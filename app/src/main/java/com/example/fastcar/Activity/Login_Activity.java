@@ -78,7 +78,6 @@ public class Login_Activity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
-        acct = GoogleSignIn.getLastSignedInAccount(this);
     }
 
     int RC_SIGN_IN = 40;
@@ -143,6 +142,7 @@ public class Login_Activity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 task.getResult(ApiException.class);
+                acct = GoogleSignIn.getLastSignedInAccount(this);
                 handleGoogleAccessToken(acct);
 //                navigateToSecondActivity();
             } catch (ApiException e) {
