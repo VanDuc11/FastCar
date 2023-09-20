@@ -70,10 +70,9 @@ public class Login_Activity extends AppCompatActivity {
         btnFacebook = findViewById(R.id.loginAct_btnFacebook);
     }
     private void googleBuile(){
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                . requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail().build();
         gsc = GoogleSignIn.getClient(this,gso);
 
         callbackManager = CallbackManager.Factory.create();
