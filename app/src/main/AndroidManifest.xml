@@ -15,6 +15,21 @@
         android:theme="@style/Theme.FastCar"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.ThongTinTruocDatCoc_Activity"
+            android:parentActivityName=".Activity.ThongTinThue_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThongTinThue_Activity"
+            android:exported="false"
+            android:parentActivityName=".Activity.ChiTietXe_Activity" />
+        <activity
+            android:name=".Activity.ChiTietXe_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DanhSachXe_Activity"
+            android:exported="false"
+            android:parentActivityName=".Activity.KhamPha_Activity" />
+        <activity
             android:name=".Activity.HoTro_Activity"
             android:exported="false">
             <meta-data

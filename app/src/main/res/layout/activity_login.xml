@@ -14,47 +14,116 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bg_login" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/from_data"
+        android:padding="15dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Chào bạn đến với FCar"
-        android:textColor="#10A816"
-        android:textSize="22dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        >
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sdt_email"
 
-    <TextView
+            android:layout_width="match_parent"
+            app:startIconDrawable="@drawable/baseline_email_24"
+            app:helperTextEnabled="false"
+            app:boxStrokeWidthFocused="0dp"
+            app:boxStrokeWidth="0dp"
+            app:endIconMode="clear_text"
+            app:hintTextColor="#1890FF"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            android:hint="Số điện thoại hoặc email"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/text_input_background"
+                android:clipToOutline="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/matkhau"
+            android:layout_width="match_parent"
+            app:helperTextEnabled="false"
+            app:boxStrokeWidthFocused="0dp"
+            app:boxStrokeWidth="0dp"
+            app:endIconMode="password_toggle"
+            android:layout_height="wrap_content"
+            app:hintTextColor="#1890FF"
+            android:hint="Mật khẩu"
+            app:startIconDrawable="@drawable/baseline_lock_24"
+            android:layout_marginTop="10dp"
+            app:errorEnabled="true"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_input_background"
+                android:inputType="textPassword"
+                android:clipToOutline="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="quên mật khẩu"
+            android:textStyle="bold"
+            android:layout_marginVertical="5dp"
+            android:gravity="right"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="Đăng nhập"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_marginVertical="5dp"
+            android:layout_height="wrap_content"
+            android:text="Bạn chưa có tài khoản ? đăng kí ngay"
+            ></TextView>
+
+    </LinearLayout>
+
+
+
+        <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:text="Đăng nhập với: "
+        android:text="Hoặc đăng nhập với:"
         android:textColor="@color/black"
-        android:textSize="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/from_data" />
 
     <FrameLayout
         android:id="@+id/loginAct_btnFacebook"
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/bo_goc"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         app:layout_constraintBottom_toTopOf="@+id/loginAct_btnGoogle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -84,59 +153,41 @@
 
     <FrameLayout
         android:id="@+id/loginAct_btnGoogle"
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bo_goc"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        android:paddingLeft="15dp"
+      android:layout_marginVertical="10dp"
+        android:paddingRight="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginAct_btnFacebook"
         app:layout_constraintVertical_bias="0.5">
-
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="1dp"
-            android:gravity="center"
-            android:text="Đăng nhập với Google"
-            android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:background="@drawable/bo_goc"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icons8_google_48" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="1dp"
+                android:gravity="center"
+                android:text="Đăng nhập với Google"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icons8_google_48" />
+        </FrameLayout>
 
     </FrameLayout>
 
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="249dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="Với việc đăng nhập,bạn đã đồng ý với"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginAct_btnGoogle" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Chính sách và quy định của chúng tôi."
-        android:textColor="#10A816"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

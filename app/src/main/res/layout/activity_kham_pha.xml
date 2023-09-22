@@ -1,9 +1,457 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".Activity.KhamPha_Activity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+
+            android:layout_height="wrap_content">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_user"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/lithanh"
+                app:shapeAppearanceOverlay="@style/imagview" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:text="Đỗ Văn Hải"/>
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+
+       >
+
+        <TextView
+            android:paddingHorizontal="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableRight="@drawable/baseline_arrow_forward_ios_24"
+            android:gravity="center_vertical"
+            android:text="Ưu đãi hiện hành"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginVertical="2dp"
+            android:src="@drawable/image_khuyenmai" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txt_ds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Xe nổi bật"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:text="Xem thêm  >>"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+
+
+    </LinearLayout>
+   <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="5dp"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bo_goc"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+            <!-- ImageView chứa hình ảnh nền -->
+            <ImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/lithanh"
+                android:scaleType="centerCrop" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentStart="true"
+                android:paddingLeft="10dp"
+                android:layout_alignParentBottom="true">
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TOYOTA INNOVA 2020"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5.0  "
+                        android:textSize="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/white"
+                        android:drawableRight="@drawable/baseline_star_outline_24"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 chuyến "
+                        android:textSize="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/white"
+                        android:drawableRight="@drawable/baseline_outlined_flag_24"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="#D9D9D9"
+                        android:text="Số sàn" />
+                </LinearLayout>
+
+                <!-- LinearLayout cho TextView thứ hai, ở đầu phải -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="end|center_vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ECCFCF"
+                        android:text="-30%"
+
+                        android:textColor="#D41515" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="500k"
+                        android:textSize="15dp"
+                        android:paddingHorizontal="5dp"
+                        android:textColor="#10A816" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="1dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/baseline_place_24"
+                        android:text="Nam từ liêm hà nội" />
+                </LinearLayout>
+
+                <!-- LinearLayout cho TextView thứ hai, ở đầu phải -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="150k/ngày"
+
+                        android:textSize="12dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bo_goc"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+            <!-- ImageView chứa hình ảnh nền -->
+            <ImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/lithanh"
+                android:scaleType="centerCrop" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentStart="true"
+                android:paddingLeft="10dp"
+                android:layout_alignParentBottom="true">
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TOYOTA INNOVA 2020"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5.0  "
+                        android:textSize="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/white"
+                        android:drawableRight="@drawable/baseline_star_outline_24"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 chuyến "
+                        android:textSize="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/white"
+                        android:drawableRight="@drawable/baseline_outlined_flag_24"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="#D9D9D9"
+                        android:text="Số sàn" />
+                </LinearLayout>
+
+                <!-- LinearLayout cho TextView thứ hai, ở đầu phải -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="end|center_vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ECCFCF"
+                        android:text="-30%"
+
+                        android:textColor="#D41515" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="500k"
+                        android:textSize="15dp"
+                        android:paddingHorizontal="5dp"
+                        android:textColor="#10A816" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="1dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/baseline_place_24"
+                        android:text="Nam từ liêm hà nội" />
+                </LinearLayout>
+
+                <!-- LinearLayout cho TextView thứ hai, ở đầu phải -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="150k/ngày"
+
+                        android:textSize="12dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+
+        android:layout_height="match_parent">
+        <!-- ImageView chứa hình ảnh nền -->
+        <ImageView
+            android:id="@+id/img_xe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/lithanh"
+            android:scaleType="centerCrop" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="15dp"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+
+         >
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chào bạn đã đến với FistCar"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                />
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chúc bạn có một trải nghiệm tốt lành cùng với FistCar Đừng quên đánh giá xe nhé.Xin chân thành cảm ơn !"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

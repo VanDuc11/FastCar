@@ -2,11 +2,13 @@ package com.example.fastcar.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -46,6 +48,8 @@ public class Login_Activity extends AppCompatActivity {
     FirebaseAuth mAuth;
     GoogleSignInAccount acct;
 
+    AppCompatButton btn_login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +68,18 @@ public class Login_Activity extends AppCompatActivity {
                 signIn();
             }
         });
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), KhamPha_Activity.class);
+                startActivity(i);
+            }
+        });
     }
     private void find() {
         btnGoogle = findViewById(R.id.loginAct_btnGoogle);
         btnFacebook = findViewById(R.id.loginAct_btnFacebook);
+        btn_login =findViewById(R.id.btn_login);
     }
     private void googleBuile(){
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

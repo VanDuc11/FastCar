@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingHorizontal="22dp"
+        android:orientation="vertical">
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:src="@drawable/baseline_check_circle_outline_24"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:text="Yêu cầu thuê xe của bạn đã tự động duyệt. Vui lòng đặc cọc ngay để hoàn tất việc đặt xe."/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginVertical="10dp"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="0dp"
+                android:text="Thuê xe khác"
+                android:textColor="#2AB92F"
+                android:background="@drawable/bo_goc"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="0dp"
+                android:layout_marginLeft="50dp"
+                android:background="#2AB92F"
+                android:textColor="@color/white"
+                android:text="Đặt cọc ngay"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
