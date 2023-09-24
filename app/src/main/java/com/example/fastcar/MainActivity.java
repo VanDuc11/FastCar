@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         signOutBtn = findViewById(R.id.signout);
 
-
-
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();

@@ -71,7 +71,7 @@ public class Login_Activity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(), KhamPha_Activity.class);
+                Intent i = new Intent(getBaseContext(), BottomNavigation_Activity.class);
                 startActivity(i);
             }
         });
@@ -187,7 +187,7 @@ public class Login_Activity extends AppCompatActivity {
     }
     private void navigateToSecondActivity() {
         finish();
-        Intent intent = new Intent(Login_Activity.this,MainActivity.class);
+        Intent intent = new Intent(Login_Activity.this, BottomNavigation_Activity.class);
         startActivity(intent);
 
     }

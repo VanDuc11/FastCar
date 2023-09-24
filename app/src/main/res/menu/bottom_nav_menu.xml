@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_khampha"
+        android:icon="@drawable/icon_home"
+        android:title="@string/title_khampha" />
+
+    <item
+        android:id="@+id/nav_thongbao"
+        android:icon="@drawable/icon_notification"
+        android:title="@string/title_noti" />
+
+    <item
+        android:id="@+id/nav_chuyenxe"
+        android:icon="@drawable/icon_truck"
+        android:title="@string/title_chuyenxe" />
+
+    <item
+        android:id="@+id/nav_hotro"
+        android:icon="@drawable/icon_telephone"
+        android:title="@string/title_hotro" />
+
+    <item
+        android:id="@+id/nav_canhan"
+        android:icon="@drawable/icon_user"
+        android:title="@string/title_user" />
+
+</menu>

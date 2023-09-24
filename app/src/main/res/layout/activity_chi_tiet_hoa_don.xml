@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".Activity.ChiTietHoaDon_Activity">
+
+    <RelativeLayout
+        android:id="@+id/btn_close_hoadonchitiet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/icon_green" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/icon_close" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:text="Chi tiết hoá đơn: "
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:text="1. Khách hàng"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Họ và tên: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Nguyễn Văn A"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0999 999 999"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:text="2. Dịch vụ"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="( "
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ten_congty"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" cung cấp )"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên xe: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VinFast (1242-4124555)"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Biển kiểm soát: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30A 88888"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày thuê xe: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12h00, 20/09/2023"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày trả xe: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12h00, 21/09/2023"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng tiền: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="500.000 vnđ"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đã cọc: "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="268.688 vnđ"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" lúc "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15h34, 19/09/2023"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cần thanh toán "
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="218.688 vnđ"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" sau khi trả xe."
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#C3A6A6" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Chúng tôi xin chân thành cảm ơn quý khách đã tin tưởng và sử dụng FastCar."
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        android:textStyle="italic" />
+</LinearLayout>

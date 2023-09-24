@@ -15,48 +15,43 @@
         android:theme="@style/Theme.FastCar"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.ThongTinTruocDatCoc_Activity"
-            android:parentActivityName=".Activity.ThongTinThue_Activity"
+            android:name=".Activity.ThanhToan_Activity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
             android:exported="false" />
+        <activity
+            android:name=".Activity.LichSu_ThueXe_Activity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThongTin_User_Activity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChiTietHoaDon_Activity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.BottomNavigation_Activity"
+            android:exported="true"
+            android:label="@string/title_activity_bottom_navigation" />
+        <activity
+            android:name=".Activity.ThongTinTruocDatCoc_Activity"
+            android:exported="false"
+            android:parentActivityName=".Activity.ThongTinThue_Activity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.ThongTinThue_Activity"
             android:exported="false"
-            android:parentActivityName=".Activity.ChiTietXe_Activity" />
+            android:parentActivityName=".Activity.ChiTietXe_Activity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.ChiTietXe_Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.DanhSachXe_Activity"
             android:exported="false"
-            android:parentActivityName=".Activity.KhamPha_Activity" />
-        <activity
-            android:name=".Activity.HoTro_Activity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".Activity.ChuyenXe_Activity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".Activity.ThongBao_Activity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".Activity.KhamPha_Activity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -67,7 +62,8 @@
 
         <activity
             android:name=".Activity.Login_Activity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -80,7 +76,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

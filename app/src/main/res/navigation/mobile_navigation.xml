@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_khampha">
+
+    <fragment
+        android:id="@+id/nav_khampha"
+        android:name="com.example.fastcar.Fragment.KhamPha_Fragment"
+        android:label="@string/title_khampha"
+        tools:layout="@layout/fragment_kham_pha" />
+
+    <fragment
+        android:id="@+id/nav_thongbao"
+        android:name="com.example.fastcar.Fragment.ThongBao_Fragment"
+        android:label="@string/title_noti"
+        tools:layout="@layout/fragment_thong_bao" />
+
+    <fragment
+        android:id="@+id/nav_chuyenxe"
+        android:name="com.example.fastcar.Fragment.ChuyenXe_Fragment"
+        android:label="@string/title_chuyenxe"
+        tools:layout="@layout/fragment_chuyen_xe" />
+
+    <fragment
+        android:id="@+id/nav_hotro"
+        android:name="com.example.fastcar.Fragment.HoTro_Fragment"
+        android:label="@string/title_hotro"
+        tools:layout="@layout/fragment_ho_tro" />
+
+    <fragment
+        android:id="@+id/nav_canhan"
+        android:name="com.example.fastcar.Fragment.CaNhan_Fragment"
+        android:label="@string/title_user"
+        tools:layout="@layout/fragment_ca_nhan" />
+</navigation>

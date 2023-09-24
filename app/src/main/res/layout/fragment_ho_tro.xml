@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.BottomNavigation_Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-20dp"
+            android:src="@drawable/img_vinfast_in_telephone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="THÔNG TIN CÔNG TY"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên công ty: "
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ten_congty"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ: "
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/diachi_congty"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email: "
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email_congty"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Điện thoại: "
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tele_congty"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fax: "
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fax_congty"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/bo_goc"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tv_hotline_html"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cần hỗ trợ nhanh vui lòng gọi: 0222 666 888 22 hoặc gửi tin nhắn cho chúng tôi."
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_call_to_hotline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/button_green"
+                    android:drawableLeft="@drawable/icon_call"
+                    android:text="Gọi"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_send_message_to_hotline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#E6DEDE"
+                    android:drawableLeft="@drawable/icon_message"
+                    android:text="Nhắn tin"
+                    android:textAllCaps="false"
+                    android:textColor="@color/button_green"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

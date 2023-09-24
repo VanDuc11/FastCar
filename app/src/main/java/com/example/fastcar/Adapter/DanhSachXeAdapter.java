@@ -3,7 +3,6 @@ package com.example.fastcar.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +26,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeHolder>{
     @NonNull
     @Override
     public DanhSachXeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_danh_sach_xe_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item1_danhsachxe, parent, false);
         return new DanhSachXeHolder(view);
     }
 

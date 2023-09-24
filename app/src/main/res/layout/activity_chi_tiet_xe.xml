@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <ScrollView
         android:layout_width="match_parent"
-        android:paddingBottom="40dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="40dp">
 
 
         <LinearLayout
@@ -17,62 +15,92 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/img_sanpham"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/lithanh" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_sanpham"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_vinfast_in_chuyen" />
+
+                    <RelativeLayout
+                        android:id="@+id/icon_back_in_chitietxe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_gravity="top">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/icon_green" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/icon_back" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingRight="5dp"
                         android:paddingLeft="5dp"
-                        android:layout_height="wrap_content">
+                        android:paddingRight="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.2"
                             android:text="TOYOTA INNOVA 2020"
-                            android:textStyle="bold"
+                            android:textColor="@color/black"
                             android:textSize="18dp"
-                            />
+                            android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.8"
-                            android:paddingRight="10dp"
-                            android:orientation="horizontal"
                             android:gravity="end|center_vertical"
-                            >
+                            android:orientation="horizontal"
+                            android:paddingRight="10dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="#ECCFCF"
+                                android:padding="3dp"
                                 android:text="-30%"
-                              android:padding="3dp"
-                             android:textSize="10dp"
-                                android:textColor="#D41515" />
+                                android:textColor="#D41515"
+                                android:textSize="10dp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="500k"
-                                android:textSize="18dp"
                                 android:paddingHorizontal="5dp"
-                                android:textColor="#10A816" />
+                                android:text="500k"
+                                android:textColor="#10A816"
+                                android:textSize="18dp"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -82,71 +110,76 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingRight="5dp"
-                        android:paddingLeft="5dp"
-                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content"
                         android:layout_marginVertical="5dp"
-                        android:layout_height="wrap_content">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="5.0  "
-                                android:textSize="18dp"
-                                android:paddingEnd="1dp"
-                                android:drawableRight="@drawable/baseline_star_outline_24"
-                                />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10 chuyến "
-                                android:textSize="18dp"
-                                android:drawableRight="@drawable/baseline_outlined_flag_24"
-                                />
-                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:paddingRight="10dp"
-                            android:orientation="horizontal"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/baseline_star_outline_24"
+                                android:paddingEnd="1dp"
+                                android:text="5.0  "
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/baseline_outlined_flag_24"
+                                android:text="10 chuyến "
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="end|center_vertical"
-                            >
+                            android:orientation="horizontal"
+                            android:paddingRight="10dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="150k/ngày"
-                                android:textSize="16dp"
-                                />
+                                android:textColor="@color/black"
+                                android:textSize="16dp" />
 
                         </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="15dp"
                     android:orientation="horizontal"
+                    android:paddingHorizontal="15dp"
 
                     >
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="15dp"
                         android:background="#D9D9D9"
+                        android:paddingHorizontal="15dp"
                         android:text="Số sàn" />
                 </LinearLayout>
 
@@ -157,154 +190,160 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:background="@color/white"
-                android:paddingHorizontal="10dp"
+                android:orientation="vertical"
 
-                android:orientation="vertical">
+                android:paddingHorizontal="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Địa điểm lấy xe"
+                    android:textColor="@color/black"
                     android:textSize="15dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:textColor="#10A816"
                     android:drawableLeft="@drawable/baseline_place_24"
-                    android:text="Nam từ liêm hà nội" />
+                    android:text="Nam từ liêm hà nội"
+                    android:textColor="#10A816"
+                    android:textSize="15dp" />
+
                 <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="#B5ACAC"
-                    android:layout_height="1dp"></View>
+                    android:background="#B5ACAC"></View>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Đặc Điểm"
-                    android:textSize="15dp"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4 ghế"
                             android:drawableTop="@drawable/img"
-                            />
+                            android:text="4 ghế"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Số sàn"
                             android:drawableTop="@drawable/baseline_outlined_flag_24"
-                            />
+                            android:text="Số sàn"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Xăng"
                             android:drawableTop="@drawable/baseline_local_gas_station_24"
-                            />
+                            android:text="Xăng"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="#B5ACAC"
-                    android:layout_height="1dp"></View>
+                    android:background="#B5ACAC"></View>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
+                android:orientation="vertical"
+                android:padding="10dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Mô tả"
-                    android:textSize="15dp"
-                    />
+                    android:textSize="15dp" />
 
                 <TextView
-                    android:paddingHorizontal="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
                     android:text="Toyota Innova đều sử dụng chung động cơ xăng 1TR-FE dung tích 2 lít, bốn xi-lanh thẳng hàng, công nghệ van biến thiên kép thông minh Dual VVT-i. Công suất tối đa 102 mã lực tại tua máy 5.600 vòng/ phút. Mô-men xoắn 183 Nm tại 4.000 vòng/ phút."
-                    android:textSize="15dp"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
 
                 <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="#B5ACAC"
-                    android:layout_height="1dp"></View>
+                    android:background="#B5ACAC"></View>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp"
 
-                android:layout_height="wrap_content">
+                android:padding="10dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Chính sách hủy chuyến"
-                    android:textSize="15dp"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
 
                 <TextView
-                    android:paddingHorizontal="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
                     android:text="Hoàn trả 100% tiền cọc khi hủy chuyến trong vòng 1 giờ tính sau khi đặt xe thành công,hoàn trả 70% nếu hủy chuyến trước 5 ngày đặt. Sau đó không hoàn trả cọc khi hủy chuyến sau 5 ngày để đảm bảo quyền lợi Admin và chính bạn."
-                    android:textSize="15dp"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
 
                 <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="#B5ACAC"
-                    android:layout_height="1dp"></View>
+                    android:background="#B5ACAC"></View>
             </LinearLayout>
 
             <LinearLayout
@@ -312,69 +351,81 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical">
-              <LinearLayout
-                  android:layout_width="match_parent"
-                  android:orientation="vertical"
-                  android:paddingHorizontal="30dp"
-                  android:layout_height="wrap_content">
-                  <TextView
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="Đánh giá"
-                      android:textSize="15dp"
-                      />
-                  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="center"
-                      android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18dp"
-                            android:drawableRight="@drawable/baseline_star_24"
-                            android:text="5.0"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18dp"
-                            android:text="5 đánh giá"/>
-                    </LinearLayout>
-                      <LinearLayout
-                          android:layout_width="0dp"
-                          android:layout_height="wrap_content"
-                          android:layout_weight="1"
-                          android:gravity="end"
-                          android:orientation="horizontal">
-                          <TextView
-                              android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:textSize="18dp"
-                              android:drawableRight="@drawable/baseline_arrow_forward_ios_24"
-                              android:text="Xem thêm"/>
-                      </LinearLayout>
 
-                  </LinearLayout>
-                  <View
-                      android:layout_width="match_parent"
-                      android:layout_marginTop="10dp"
-                      android:background="#B5ACAC"
-                      android:layout_height="1dp"></View>
-              </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đánh giá"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/baseline_star_24"
+                                android:text="5.0"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="5 đánh giá"
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/baseline_arrow_forward_ios_24"
+                                android:text="Xem thêm"
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#B5ACAC"></View>
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/txt_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:gravity="center"
-                    android:textColor="#AEA3A3"
                     android:layout_marginVertical="10dp"
+                    android:gravity="center"
                     android:text="Chưa có đánh giá nào "
+                    android:textColor="#AEA3A3"
                     android:textSize="25dp" />
 
                 <ListView
@@ -394,15 +445,19 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="horizontal">
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_thuexe"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_weight="1"
             android:backgroundTint="#10A816"
-            android:text="Thuê Xe"
+            android:text="Thuê xe"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
