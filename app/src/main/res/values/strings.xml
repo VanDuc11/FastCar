@@ -4,4 +4,23 @@
     <string name="facebook_app_id">688196926667846</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">56789</string>
+
+    <string name="tt_zalopay">Thanh toán bằng ZaloPay</string>
+    <string name="tt_momo">Thanh toán bằng Momo</string>
+    <string name="tt_vnpay">Thanh toán bằng VnPay</string>
+    <string name="tt">Thanh toán</string>
+
+    <string name="ten_congty">Công ty cổ phần FastCar</string>
+    <string name="diachi_congty">VP 06, tầng 8, Tòa Keangnam Landmark 72 Phạm Hùng, Nam Từ Liêm, Hà Nội</string>
+    <string name="email_congty">fastcar@gmail.com</string>
+    <string name="tele_congty">0968 686 868</string>
+    <string name="fax_congty">0222 666 888 22</string>
+
+    <string name="title_activity_bottom_navigation">BottomNavigation_Activity</string>
+    <string name="title_khampha">Khám phá</string>
+    <string name="title_noti">Thông báo</string>
+    <string name="title_chuyenxe">Chuyến</string>
+    <string name="title_hotro">Hỗ trợ</string>
+    <string name="title_user">Cá nhân</string>
+
 </resources>
