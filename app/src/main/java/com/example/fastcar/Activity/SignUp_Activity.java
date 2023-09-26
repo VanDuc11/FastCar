@@ -62,7 +62,7 @@ public class SignUp_Activity extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(SignUp_Activity.this, "Email không tồn tại.",
+                                Toast.makeText(SignUp_Activity.this, "Email không tồn tại hoặc đã được sử dụng.",
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
