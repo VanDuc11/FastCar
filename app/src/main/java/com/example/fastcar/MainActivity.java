@@ -39,14 +39,7 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();
 
-        if (fBaseuser !=null){
-            User u = new User();
-            u.setUserId(fBaseuser.getUid());
-            u.setEmail(fBaseuser.getEmail());
-            u.setName(fBaseuser.getDisplayName());
-            u.setProfile(fBaseuser.getProviderId().toString());
-            database.getReference().child("Users").child(fBaseuser.getUid()).setValue(u);
-        }
+
         String personName = fBaseuser.getDisplayName();
         String personEmail = fBaseuser.getEmail();
         name.setText(personName);
