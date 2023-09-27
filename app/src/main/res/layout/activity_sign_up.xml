@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.SignUp_Activity">
+
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="358dp"
@@ -13,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="16dp"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,6 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bg_login" />
+
     <LinearLayout
         android:id="@+id/from_data"
         android:layout_width="match_parent"
@@ -37,7 +39,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Số điện thoại hoặc email"
+            android:hint="Nhập email của bạn"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:endIconMode="clear_text"
@@ -78,6 +80,7 @@
                 android:inputType="textPassword"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/SignUp_ResMatkhau"
             android:layout_width="match_parent"
@@ -112,4 +115,16 @@
             android:textColor="@color/white"
             android:textSize="16dp" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/SignUP_btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/black"
+        android:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/com_facebook_close" />
 </androidx.constraintlayout.widget.ConstraintLayout>

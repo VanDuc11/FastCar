@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.fastcar.MainActivity;
@@ -24,6 +26,7 @@ public class SignUp_Activity extends AppCompatActivity {
     TextInputLayout edtEamil,edtPass,EdtRespass;
     AppCompatButton BtnSignin;
     FirebaseAuth mAuth;
+    ImageButton btn_close;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,12 @@ public class SignUp_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkSignUp();
+            }
+        });
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
@@ -77,5 +86,6 @@ public class SignUp_Activity extends AppCompatActivity {
         edtPass = findViewById(R.id.SignUp_matkhau);
         EdtRespass = findViewById(R.id.SignUp_ResMatkhau);
         BtnSignin = findViewById(R.id.SignUp_btn_SigUp);
+        btn_close = findViewById(R.id.SignUP_btn_close);
     }
 }
