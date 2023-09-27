@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -87,5 +86,6 @@ public class SignUp_Activity extends AppCompatActivity {
         EdtRespass = findViewById(R.id.SignUp_ResMatkhau);
         BtnSignin = findViewById(R.id.SignUp_btn_SigUp);
         btn_close = findViewById(R.id.SignUP_btn_close);
+
     }
 }
