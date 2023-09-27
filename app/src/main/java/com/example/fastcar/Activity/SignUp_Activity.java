@@ -50,14 +50,14 @@ public class SignUp_Activity extends AppCompatActivity {
         String email = edtEamil.getEditText().getText().toString();
         String pass = edtPass.getEditText().getText().toString();
         if (email.length() == 0 ){
-            edtEamil.setError("Không để trống mật khẩu");
+            edtEamil.setError("Không để trống email");
 
         }else  if (pass.length() == 0){
             edtPass.setError("Không để trống mật khẩu");
         }else if (EdtRespass.getEditText().getText().toString().length() == 0){
             EdtRespass.setError("Không để trống email");
         }else if (pass.length() <= 6){
-            EdtRespass.setError("Mật khẩu pahri dài hơn 6 ký tự");
+            EdtRespass.setError("Mật khẩu phải dài hơn 6 ký tự");
         }else if (pass.equalsIgnoreCase(EdtRespass.getEditText().getText().toString())){
 
             mAuth.createUserWithEmailAndPassword(email, pass)
