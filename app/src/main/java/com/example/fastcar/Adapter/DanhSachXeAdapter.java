@@ -29,13 +29,11 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView img_xe;
-        public TextView name_xe;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            img_xe = itemView.findViewById(R.id.img_xe);
-            name_xe = itemView.findViewById(R.id.name_xe);
+
         }
     }
 
@@ -48,8 +46,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull DanhSachXeAdapter.ViewHolder holder, int position) {
-        String item = itemList.get(position);
-        holder.name_xe.setText(item);
+
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
