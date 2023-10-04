@@ -37,7 +37,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     }
 
     void mapping() {
-        goThongtin = findViewById(R.id.btn_thuexe);
-        ic_back = findViewById(R.id.icon_back_in_chitietxe);
+//        goThongtin = findViewById(R.id.btn_thuexe);
+//        ic_back = findViewById(R.id.icon_back_in_chitietxe);
     }
 }
