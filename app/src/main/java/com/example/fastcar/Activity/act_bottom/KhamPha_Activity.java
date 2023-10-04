@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 public class KhamPha_Activity extends AppCompatActivity {
-    TextView goDS, tvName;
+    TextView goDS, tvName,btnTim;
     RecyclerView recy1, recy2;
 
     private FirebaseAuth auth;
@@ -62,6 +62,13 @@ public class KhamPha_Activity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        btnTim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getBaseContext(), DanhSachXe_Activity.class);
+                startActivity(i);
+            }
+        });
 
 
     }
@@ -69,6 +76,7 @@ public class KhamPha_Activity extends AppCompatActivity {
     void mapping() {
         goDS = findViewById(R.id.txt_ds);
         tvName = findViewById(R.id.tvName);
+        btnTim = findViewById(R.id.act_khamha_tvTimXe);
         recy1 = findViewById(R.id.recyclerView);
         recy2 = findViewById(R.id.recyclerView2);
     }
