@@ -6,13 +6,15 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.fastcar.R;
 
 public class ChiTietXe_Activity extends AppCompatActivity {
-    AppCompatButton goThongtin;
-    RelativeLayout ic_back;
+    TextView goThongtin;
+    ImageView ic_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     }
 
     void mapping() {
-//        goThongtin = findViewById(R.id.btn_thuexe);
-//        ic_back = findViewById(R.id.icon_back_in_chitietxe);
+        goThongtin = findViewById(R.id.btn_thuexe);
+        ic_back = findViewById(R.id.icon_back_in_dsxe);
     }
 }

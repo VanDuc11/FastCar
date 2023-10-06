@@ -26,24 +26,24 @@ public class ThongTinThue_Activity extends AppCompatActivity {
 
         mapping();
 
-        ic_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        btn_xacnhandatcoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog();
-            }
-        });
+//        ic_back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onBackPressed();
+//            }
+//        });
+//
+//        btn_xacnhandatcoc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showDialog();
+//            }
+//        });
     }
 
     void mapping() {
         ic_back = findViewById(R.id.icon_back_in_thongtin_xethue);
-        btn_xacnhandatcoc = findViewById(R.id.btn_xacnhan_datcoc);
+//        btn_xacnhandatcoc = findViewById(R.id.btn_xacnhan_datcoc);
     }
 
     void showDialog() {
