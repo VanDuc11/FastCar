@@ -38,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
+        android:background="#F4F6F8"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck">
 
         <androidx.constraintlayout.widget.ConstraintLayout

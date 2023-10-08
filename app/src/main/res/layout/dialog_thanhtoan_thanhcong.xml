@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,7 +13,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:src="@drawable/baseline_check_circle_outline_24" />
+            android:src="@drawable/ic_baseline_check_circle_outline_24" />
 
         <TextView
             android:layout_width="match_parent"
@@ -39,12 +40,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="#2AB92F"
+            android:background="#67CC88"
             android:text="Đóng"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
 
     </LinearLayout>
 
