@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="#60CE85"
+        android:background="@color/blue_app"
         android:gravity="center"
         app:titleTextColor="@color/white">
 
@@ -39,7 +39,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="110dp"
 
-        android:background="#F4F6F8">
+        android:background="@color/backgroud">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -9,6 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#E80B0B</color>
     <color name="button_green">#2AB92F</color>
+    <color name="blue_app">#60CE85</color>
+    <color name="backgroud">#F4F6F8</color>
+    <color name="blue_tv">#67CC88</color>
     <color name="zalopay">#1976D2</color>
     <color name="momo">#E02699</color>
 
