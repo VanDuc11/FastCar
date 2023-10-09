@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="500K"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="#67CC88"
+                android:textColor="@color/blue_tv"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
