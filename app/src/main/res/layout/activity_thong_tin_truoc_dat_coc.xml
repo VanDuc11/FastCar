@@ -374,7 +374,7 @@
                                 android:drawablePadding="10dp"
                                 android:text="Ngày nhận"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                                android:textColor="#8c8c8c"
+                                android:textColor="@color/grey"
                                 android:textSize="18dp" />
 
                             <TextView
@@ -401,7 +401,7 @@
                                 android:drawablePadding="10dp"
                                 android:text="Ngày nhận"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                                android:textColor="#8c8c8c"
+                                android:textColor="@color/grey"
                                 android:textSize="18dp" />
 
                             <TextView

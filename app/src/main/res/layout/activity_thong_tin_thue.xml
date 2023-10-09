@@ -170,7 +170,7 @@
                                 android:drawablePadding="10dp"
                                 android:text="Ngày nhận"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                                android:textColor="#8c8c8c"
+                                android:textColor="@color/grey"
                                 android:textSize="18dp" />
 
                             <TextView
@@ -197,7 +197,7 @@
                                 android:drawablePadding="10dp"
                                 android:text="Ngày nhận"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                                android:textColor="#8c8c8c"
+                                android:textColor="@color/grey"
                                 android:textSize="18dp" />
 
                             <TextView
@@ -556,7 +556,7 @@
                         android:layout_marginTop="10dp"
                         android:text="15 triệu (tiền mặt khi nhận xe) hoặc Xe máy (kèm cà vệt gốc) giá trị 15 triệu"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                        android:textColor="#8c8c8c"
+                        android:textColor="@color/grey"
                         android:textSize="15dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView27" />
