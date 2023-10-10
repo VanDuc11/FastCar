@@ -1,170 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.act_bottom.CaNhan_Activity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="55dp"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_marginBottom="55dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avt_user_in_user"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/img_avatar_user" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_name_user_in_user"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="-20dp"
+                    app:cardBackgroundColor="#5767CC88"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cv"
+                    android:layout_marginTop="-50dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/avt_user_in_user"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/img_avatar_user" />
+
+                    <TextView
+                        android:id="@+id/tv_name_user_in_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="Tên người dùng"
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="Tên người dùng"
-                android:textSize="18dp" />
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-        <LinearLayout
-            android:id="@+id/btn_info_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="20dp">
+                    <TextView
+                        android:id="@+id/btn_thongtin_canhan_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_user_black"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="15dp"
+                        android:text="Thông tin tài khoản"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/icon_user_black" />
+                    <TextView
+                        android:id="@+id/btn_xeyeuthich_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_love"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Xe yêu thích"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
 
-            <TextView
+                    <TextView
+                        android:id="@+id/btn_magiamgia_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_voucher_v1"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Mã giảm giá"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_lichsu_ThueXe_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_truck_black"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Lịch sử xe đã thuê"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_doiMK_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_password"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Đổi mật khẩu"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_deleteAccount_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_delete"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Yêu cầu xoá tài khoản"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_logout"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="Tài khoản"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black" />
-
-        <LinearLayout
-            android:id="@+id/btn_voucher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/icon_voucher" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="Mã giảm giá"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black" />
-
-        <LinearLayout
-            android:id="@+id/btn_lichsu_thuexe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/icon_truck_black" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="Lịch sử xe đã thuê"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black" />
-
-        <LinearLayout
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/icon_logout" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:background="@drawable/custom_btn4"
                 android:text="Đăng xuất"
-                android:textSize="16dp" />
+                android:textSize="17dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black" />
-
-        <LinearLayout
-            android:id="@+id/btn_delete_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/icon_delete" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="Xoá tài khoản"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black" />
-    </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -179,7 +188,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="tab5_to_tab1"
+            android:onClick="tab4_to_tab1"
             android:orientation="vertical">
 
             <ImageView
@@ -189,27 +198,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:onClick="tab5_to_tab2"
-            android:orientation="vertical"
-            tools:ignore="OnClick">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/icon_notify_black" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="tab5_to_tab3"
+            android:onClick="tab4_to_tab2"
             android:orientation="vertical">
 
             <ImageView
@@ -224,7 +219,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="tab5_to_tab4"
+            android:onClick="tab4_to_tab3"
             android:orientation="vertical">
 
             <ImageView

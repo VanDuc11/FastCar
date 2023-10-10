@@ -3,6 +3,7 @@ package com.example.fastcar.Activity.act_bottom;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -21,7 +22,7 @@ import com.example.fastcar.R;
 
 public class HoTro_Activity extends AppCompatActivity {
     TextView tv_hotline_html;
-    Button btn_call, btn_send_message;
+    AppCompatButton btn_call, btn_send_message;
     String phone_number = "022266688822";
     private static final int REQUEST_CALL_PERMISSION = 123;
 
@@ -102,19 +103,15 @@ public class HoTro_Activity extends AppCompatActivity {
 
     }
 
-    public void tab4_to_tab1(View view) {
+    public void tab3_to_tab1(View view) {
         startActivity(new Intent(getBaseContext(), KhamPha_Activity.class));
     }
 
-    public void tab4_to_tab2(View view) {
-        startActivity(new Intent(getBaseContext(), ThongBao_Activity.class));
-    }
-
-    public void tab4_to_tab3(View view) {
+    public void tab3_to_tab2(View view) {
         startActivity(new Intent(getBaseContext(), ChuyenXe_Activity.class));
     }
 
-    public void tab4_to_tab5(View view) {
+    public void tab3_to_tab4(View view) {
         startActivity(new Intent(getBaseContext(), CaNhan_Activity.class));
     }
 

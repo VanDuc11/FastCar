@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -66,7 +67,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set vị trí dialog
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
-//        windowAttributes.gravity = gravity;
+        windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
         dialog.show();
 

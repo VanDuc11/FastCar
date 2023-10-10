@@ -4,15 +4,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.fastcar.Activity.act_bottom.CaNhan_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.R;
 
@@ -60,19 +67,29 @@ public class ThanhToan_Activity extends AppCompatActivity {
     void showDialog() {
         LayoutInflater inflater = LayoutInflater.from(ThanhToan_Activity.this);
         View custom = inflater.inflate(R.layout.dialog_thanhtoan_thanhcong, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(ThanhToan_Activity.this);
-        builder.setView(custom);
-        builder.setInverseBackgroundForced(false);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
+        Dialog dialog = new Dialog(ThanhToan_Activity.this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
 
         AppCompatButton btn_close_dialog = custom.findViewById(R.id.btn_close_dialog_thanhtoanthanhcong);
 
         btn_close_dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.dismiss();
+                dialog.dismiss();
                 startActivity(new Intent(getBaseContext(), KhamPha_Activity.class));
             }
         });

@@ -1,123 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bo_goc"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="TOYOTA INNOVA 2020"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_vinfast_in_chuyen" />
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/icon_rectangle_red" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="15dp"
-                    android:text="Chờ đặt cọc"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </LinearLayout>
-
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:orientation="vertical">
-
+            android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:text="HÀ NỘI"
-                android:textColor="@color/black"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="7.00H, 20/9/2023"
-                android:textColor="@color/black"
-                android:textSize="16dp" />
-
-            <TextView
+                tools:ignore="TextContrastCheck,TextContrastCheck"
                 android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#60CE85"
+                android:gravity="center_vertical"
+                android:paddingStart="40dp"
+                android:drawablePadding="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Đã huỷ"
+                android:drawableLeft="@drawable/icon_huychuyen"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:textColor="@color/white"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="|"
-                android:textColor="@color/black"
-                android:textSize="16dp" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:text="16.00H, 21/9/2023"
-                android:textColor="@color/black"
-                android:textSize="16dp" />
-
+                android:maxHeight="140dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_vinfast_in_chuyen"
+                app:shapeAppearanceOverlay="@style/img_XekhamPha" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp">
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tổng tiền: "
+                    android:padding="5dp"
+                    android:maxLines="1"
+                    android:text="TOYOTA INNOVA 2020"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D6C4C4" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="500.268đ"
-                    android:textColor="@color/button_green"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+                    android:padding="3dp"
+                    android:maxLines="1"
+                    android:text="Bắt đầu: 7.00H, 20/9/2023"
+                    android:drawableLeft="@drawable/icon_date"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:padding="3dp"
+                    android:maxLines="1"
+                    android:drawableLeft="@drawable/icon_date"
+                    android:text="Kết thúc: 16.00H, 21/9/2023"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tổng tiền: "
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="500.268đ"
+                        android:textColor="@color/button_green"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

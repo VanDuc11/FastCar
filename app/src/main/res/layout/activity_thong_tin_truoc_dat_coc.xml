@@ -599,7 +599,6 @@
             android:background="@drawable/custom_btn3"
             android:text="Đặt cọc "
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16dp"

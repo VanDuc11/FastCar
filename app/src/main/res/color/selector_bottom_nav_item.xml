@@ -1,7 +1,0 @@
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Màu mặc định khi tab không được chọn -->
-    <item android:color="@color/black" android:state_checked="false" />
-
-    <!-- Màu khi tab được chọn -->
-    <item android:color="@color/button_green" android:state_checked="true" />
-</selector>

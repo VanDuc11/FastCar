@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.MainActivity;
 import com.example.fastcar.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -66,7 +67,7 @@ public class SignUp_Activity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(SignUp_Activity.this, "Đăng nhập thành công.",
                                         Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignUp_Activity.this, MainActivity.class);
+                                Intent intent = new Intent(SignUp_Activity.this, KhamPha_Activity.class);
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user.

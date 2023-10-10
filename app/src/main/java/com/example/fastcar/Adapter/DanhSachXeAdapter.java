@@ -48,7 +48,6 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     public void onBindViewHolder(@NonNull DanhSachXeAdapter.ViewHolder holder, int position) {
 
 
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

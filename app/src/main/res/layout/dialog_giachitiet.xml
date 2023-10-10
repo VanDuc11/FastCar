@@ -6,7 +6,6 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView5"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
@@ -22,6 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#F4F6F8"
             android:padding="10dp">
 
             <TextView
