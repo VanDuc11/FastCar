@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="345dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/item_xeKhamPha"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
         android:background="@drawable/bo_goc_xekhampha"
         android:padding="10dp"
         android:layout_marginRight="10dp"
@@ -19,9 +19,9 @@
         app:layout_constraintVertical_bias="0.5">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_xe"
+            android:id="@+id/img_xe_inKhamPha"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="190dp"
             android:scaleType="centerCrop"
             android:src="@drawable/honda_city"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
             app:shapeAppearanceOverlay="@style/img_XekhamPha" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tv_truyendong_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -41,40 +41,40 @@
             android:text="Số sàn"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_xe" />
+            app:layout_constraintTop_toBottomOf="@+id/img_xe_inKhamPha" />
 
         <TextView
-            android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/custom_tv2"
             android:gravity="center"
-            android:text="4 chỗ ngồi"
+            android:text="Miễn thế chấp"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="@color/black"
-            android:textSize="18dp"
-            app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/img_xe" />
+            android:textSize="16dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_truyendong_inKhamPha"
+            app:layout_constraintTop_toBottomOf="@+id/img_xe_inKhamPha" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/tv_tenxe_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
+            android:layout_marginLeft="5dp"
             android:text="TOYOTA INNOVA 2020"
             android:drawableRight="@drawable/icons8_shield_24"
             android:drawablePadding="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="19dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_truyendong_inKhamPha" />
 
         <View
             android:id="@+id/view"
@@ -84,11 +84,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inKhamPha"
             app:layout_constraintVertical_bias="0.234" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/tv_soSao_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/baseline_star_outline_24"
@@ -96,12 +96,12 @@
             android:text="5.0"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView12" />
+            app:layout_constraintTop_toTopOf="@+id/tv_soChuyen_inKhamPha" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/tv_soChuyen_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -110,8 +110,8 @@
             android:text="10 chuyến"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="@color/black"
-            android:textSize="18dp"
-            app:layout_constraintStart_toEndOf="@+id/textView11"
+            android:textSize="16dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_soSao_inKhamPha"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <LinearLayout
@@ -130,7 +130,7 @@
                 android:text="500K"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@color/blue_tv"
-                android:textSize="18dp"
+                android:textSize="17dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -139,7 +139,7 @@
                 android:text="/ngày"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@color/grey"
-                android:textSize="15dp" />
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -156,7 +156,7 @@
                 android:text="Giá tổng "
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@color/grey"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginBottom="10dp"/>
 
             <TextView
@@ -165,7 +165,7 @@
                 android:text="500K"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:textSize="17dp" />
 
 
         </LinearLayout>

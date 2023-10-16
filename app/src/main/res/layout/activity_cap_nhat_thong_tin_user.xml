@@ -111,7 +111,8 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/text_input_background" />
+                android:background="@drawable/text_input_background"
+                android:paddingStart="10dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edt_email_in_ud"
@@ -171,7 +172,8 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:onClick="upload_CCCD">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/img_cccd"
@@ -207,7 +209,8 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:onClick="upload_GPLX">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/img_gplx"
@@ -231,10 +234,10 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/custom_btn4"
                 android:text="Chỉnh sửa"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:background="@drawable/custom_btn4"
                 android:textSize="17dp" />
 
         </LinearLayout>

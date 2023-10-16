@@ -8,10 +8,10 @@
     tools:context=".Activity.DanhSachXe_Activity">
 
     <LinearLayout
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/blue_app"
+        android:gravity="center"
         app:titleTextColor="@color/white">
 
         <ImageView
@@ -24,14 +24,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Danh sách xe"
-            android:paddingRight="30dp"
             android:layout_marginStart="10dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
+            android:gravity="center"
+            android:paddingRight="30dp"
+            android:text="Danh sách xe"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-            android:textSize="20dp" />
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -46,88 +46,6 @@
             android:layout_height="match_parent"
             android:padding="10dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="match_parent"
-                android:layout_height="210dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@color/blue_app"
-                        android:gravity="center"
-                        android:text="Chọn thời gian thuê"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textColor="@color/white"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        tools:ignore="TextContrastCheck,TextContrastCheck" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView7"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="15dp"
-                            android:drawableLeft="@drawable/ic_baseline_access_time_24"
-                            android:drawablePadding="10dp"
-                            android:text="Chọn thời gian"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                            android:textColor="#8C8C8C"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/tvTime_inKhamPha"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginBottom="10dp"
-                            android:hint="Chọn thời gian"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                            android:textColor="@color/black"
-                            android:textSize="18dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView7" />
-                    </LinearLayout>
-
-
-                    <TextView
-                        android:id="@+id/act_khamha_tvTimXe"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/custom_btn"
-                        android:gravity="center"
-                        android:text="Tìm xe"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textColor="@color/white"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
@@ -137,8 +55,7 @@
                 android:text="Kết quả tìm kiếm của bạn."
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textSize="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -148,14 +65,13 @@
                 android:layout_marginRight="5dp"
                 android:drawableRight="@drawable/icons8_filter_24"
                 android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcy_litsSP"
-                android:layout_marginTop="15dp"
+                android:id="@+id/recyclerView_listXe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -163,7 +79,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
 
 
 </RelativeLayout>

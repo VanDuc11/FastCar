@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,10 +26,11 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
-import com.example.fastcar.Adapter.DanhSachXeAdapter;
 import com.example.fastcar.Adapter.KhuyenMaiApdater;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
+import com.example.fastcar.Model.Car;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.facebook.login.LoginManager;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -46,17 +50,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class KhamPha_Activity extends AppCompatActivity {
-    TextView goDS, tvName, btnTim, tvTime_inKhamPha;
-    RecyclerView recy1, recy2;
+    TextView tvName, btnTim, tvTime_inKhamPha;
+    RecyclerView recyclerView_khuyenmai;
     CircleImageView img_user;
-
     private FirebaseAuth auth;
     private FirebaseUser fBaseuser;
     FirebaseDatabase database;
     MaterialDatePicker<Pair<Long, Long>> datePicker;
     Long todayInMillis, tomorrowInMillis;
+    ViewPager viewPager;
+    private boolean isChooseDatePicker = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +80,6 @@ public class KhamPha_Activity extends AppCompatActivity {
         build_DatePicker();
         setDefault_SelectionDate();
 
-        goDS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(), DanhSachXe_Activity.class);
-                startActivity(i);
-            }
-        });
         btnTim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,22 +88,26 @@ public class KhamPha_Activity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("startTime1", todayInMillis);
+        editor.putLong("endTime1", tomorrowInMillis);
+        editor.putBoolean("check", isChooseDatePicker);
+        editor.apply();
 
     }
 
     void mapping() {
-        goDS = findViewById(R.id.txt_ds);
         tvName = findViewById(R.id.tvName);
         btnTim = findViewById(R.id.act_khamha_tvTimXe);
         tvTime_inKhamPha = findViewById(R.id.tvTime_inKhamPha);
-        recy1 = findViewById(R.id.recyclerView);
-        recy2 = findViewById(R.id.recyclerView2);
+        recyclerView_khuyenmai = findViewById(R.id.recyclerView_khuyenmai);
         img_user = findViewById(R.id.img_user_inKhamPha);
+        viewPager = findViewById(R.id.viewPager_XeKhamPha);
     }
 
     void load() {
-        recy1.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        recy2.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerView_khuyenmai.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
         List<String> itemList = new ArrayList<>();
         itemList.add("aaaaaa");
@@ -111,9 +115,22 @@ public class KhamPha_Activity extends AppCompatActivity {
         itemList.add("aaaaaa");
         itemList.add("aaaaaa");// Replace with your data
         KhuyenMaiApdater adapter = new KhuyenMaiApdater(this, itemList);
-        recy1.setAdapter(adapter);
-        XeKhamPhaAdapter adapter1 = new XeKhamPhaAdapter(this, itemList);
-        recy2.setAdapter(adapter1);
+        recyclerView_khuyenmai.setAdapter(adapter);
+
+        RetrofitClient.FC_services().getListCar().enqueue(new Callback<List<Car>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<List<Car>> call, retrofit2.Response<List<Car>> response) {
+                XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(KhamPha_Activity.this, response.body());
+                viewPager.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Car>> call, Throwable t) {
+                System.out.println("Có lỗi khi thực hiện: " + t);
+            }
+        });
     }
 
     @Override
@@ -132,28 +149,23 @@ public class KhamPha_Activity extends AppCompatActivity {
         tvName.setText(userName);
 
         if (uri != null) {
-            Glide.with(getBaseContext())
-                    .load(uri)
-                    .into(img_user);
+            Glide.with(getBaseContext()).load(uri).into(img_user);
         } else {
-            Glide.with(getBaseContext())
-                    .load(R.drawable.img_avatar_user)
-                    .into(img_user);
+            Glide.with(getBaseContext()).load(R.drawable.img_avatar_user).into(img_user);
         }
 
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = HostApi.API_URL + "/user/creater_user";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("Đăng nhập thành công" + response.toString());
-                    }
-                }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                System.out.println("Đăng nhập thành công" + response.toString());
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("erro" + error.getMessage());
+                System.out.println("error" + error.getMessage());
             }
         }) {
             @Nullable
@@ -203,13 +215,9 @@ public class KhamPha_Activity extends AppCompatActivity {
         tomorrowInMillis = tomorrow.getTimeInMillis();
 
         datePicker = MaterialDatePicker.Builder.dateRangePicker()
-//                .setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
-//                        MaterialDatePicker.todayInUtcMilliseconds()))
                 .setSelection(Pair.create(todayInMillis, tomorrowInMillis))
                 .setCalendarConstraints(buildCalendarConstraints())
                 .build();
-
-        System.out.println("date: " + todayInMillis);
     }
 
     public void showDatePicker(View view) {
@@ -221,6 +229,16 @@ public class KhamPha_Activity extends AppCompatActivity {
                 // Lấy ngày bắt đầu và ngày kết thúc từ Pair
                 Long startDate = selection.first;
                 Long endDate = selection.second;
+
+                isChooseDatePicker = true;
+
+                SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong("startTime2", startDate);
+                editor.putLong("endTime2", endDate);
+                editor.putBoolean("check", isChooseDatePicker);
+                editor.apply();
+
 
                 // Định dạng ngày tháng theo định dạng tiếng Việt
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -272,7 +290,6 @@ public class KhamPha_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
     }
 
 }

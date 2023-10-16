@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -114,7 +115,6 @@ public class CaNhan_Activity extends AppCompatActivity {
     public void tab4_to_tab1(View view) {
         startActivity(new Intent(getBaseContext(), KhamPha_Activity.class));
     }
-
 
     public void tab4_to_tab2(View view) {
         startActivity(new Intent(getBaseContext(), ChuyenXe_Activity.class));

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_dialog_custom"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="20dp"
+    app:cardCornerRadius="15dp">
+
+
+    <TextView
+        android:id="@+id/btn_open_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/icon_camera_v1"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:text="Chụp ảnh"
+        android:textColor="@color/black"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/btn_open_library"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/icon_picture_v1"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:text="Chọn ảnh từ thư viện"
+        android:textColor="@color/black"
+        android:textSize="17dp" />
+
+</LinearLayout>

@@ -28,10 +28,16 @@
         <item name="cornerFamily" >rounded</item>
         <item name="cornerSize">10%</item>
     </style>
+
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Các thuộc tính tùy chỉnh khác nếu cần -->
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_dialog</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_dialog</item>
     </style>
 
 
