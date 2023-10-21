@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="360dp"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_xeKhamPha"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
+        android:layout_height="360dp"
+        android:layout_marginRight="10dp"
         android:background="@drawable/bo_goc_xekhampha"
         android:padding="10dp"
-        android:layout_marginRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -18,17 +19,45 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_xe_inKhamPha"
+        <RelativeLayout
+            android:id="@+id/rl_fr"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/honda_city"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/img_XekhamPha" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_xe_inKhamPha"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/honda_city"
+                app:shapeAppearanceOverlay="@style/img_XekhamPha"
+                tools:ignore="DuplicateIds" />
+
+            <RelativeLayout
+                android:id="@+id/button_favorite_car_inXeKhamPha"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/custom_btn9"
+                android:backgroundTint="#E6DDDD">
+
+                <ImageView
+                    android:id="@+id/icon_favorite_car_inXeKhamPha"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_nolove" />
+            </RelativeLayout>
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/tv_truyendong_inKhamPha"
@@ -43,7 +72,7 @@
             android:textColor="@color/black"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_xe_inKhamPha" />
+            app:layout_constraintTop_toBottomOf="@+id/rl_fr" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,18 +86,18 @@
             android:textColor="@color/black"
             android:textSize="16dp"
             app:layout_constraintStart_toEndOf="@+id/tv_truyendong_inKhamPha"
-            app:layout_constraintTop_toBottomOf="@+id/img_xe_inKhamPha" />
+            app:layout_constraintTop_toBottomOf="@+id/rl_fr" />
 
         <TextView
             android:id="@+id/tv_tenxe_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
             android:layout_marginLeft="5dp"
-            android:text="TOYOTA INNOVA 2020"
+            android:layout_marginTop="20dp"
             android:drawableRight="@drawable/icons8_shield_24"
             android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="TOYOTA INNOVA 2020"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textColor="@color/black"
             android:textSize="19dp"
@@ -91,7 +120,7 @@
             android:id="@+id/tv_soSao_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/baseline_star_outline_24"
+            android:drawableLeft="@drawable/ic_baseline_star_24"
             android:drawablePadding="5dp"
             android:text="5.0"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
@@ -125,6 +154,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view">
 
             <TextView
+                android:id="@+id/tv_soTienThue_1ngay_inXeKhamPha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="500K"
@@ -141,37 +171,5 @@
                 android:textColor="@color/grey"
                 android:textSize="16dp" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Giá tổng "
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="@color/grey"
-                android:textSize="16dp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="500K"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
-
-
-        </LinearLayout>
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

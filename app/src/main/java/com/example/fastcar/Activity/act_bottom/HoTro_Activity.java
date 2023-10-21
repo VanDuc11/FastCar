@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.R;
 
 public class HoTro_Activity extends AppCompatActivity {
@@ -73,7 +74,7 @@ public class HoTro_Activity extends AppCompatActivity {
                 // đã cấp quyền
                 requestCall();
             } else {
-                Toast.makeText(HoTro_Activity.this, "Không có quyền thực hiện cuộc gọi", Toast.LENGTH_SHORT).show();
+                CustomDialogNotify.showToastCustom(HoTro_Activity.this, "Chưa cấp quyền thực hiện cuộc gọi");
             }
         }
     }

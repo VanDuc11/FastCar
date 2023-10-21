@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="55dp" >
+        android:layout_marginBottom="55dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                         android:id="@+id/avt_user_in_user"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/img_avatar_user" />
+                        android:src="@drawable/img_avatar_user_v1" />
 
                     <TextView
                         android:id="@+id/tv_name_user_in_user"
@@ -90,13 +90,27 @@
                         android:id="@+id/btn_xeyeuthich_in_tabUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_love"
+                        android:drawableLeft="@drawable/icon_love_v2"
                         android:drawableRight="@drawable/icon_next_v1"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:text="Xe yêu thích"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_ThemXe_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_wallet"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Đăng kí cho thuê xe"
                         android:textColor="@color/black"
                         android:textSize="16dp" />
 
@@ -128,6 +142,23 @@
                         android:textColor="@color/black"
                         android:textSize="16dp" />
 
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
                     <TextView
                         android:id="@+id/btn_doiMK_in_tabUser"
                         android:layout_width="match_parent"
@@ -155,22 +186,19 @@
                         android:text="Yêu cầu xoá tài khoản"
                         android:textColor="@color/black"
                         android:textSize="16dp" />
-
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_logout"
-                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:background="@drawable/custom_btn4"
                 android:text="Đăng xuất"
-                android:textSize="17dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                />
+                android:textSize="17dp" />
 
         </LinearLayout>
     </ScrollView>

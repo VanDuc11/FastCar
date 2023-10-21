@@ -60,8 +60,6 @@ public class DanhSachXe_Activity extends AppCompatActivity {
                 adapter = new DanhSachXeAdapter(getApplicationContext(), response.body());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
-                System.out.println(response.body());
             }
 
             @Override
@@ -70,4 +68,10 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        getData();
+//    }
 }

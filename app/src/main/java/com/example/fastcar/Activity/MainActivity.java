@@ -1,4 +1,4 @@
-package com.example.fastcar;
+package com.example.fastcar.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Model.User;
+import com.example.fastcar.R;
 import com.example.fastcar.Server.HostApi;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

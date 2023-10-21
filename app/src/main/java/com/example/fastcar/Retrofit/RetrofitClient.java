@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     public static FastCarServices FC_services() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(HostApi.API_URL + "/")
+                .baseUrl(HostApi.API_URL + "/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(FastCarServices.class);

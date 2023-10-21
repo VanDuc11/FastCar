@@ -11,13 +11,15 @@ public class Car implements Parcelable {
     String _id, BKS, HangXe, MauXe, NSX;
     int SoGhe;
     String ChuyenDong, LoaiNhienLieu;
-    int TieuHao;
+    float TieuHao;
     String MoTa;
     ArrayList<String> HinhAnh;
+    String DiaChiXe;
+    int GiaThue1Ngay;
+    User ChuSH;
     int TrangThai, SoChuyen;
-    ArrayList<FeedBack> FeedBack;
 
-    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, int tieuHao, String moTa, ArrayList<String> hinhAnh, int trangThai, int soChuyen, ArrayList<FeedBack> feedBack) {
+    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String diaChiXe, int giaThue1Ngay, User chuSH, int trangThai, int soChuyen, ArrayList<FeedBack> feedBack) {
         this._id = _id;
         this.BKS = BKS;
         this.HangXe = hangXe;
@@ -29,9 +31,11 @@ public class Car implements Parcelable {
         this.TieuHao = tieuHao;
         this.MoTa = moTa;
         this.HinhAnh = hinhAnh;
+        this.DiaChiXe = diaChiXe;
+        this.GiaThue1Ngay = giaThue1Ngay;
+        this.ChuSH = chuSH;
         this.TrangThai = trangThai;
         this.SoChuyen = soChuyen;
-        this.FeedBack = feedBack;
     }
 
 
@@ -47,12 +51,14 @@ public class Car implements Parcelable {
         SoGhe = in.readInt();
         ChuyenDong = in.readString();
         LoaiNhienLieu = in.readString();
-        TieuHao = in.readInt();
+        TieuHao = in.readFloat();
         MoTa = in.readString();
         HinhAnh = in.createStringArrayList();
+        DiaChiXe = in.readString();
+        GiaThue1Ngay = in.readInt();
+        ChuSH = in.readParcelable(User.class.getClassLoader());
         TrangThai = in.readInt();
         SoChuyen = in.readInt();
-        FeedBack = in.createTypedArrayList(com.example.fastcar.Model.FeedBack.CREATOR);
     }
 
     public static final Creator<Car> CREATOR = new Creator<Car>() {
@@ -123,11 +129,11 @@ public class Car implements Parcelable {
         LoaiNhienLieu = loaiNhienLieu;
     }
 
-    public int getTieuHao() {
+    public float getTieuHao() {
         return TieuHao;
     }
 
-    public void setTieuHao(int tieuHao) {
+    public void setTieuHao(float tieuHao) {
         TieuHao = tieuHao;
     }
 
@@ -172,14 +178,29 @@ public class Car implements Parcelable {
         this._id = _id;
     }
 
-    public ArrayList<FeedBack> getFeedBack() {
-        return FeedBack;
+    public User getChuSH() {
+        return ChuSH;
     }
 
-    public void setFeedBack(ArrayList<FeedBack> feedBack) {
-        FeedBack = feedBack;
+    public void setChuSH(User chuSH) {
+        ChuSH = chuSH;
     }
 
+    public String getDiaChiXe() {
+        return DiaChiXe;
+    }
+
+    public void setDiaChiXe(String diaChiXe) {
+        DiaChiXe = diaChiXe;
+    }
+
+    public int getGiaThue1Ngay() {
+        return GiaThue1Ngay;
+    }
+
+    public void setGiaThue1Ngay(int giaThue1Ngay) {
+        GiaThue1Ngay = giaThue1Ngay;
+    }
 
     @Override
     public int describeContents() {
@@ -196,11 +217,13 @@ public class Car implements Parcelable {
         parcel.writeInt(SoGhe);
         parcel.writeString(ChuyenDong);
         parcel.writeString(LoaiNhienLieu);
-        parcel.writeInt(TieuHao);
+        parcel.writeFloat(TieuHao);
         parcel.writeString(MoTa);
         parcel.writeStringList(HinhAnh);
+        parcel.writeString(DiaChiXe);
+        parcel.writeInt(GiaThue1Ngay);
+        parcel.writeParcelable(ChuSH, i);
         parcel.writeInt(TrangThai);
         parcel.writeInt(SoChuyen);
-        parcel.writeTypedList(FeedBack);
     }
 }

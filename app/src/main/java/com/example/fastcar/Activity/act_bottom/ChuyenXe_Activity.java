@@ -3,6 +3,7 @@ package com.example.fastcar.Activity.act_bottom;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +11,24 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.fastcar.Activity.ChiTietHoaDon_Activity;
+import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Adapter.DanhSachChuyenXeAdapter;
+import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChuyenXe_Activity extends AppCompatActivity {
     RecyclerView recyclerView_chuyenXe;
     DanhSachChuyenXeAdapter adapter;
-    List<String> listChuyenXe = new ArrayList<>();
+    LinearLayout ln_noResult;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +36,47 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_chuyen_xe);
 
         mapping();
+        load();
 
-        listChuyenXe.add("1");
-        listChuyenXe.add("1");
-        listChuyenXe.add("1");
-        listChuyenXe.add("1");
-        adapter = new DanhSachChuyenXeAdapter(listChuyenXe, this);
-        recyclerView_chuyenXe.setAdapter(adapter);
-
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                load();
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     void mapping() {
         recyclerView_chuyenXe = findViewById(R.id.recyclerView_chuyenxe);
+        ln_noResult = findViewById(R.id.ln_no_result_inChuyenXe);
+        refreshLayout = findViewById(R.id.refresh_data_inChuyenXe);
+    }
+
+    private void load() {
+        ln_noResult.setVisibility(View.GONE);
+        RetrofitClient.FC_services().getListHoaDon("1,2,3").enqueue(new Callback<List<HoaDon>>() {
+            @Override
+            public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+                if (response.code() == 200) {
+                    if(response.body() != null) {
+                        ln_noResult.setVisibility(View.GONE);
+                        adapter = new DanhSachChuyenXeAdapter(ChuyenXe_Activity.this, response.body());
+                        recyclerView_chuyenXe.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        refreshLayout.setVisibility(View.GONE);
+                        ln_noResult.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HoaDon>> call, Throwable t) {
+                System.out.println("Có lỗi xảy ra: " + t);
+            }
+        });
     }
 
     public void tab2_to_tab1(View view) {
@@ -53,7 +91,17 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         startActivity(new Intent(getBaseContext(), CaNhan_Activity.class));
     }
 
+    public void fromChuyenXe_to_LSChuyenXe(View view) {
+        startActivity(new Intent(getBaseContext(), LichSu_ThueXe_Activity.class));
+    }
+
     @Override
     public void onBackPressed() {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        load();
     }
 }

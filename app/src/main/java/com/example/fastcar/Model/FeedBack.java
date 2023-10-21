@@ -5,24 +5,33 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class FeedBack implements Parcelable {
-    User user;
-    String NoiDung;
-    int Sao;
+import java.util.Date;
 
-    public FeedBack(User user, String noiDung, int sao) {
-        this.user = user;
+public class FeedBack implements Parcelable {
+    User User;
+    Car Xe;
+    String NoiDung;
+    int SoSao;
+    String ThoiGian;
+
+    public FeedBack(User user, Car xe, String noiDung, int soSao, String thoiGian) {
+        this.User = user;
+        this.Xe = xe;
         NoiDung = noiDung;
-        Sao = sao;
+        SoSao = soSao;
+        ThoiGian = thoiGian;
     }
 
     public FeedBack() {
     }
 
+
     protected FeedBack(Parcel in) {
-        user = in.readParcelable(User.class.getClassLoader());
+        User = in.readParcelable(User.class.getClassLoader());
+        Xe = in.readParcelable(Car.class.getClassLoader());
         NoiDung = in.readString();
-        Sao = in.readInt();
+        SoSao = in.readInt();
+        ThoiGian = in.readString();
     }
 
     public static final Creator<FeedBack> CREATOR = new Creator<FeedBack>() {
@@ -37,12 +46,33 @@ public class FeedBack implements Parcelable {
         }
     };
 
-    public User getUser() {
-        return user;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeParcelable(Xe, i);
+        parcel.writeString(NoiDung);
+        parcel.writeInt(SoSao);
+        parcel.writeString(ThoiGian);
+    }
+
+    public com.example.fastcar.Model.User getUser() {
+        return User;
+    }
+
+    public void setUser(com.example.fastcar.Model.User user) {
+        User = user;
+    }
+
+    public Car getXe() {
+        return Xe;
+    }
+
+    public void setXe(Car xe) {
+        Xe = xe;
     }
 
     public String getNoiDung() {
@@ -53,23 +83,19 @@ public class FeedBack implements Parcelable {
         NoiDung = noiDung;
     }
 
-    public int getSao() {
-        return Sao;
+    public int getSoSao() {
+        return SoSao;
     }
 
-    public void setSao(int sao) {
-        Sao = sao;
+    public void setSoSao(int soSao) {
+        SoSao = soSao;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getThoiGian() {
+        return ThoiGian;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeParcelable((Parcelable) user, i);
-        parcel.writeString(NoiDung);
-        parcel.writeInt(Sao);
+    public void setThoiGian(String thoiGian) {
+        ThoiGian = thoiGian;
     }
 }

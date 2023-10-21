@@ -6,10 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/blue_app"
         android:gravity="center">
 
         <ImageView
@@ -17,21 +16,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:src="@drawable/icon_back" />
+            android:src="@drawable/icon_back_black" />
 
         <TextView
             android:id="@+id/tv_tenxe_actionBar_inChiTietXe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:gravity="center"
             android:maxLines="1"
-            android:paddingRight="30dp"
             android:text="TOYOTA Innova 2020"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-            android:textColor="@color/white"
             android:textSize="17dp" />
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/icon_favorite_car_inCTX"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/icon_nolove" />
+    </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -42,7 +46,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/gr1"
@@ -54,8 +58,8 @@
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewPager_Photo_inChiTietXe"
-                    android:layout_width="wrap_content"
-                    android:layout_height="270dp"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp" />
 
                 <me.relex.circleindicator.CircleIndicator
                     android:id="@+id/circle_indicator_inChiTietXe"
@@ -67,7 +71,7 @@
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView2"
+                android:id="@+id/cardview_tenXe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -87,6 +91,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:drawableRight="@drawable/icons8_shield_24"
+                        android:drawablePadding="10dp"
                         android:padding="3dp"
                         android:text="TOYOTA Innova 2020"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
@@ -108,11 +114,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:drawableStart="@drawable/baseline_star_outline_24"
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@drawable/ic_baseline_star_24"
                             android:gravity="center"
-                            android:text="5"
+                            android:text="5.0"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                            android:textSize="17dp" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/tv_soChuyen_inChiTietXe"
@@ -120,28 +127,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:drawableLeft="@drawable/baseline_outlined_flag_24"
-                            android:drawablePadding="10dp"
+                            android:drawablePadding="5dp"
                             android:text="4 chuyến"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                            android:textSize="17dp"
+                            android:textSize="16dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
                     </LinearLayout>
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:drawableRight="@drawable/icons8_favorites_24"
-                        android:drawablePadding="10dp"
-                        android:text="Yêu thích"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                        android:textSize="15dp"
-
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -150,6 +144,7 @@
                         app:layout_constraintEnd_toEndOf="parent">
 
                         <TextView
+                            android:id="@+id/tv_soTienThue_1ngay_inChiTietXe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="500k"
@@ -176,48 +171,45 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView4"
+                android:id="@+id/cardview_thoigianThueXe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                app:cardBackgroundColor="#F1F1F1"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/cardview_tenXe"
                 tools:layout_editor_absoluteX="10dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
                         android:id="@+id/textView16"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thời gian thuê"
+                        android:padding="3dp"
+                        android:text="Thời gian thuê xe"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textSize="17dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:textSize="17dp" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/linearLayout3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="5dp"
-                        app:cardElevation="5dp"
+                        app:cardElevation="2dp"
                         app:cardUseCompatPadding="true"
-                        tools:ignore="MissingConstraints"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView16">
+                        tools:ignore="MissingConstraints">
 
                         <LinearLayout
-                            android:onClick="showDatePicker_inChiTietXe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="showDatePicker_inChiTietXe"
                             android:orientation="horizontal"
                             android:padding="10dp">
 
@@ -231,6 +223,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Nhận xe"
+                                    android:drawableLeft="@drawable/icon_date"
+                                    android:drawablePadding="5dp"
+                                    android:gravity="center"
                                     android:textSize="16dp" />
 
                                 <TextView
@@ -238,9 +233,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="12/12/2000"
+                                    android:textStyle="bold"
+                                    android:layout_marginLeft="33dp"
                                     android:textColor="@color/black"
-                                    android:textSize="18dp"
-                                    android:textStyle="bold" />
+                                    android:textSize="16dp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -253,6 +249,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Trả xe"
+                                    android:drawableLeft="@drawable/icon_date"
+                                    android:drawablePadding="5dp"
+                                    android:gravity="center"
                                     android:textSize="16dp" />
 
                                 <TextView
@@ -260,107 +259,165 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="13/12/2000"
+                                    android:layout_marginLeft="33dp"
                                     android:textColor="@color/black"
-                                    android:textSize="18dp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:textSize="16dp" />
                             </LinearLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-
                     <TextView
-                        android:id="@+id/textView31"
+                        android:id="@+id/tv_xedaThue_inChiTietXe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
                         android:text="Xe đã được thuê từ ngày 8:00 04/10/2023 - 8:00 04/10/2023"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textColor="@color/red"
-                        android:textSize="15dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-
-                    <View
-                        android:id="@+id/view"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@color/grey"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView31" />
+                        android:textSize="15dp" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="Địa điểm giao nhận xe"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
 
-                        android:id="@+id/textView19"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_selection_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="2dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <RadioButton
+                                android:id="@+id/rd_selection1"
+                                android:layout_width="35dp"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="5dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="5dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tôi tự đến lấy xe"
+                                        android:textSize="16dp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="right"
+                                        android:text="Miễn phí"
+                                        android:textColor="@color/button_green"
+                                        android:textSize="18dp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_diachiXe_inCTX"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="Quận Nam Từ Liêm, Hà Nội"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                                    android:textSize="17dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="Địa chỉ xe cụ thể sẽ được hiển thị sau khi đặt cọc thành công trên ứng dụng"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_selection_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Giới hạn số km"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textSize="17dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view" />
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="2dp"
+                        app:cardUseCompatPadding="true">
 
-                    <TextView
-                        android:id="@+id/textView20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="400km/ngày"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                        android:textSize="15dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
 
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Phí vượt: 5000 VND/km"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                        android:textSize="15dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                            <RadioButton
+                                android:id="@+id/rd_selection2"
+                                android:layout_width="35dp"
+                                android:visibility="visible"
+                                android:clickable="false"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="5dp" />
 
-                    <TextView
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="5dp">
 
-                        android:id="@+id/textView27"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Tài sản thế chấp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textSize="17dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
 
-                    <TextView
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tôi muốn được giao xe tận nơi"
+                                        android:textSize="16dp" />
 
-                        android:id="@+id/textView28"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="15 triệu (tiền mặt khi nhận xe) hoặc Xe máy (kèm cà vệt gốc) giá trị 15 triệu"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                        android:textColor="@color/grey"
-                        android:textSize="15dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="right"
+                                        android:textColor="@color/button_green"
+                                        android:textSize="18dp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="Rất tiếc, chủ xe không hỗ trợ giao xe tận nơi"
+                                    android:textSize="15dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView7"
+                android:id="@+id/cardview_dacdiemXe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -370,32 +427,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView4">
+                app:layout_constraintTop_toBottomOf="@+id/cardview_thoigianThueXe">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView23"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Đặc điểm"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textSize="17dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:textSize="17dp" />
 
                     <LinearLayout
                         android:id="@+id/act_chitietxe_reyDacDiem"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:orientation="horizontal"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView23"
                         tools:ignore="MissingConstraints">
 
                         <LinearLayout
@@ -419,6 +471,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
                                 android:text="Số tự động"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textSize="16dp" />
@@ -446,6 +499,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
                                 android:text="4 chỗ"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textSize="16dp" />
@@ -473,6 +527,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
                                 android:text="Xăng"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textSize="16dp" />
@@ -500,82 +555,396 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
                                 android:text="10l/100km"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textSize="16dp" />
                         </LinearLayout>
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#E1D7D7" />
+
                     <TextView
-                        android:id="@+id/textView22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Mô tả"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textSize="17dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/act_chitietxe_reyDacDiem" />
+                        android:textSize="17dp" />
 
                     <TextView
                         android:id="@+id/tv_moTa_inChiTietXe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="aa"
+                        android:text="aa bb cc dd ee"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textColor="@color/grey"
-                        android:textSize="15dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView22" />
-
+                        android:textSize="16dp" />
 
                     <View
-                        android:id="@+id/view4"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@color/grey"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_moTa_inChiTietXe" />
+                        android:layout_marginTop="10dp"
+                        android:background="#E1D7D7" />
 
                     <TextView
-
-                        android:id="@+id/textView29"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Nhận xét"
+                        android:text="Vị trí xe"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                        android:textSize="17dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view4" />
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/icon_location_black"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textColor="@color/grey"
+                        android:text="Quận Nam Từ Liêm, Hà Nội"
+                        android:textSize="16dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_chuxe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardview_dacdiemXe">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chủ xe"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:orientation="horizontal">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img_avatar_chuSHXe_inCTX"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/img_avatar_user_v1" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_tenChuSH_Xe_inCTX"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="17dp"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                                android:text="Elon Musk :)" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_soSao_ofChuSH_Xe_inCTX"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_baseline_star_24"
+                                    android:gravity="center"
+                                    android:text="5.0"
+                                    android:drawablePadding="5dp"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                    android:textSize="16dp" />
+
+                                <TextView
+                                    android:id="@+id/tv_soChuyen_ofChuSH_Xe_inCTX"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="20dp"
+                                    android:drawableLeft="@drawable/baseline_outlined_flag_24"
+                                    android:drawablePadding="5dp"
+                                    android:text="4 chuyến"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                    android:textSize="16dp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Thông tin liên hệ sẽ được hiển thị sau khi đặt cọc trên ứng dụng."
+                                android:textColor="@color/grey"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                android:textSize="15dp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_DieuKhoan_PhuPhi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardview_chuxe">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:onClick="showDialog_GiayToThueXe_inCTX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/icon_question_16x16"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:text="Giấy tờ thuê xe"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn 1 trong 2 hình thức:"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:drawableLeft="@drawable/icon_cccd"
+                        android:drawablePadding="10dp"
+                        android:text="GPLX CCCD gắn chip (đối chiếu)"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:drawableLeft="@drawable/icon_hochieu"
+                        android:drawablePadding="10dp"
+                        android:text="GPLX (đối chiếu) Passport (giữ lại)"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
 
                     <View
-                        android:id="@+id/view6"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="30dp"
-                        android:background="@color/grey"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView29" />
+                        android:layout_marginTop="10dp"
+                        android:background="#E1D7D7" />
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableRight="@drawable/icon_question_16x16"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:onClick="showDialog_TSTheChap_inCTX"
+                        android:text="Tài sản thế chấp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Miễn thế chấp"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#E1D7D7" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Phụ phí có thể phát sinh"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Phí vượt giới hạn"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="5 000đ/km"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tv_400km_inChiTietXe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Phụ phí phát sinh nếu lộ trình di chuyển vượt quá 400km khi thuê 1 ngày"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textColor="@color/grey"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Phụ phí khác"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Phụ phí phát sinh nếu trả xe trễ, xe không đảm bảo vệ sinh hoặc bị ám mùi"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textColor="@color/grey"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:onClick="showDialog_PhuPhiPhatSinh_inCTX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:text="Xem thêm"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#E1D7D7" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Điều khoản"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/tv_dieukhoan_inChiTietXe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieukhoan"
+                        android:maxLines="5"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_see_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawablePadding="10dp"
+                        android:text="Xem thêm"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="15dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_danhgiaXe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardview_DieuKhoan_PhuPhi">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView29"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nhận xét"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/act_chitietxe_reyNhanXet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view6" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="vertical"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/tv_noResult_inFB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chưa có nhận xét nào"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="15dp" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
 
@@ -591,14 +960,20 @@
         android:layout_gravity="center"
         android:background="#F4F6F8"
         android:gravity="center"
-        android:orientation="vertical"
         tools:layout_editor_absoluteX="27dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E1D7D7"
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/textView30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
             android:text="Số ngày thuê:"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textSize="15dp"
@@ -610,6 +985,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
+            android:layout_marginTop="10dp"
             android:text="1 ngày"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textSize="15dp"
@@ -634,7 +1010,7 @@
         <TextView
             android:id="@+id/btn_thuexe"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/custom_btn3"
@@ -642,8 +1018,7 @@
             android:text="Chọn thuê"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            android:textStyle="bold"
+            android:textSize="17dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

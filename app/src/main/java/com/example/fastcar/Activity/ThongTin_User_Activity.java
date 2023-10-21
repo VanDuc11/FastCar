@@ -23,16 +23,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.CustomDialogNotify;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.R;
 
 import java.io.File;

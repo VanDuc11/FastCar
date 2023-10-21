@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="20dp"
+    app:cardElevation="10dp"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="15dp">
 
@@ -17,7 +17,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_baseline_check_circle_outline_24" />
 
         <TextView
@@ -26,18 +26,19 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="THANH TOÁN THÀNH CÔNG"
-            android:textSize="23dp"
+            android:textSize="21dp"
             android:textStyle="bold"
             android:textColor="@color/button_green" />
 
         <TextView
+            android:id="@+id/tv_content_dialog_tt_success"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Quý khách đã thanh toán thành công 333.333 đ tiền cọc cho xe Vinfast Lux A2.0 (1333-4343657)"
             android:textColor="@color/black"
             android:padding="5dp"
-            android:textSize="17dp" />
+            android:textSize="16dp" />
 
 
         <androidx.appcompat.widget.AppCompatButton

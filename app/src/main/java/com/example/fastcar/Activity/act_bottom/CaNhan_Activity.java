@@ -13,14 +13,14 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.CustomDialogNotify;
+import com.example.fastcar.Activity.XeYeuThich_Activity;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongTin_User_Activity;
@@ -33,7 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CaNhan_Activity extends AppCompatActivity {
-    TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnDeleteAccount, btnXeYeuThich, btnDoiMK;
+    TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnDeleteAccount, btnXeYeuThich, btnThemXe, btnDoiMK;
     AppCompatButton btnLogout;
     CircleImageView avt_user;
     TextView tv_name_user;
@@ -80,10 +80,14 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         // Xe yêu thích
         btnXeYeuThich.setOnClickListener(
-                view -> CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Chức năng đang phát triển"));
+                view -> startActivity(new Intent(CaNhan_Activity.this, XeYeuThich_Activity.class)));
 
         // Voucher
         btnVoucher.setOnClickListener(
+                view -> CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Chức năng đang phát triển"));
+
+        // Thêm xe
+        btnThemXe.setOnClickListener(
                 view -> CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Chức năng đang phát triển"));
 
         // Lịch sử thuê xe
@@ -110,6 +114,7 @@ public class CaNhan_Activity extends AppCompatActivity {
         btnDoiMK = findViewById(R.id.btn_doiMK_in_tabUser);
         avt_user = findViewById(R.id.avt_user_in_user);
         tv_name_user = findViewById(R.id.tv_name_user_in_user);
+        btnThemXe = findViewById(R.id.btn_ThemXe_in_tabUser);
     }
 
     public void tab4_to_tab1(View view) {

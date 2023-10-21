@@ -15,9 +15,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,12 +24,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FastCar"
+        android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity
+            android:name=".Activity.XeYeuThich_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MaGiamGia_Activity"
+            android:exported="false" />
         <activity
             android:name=".Activity.CapNhatThongTinUser_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.act_bottom.ThongBao_Activity"
+            android:name=".Activity.ThongBao_Activity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
@@ -51,7 +56,7 @@
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
-            android:name=".Activity.ThongTinTruocDatCoc_Activity"
+            android:name=".Activity.HoaDon_Activity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
@@ -113,7 +118,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

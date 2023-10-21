@@ -7,15 +7,12 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
-import com.example.fastcar.MainActivity;
 import com.example.fastcar.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -35,7 +32,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.jetbrains.annotations.Nullable;
@@ -185,7 +181,6 @@ public class Login_Activity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -221,7 +216,7 @@ public class Login_Activity extends AppCompatActivity {
                             navigateToSecondActivity();
                         }
                         else {
-                            Toast.makeText(Login_Activity.this, "ERRO", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login_Activity.this, "ERROR", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

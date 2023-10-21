@@ -53,7 +53,7 @@
                         android:id="@+id/avt_user_in_thongtinchitiet"
                         android:layout_width="140dp"
                         android:layout_height="140dp"
-                        android:src="@drawable/img_avatar_user" />
+                        android:src="@drawable/img_avatar_user_v1" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"

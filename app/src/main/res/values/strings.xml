@@ -23,4 +23,16 @@
     <string name="title_hotro">Hỗ trợ</string>
     <string name="title_user">Cá nhân</string>
 
+    <string name="dieukhoan">Quy định khác:\n
+  - Sử dụng xe đúng mục đích.\n
+  - Không sử dụng xe thuê vào mục đích phi pháp,trái pháp luật.\n
+  - Không sử dụng xe thuê để cầm cố, thế chấp tài sản.\n
+  - Không hút thuốc, nhả kẹo cao su, xả rác trong xe.\n
+  - Không chở hàng cấm, dễ cháy nổ.\n
+  - Không chở hoa quả, thực phẩm nặng mùi trong xe.\n
+  - Khi trả xe, nếu xe bẩn hoặc có mùi trong xe, khách hàng vui lòng vệ sinh xe sạch sẽ hoặc gửi phụ thu phí vệ sinh xe.\n
+Trân trọng cảm ơn quý khách. Chúc quý khách hàng có những chuyến đi tuyệt vời ! </string>
+
+    <string name="goiyloinhan">Chào anh/chị chủ xe!\nTôi cần thuê xe của anh/chị để đi du lịch cùng gia đình với thời gian như trên.\nTôi có đầy đủ giấy tờ thuê xe và tài sản thế chấp nếu anh/chị cần.\nAnh/Chị vui lòng báo giúp tình trạng xe sớm nhé. Cảm ơn anh/chị!</string>
+
 </resources>

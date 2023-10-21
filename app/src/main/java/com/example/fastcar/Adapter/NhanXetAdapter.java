@@ -10,17 +10,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.R;
 
 import java.util.List;
 
 public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHoder>{
     Context context;
-    List<String> list;
+    List<FeedBack> list;
 
-    public NhanXetAdapter(Context context, List<String> list){
+    public NhanXetAdapter(Context context, List<FeedBack> list){
         this.context = context;
         this.list = list;
+    }
+
+    public  class  ViewHoder extends RecyclerView.ViewHolder{
+        TextView tvTen,tvSao,tvDate, tvContent;
+        ImageView imgUser;
+        public ViewHoder(@NonNull View itemView) {
+            super(itemView);
+            tvTen = itemView.findViewById(R.id.tv_nameUser_feedback);
+            tvSao = itemView.findViewById(R.id.tv_soSao_ofFeedBackUser);
+            tvDate = itemView.findViewById(R.id.tv_feedBack_date);
+            imgUser = itemView.findViewById(R.id.img_feedback_ofUser);
+            tvContent = itemView.findViewById(R.id.tv_feedBack_content);
+        }
     }
     @NonNull
     @Override
@@ -31,7 +45,15 @@ public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHode
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
-
+        FeedBack feedBack = list.get(position);
+        holder.tvTen.setText(feedBack.getUser().getUserName());
+        holder.tvDate.setText(feedBack.getThoiGian());
+        holder.tvSao.setText(String.valueOf(feedBack.getSoSao()));
+        if(feedBack.getNoiDung() != null) {
+            holder.tvContent.setText(feedBack.getNoiDung());
+        } else {
+            holder.tvContent.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -39,15 +61,4 @@ public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHode
         return list.size();
     }
 
-    public  class  ViewHoder extends RecyclerView.ViewHolder{
-        TextView tvTen,tvSao,tvDate;
-        ImageView img;
-        public ViewHoder(@NonNull View itemView) {
-            super(itemView);
-            tvTen = itemView.findViewById(R.id.layout_item_nhanXet_tvName);
-            tvSao = itemView.findViewById(R.id.layout_item_nhanXet_tvSao);
-            tvDate = itemView.findViewById(R.id.layout_item_nhanXet_tvDate);
-            img = itemView.findViewById(R.id.layout_item_nhanXet_img);
-        }
-    }
 }

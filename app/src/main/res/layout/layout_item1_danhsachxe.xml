@@ -19,26 +19,53 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/gr1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
             tools:ignore="MissingConstraints">
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewPager_Photo"
-                android:layout_width="wrap_content"
-                android:layout_height="210dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                tools:ignore="MissingConstraints">
 
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/circle_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="-40dp"
-                android:gravity="center_horizontal" />
-        </LinearLayout>
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager_Photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="210dp" />
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/circle_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="-40dp"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/button_favorite_car_inListXe"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/custom_btn9"
+                android:backgroundTint="#E6DDDD">
+
+                <ImageView
+                    android:id="@+id/icon_favorite_car_inListXe"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_nolove" />
+            </RelativeLayout>
+
+        </RelativeLayout>
 
 
         <TextView
@@ -105,7 +132,7 @@
             android:id="@+id/tv_soSao_inItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/baseline_star_outline_24"
+            android:drawableLeft="@drawable/ic_baseline_star_24"
             android:drawablePadding="5dp"
             android:text="5.0"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
@@ -139,8 +166,9 @@
             app:layout_constraintTop_toBottomOf="@+id/view">
 
             <TextView
+                android:id="@+id/tv_soTienThue_1ngay_inDSxe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:text="500K"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="#67CC88"
@@ -154,32 +182,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@color/grey"
                 android:textSize="16dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Giá tổng "
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="@color/grey"
-                android:textSize="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="500K"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
