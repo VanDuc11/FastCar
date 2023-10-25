@@ -146,7 +146,7 @@ public class KhamPha_Activity extends AppCompatActivity {
 
     void Save() {
         String personName = fBaseuser.getDisplayName();
-        String userName = personName == "" ? "UserName" : personName;
+        String userName = personName == null ? "UserName" : personName;
         String Email = fBaseuser.getEmail();
         Uri uri = fBaseuser.getPhotoUrl();
         tvName.setText(userName);

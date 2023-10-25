@@ -34,7 +34,8 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_btn9"
-                android:onClick="fromChuyenXe_to_LSChuyenXe">
+                android:onClick="fromChuyenXe_to_LSChuyenXe"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -94,7 +95,8 @@
                     android:text="Xem lịch sử chuyến"
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                     android:textColor="@color/button_green"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </LinearLayout>
         </LinearLayout>
@@ -116,7 +118,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="tab2_to_tab1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck">
 
             <ImageView
                 android:layout_width="30dp"
@@ -154,7 +157,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="tab2_to_tab3"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck">
 
             <ImageView
                 android:layout_width="30dp"
@@ -168,7 +172,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:onClick="tab2_to_tab4"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck">
 
             <ImageView
                 android:layout_width="30dp"
