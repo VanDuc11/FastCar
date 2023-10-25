@@ -25,6 +25,9 @@ public interface FastCarServices {
     @GET("xe/list")
     Call<List<Car>> getListCar();
 
+    @GET("xe/top5xe")
+    Call<List<Car>> getListTop5Car();
+
     @POST("xe/create")
     Call<ResMessage> createXe(@Body Car car);
 
