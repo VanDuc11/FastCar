@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,8 +22,21 @@ import android.widget.TextView;
 
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
+import com.example.fastcar.FormatString.NumberFormatVND;
+import com.example.fastcar.Model.CreateOrder;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
+
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class ThanhToan_Activity extends AppCompatActivity {
     RadioButton rd_momo, rd_zalopay;
@@ -34,6 +48,13 @@ public class ThanhToan_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanh_toan);
+
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
 
         mapping();
         load();
@@ -69,14 +90,14 @@ public class ThanhToan_Activity extends AppCompatActivity {
             rd_zalopay.setChecked(false);
         }
 
-        tv_tienCoc.setText(format_Money_to_VND(hoaDon.getTienCoc()));
+        tv_tienCoc.setText(NumberFormatVND.format(hoaDon.getTienCoc()));
 
         btn_thanhtoan.setOnClickListener(view -> {
             if (!rd_zalopay.isChecked() && !rd_momo.isChecked()) {
                 CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Chưa chọn phương thức thanh toán");
             } else {
                 if (rd_zalopay.isChecked()) {
-                    showDialog(hoaDon);
+                    requestZaloPay(hoaDon);
                 } else {
                     CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Chức năng thanh toán qua ví Momo đang phát tiển");
                 }
@@ -84,7 +105,40 @@ public class ThanhToan_Activity extends AppCompatActivity {
         });
     }
 
-    void showDialog(HoaDon hoaDon) {
+    private void requestZaloPay(HoaDon hoaDon) {
+        CreateOrder orderApi = new CreateOrder();
+        try {
+            JSONObject data = orderApi.createOrder(String.valueOf(hoaDon.getTienCoc()));
+            String code = data.getString("return_code");
+
+            if (code.equals("1")) {
+                String token = data.getString("zp_trans_token");
+
+                ZaloPaySDK.getInstance().payOrder(ThanhToan_Activity.this, token, "demozpdk://app", new PayOrderListener() {
+                    @Override
+                    public void onPaymentSucceeded(String s, String s1, String s2) {
+                        hoaDon.setTrangThaiHD(2);
+                        updateTrangThaiHD(hoaDon);
+                        showDialog(hoaDon);
+                    }
+
+                    @Override
+                    public void onPaymentCanceled(String s, String s1) {
+                        CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Bạn đã huỷ thanh toán");
+                    }
+
+                    @Override
+                    public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                        CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Thanh toán thất bại");
+                    }
+                });
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showDialog(HoaDon hoaDon) {
         LayoutInflater inflater = LayoutInflater.from(ThanhToan_Activity.this);
         View custom = inflater.inflate(R.layout.dialog_thanhtoan_thanhcong, null);
         Dialog dialog = new Dialog(ThanhToan_Activity.this);
@@ -106,7 +160,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
 
         TextView tv_content = dialog.findViewById(R.id.tv_content_dialog_tt_success);
 
-        StringBuilder format_Money = format_Money_to_VND(hoaDon.getTienCoc());
+        StringBuilder format_Money = NumberFormatVND.format(hoaDon.getTienCoc());
         String maHD = hoaDon.getMaHD();
         String tenXe = hoaDon.getXe().getMauXe();
         String st_html = "Quý khách đã thanh toán thành công <b>" + format_Money + "</b> tiền cọc cho xe "
@@ -124,20 +178,27 @@ public class ThanhToan_Activity extends AppCompatActivity {
         });
     }
 
-    private StringBuilder format_Money_to_VND(int money) {
-        StringBuilder sb = new StringBuilder(String.valueOf(money));
-        int count = 0;
-        for (int i = sb.length() - 1; i >= 0; i--) {
-            count++;
-            if (count % 3 == 0 && i != 0) {
-                sb.insert(i, '.');
+    private void updateTrangThaiHD(HoaDon hoaDon) {
+        RetrofitClient.FC_services().updateTrangThaiHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
             }
-        }
-        sb.append(" đ");
-        return sb;
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println("Có lỗi khi cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + "  " + t);
+            }
+        });
     }
 
     public void back_to_HoaDon(View view) {
         onBackPressed();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
     }
 }

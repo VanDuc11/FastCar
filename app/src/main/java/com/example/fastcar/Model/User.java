@@ -6,13 +6,15 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class User implements Parcelable {
     String _id, UID, UserName, SDT, NgaySinh, GioiTinh , Email;
     ArrayList<String> GPLX, CCCD;
-    String MatKhau;
+    String MatKhau, Avatar;
+    Date NgayThamGia;
 
-    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, ArrayList<String> GPLX, ArrayList<String> CCCD, String matKhau) {
+    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, ArrayList<String> GPLX, ArrayList<String> CCCD, String matKhau, String avatar, Date ngayThamGia) {
         this._id = _id;
         this.UID = UID;
         UserName = userName;
@@ -23,6 +25,8 @@ public class User implements Parcelable {
         this.GPLX = GPLX;
         this.CCCD = CCCD;
         MatKhau = matKhau;
+        this.Avatar = avatar;
+        this.NgayThamGia = ngayThamGia;
     }
 
     public User() {
@@ -39,6 +43,8 @@ public class User implements Parcelable {
         GPLX = in.createStringArrayList();
         CCCD = in.createStringArrayList();
         MatKhau = in.readString();
+        Avatar = in.readString();
+        NgayThamGia = new Date(in.readLong());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -70,6 +76,8 @@ public class User implements Parcelable {
         parcel.writeStringList(GPLX);
         parcel.writeStringList(CCCD);
         parcel.writeString(MatKhau);
+        parcel.writeString(Avatar);
+        parcel.writeLong(NgayThamGia.getTime());
     }
 
     public String get_id() {
@@ -150,5 +158,21 @@ public class User implements Parcelable {
 
     public void setMatKhau(String matKhau) {
         MatKhau = matKhau;
+    }
+
+    public String getAvatar() {
+        return Avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        Avatar = avatar;
+    }
+
+    public Date getNgayThamGia() {
+        return NgayThamGia;
+    }
+
+    public void setNgayThamGia(Date ngayThamGia) {
+        NgayThamGia = ngayThamGia;
     }
 }

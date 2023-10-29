@@ -306,7 +306,8 @@
                         android:id="@+id/tv_thoiGian_thanhtoan_conlai_inHD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đang chờ khách hàng thành toán 59 phút 33 giây"
+                        android:lineHeight="22dp"
+                        android:text="Đang chờ khách hàng thanh toán 59 phút 33 giâythành toán 59 phút 33 giây"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textSize="15dp" />
                 </LinearLayout>

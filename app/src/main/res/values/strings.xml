@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FastCar</string>
+    <string name="app_name">Fast Car</string>
 
     <string name="facebook_app_id">688196926667846</string>
     <string name="fb_login_protocol_scheme">fb1234</string>

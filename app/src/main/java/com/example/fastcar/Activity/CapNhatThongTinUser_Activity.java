@@ -49,7 +49,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CapNhatThongTinUser_Activity extends AppCompatActivity {
-    TextInputLayout edt_hoten, edt_email, edt_sdt, edt_ngaysinh;
+    TextInputLayout edt_hoten, edt_sdt, edt_ngaysinh;
     Spinner spinner;
     AppCompatButton btnUpdate;
     Calendar calendar;
@@ -84,7 +84,6 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
 
     private void mapping() {
         edt_hoten = findViewById(R.id.edt_hoten_in_ud);
-        edt_email = findViewById(R.id.edt_email_in_ud);
         edt_sdt = findViewById(R.id.edt_sdt_in_ud);
         edt_ngaysinh = findViewById(R.id.edt_ngaysinh_in_ud);
         spinner = findViewById(R.id.spinner_gioittinh_in_ud);

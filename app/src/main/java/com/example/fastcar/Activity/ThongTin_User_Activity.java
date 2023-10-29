@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Dialog.CustomDialogNotify;
+import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 
 import java.io.File;
@@ -43,12 +44,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ThongTin_User_Activity extends AppCompatActivity {
     ImageView btn_edit_info;
-    TextView tv_hoten, tv_email, tv_sdt, tv_gioitinh, tv_ngaysinh, tv_ten_hienthi;
+    TextView tv_hoten, tv_email, tv_sdt, tv_gioitinh, tv_ngaysinh, tv_ten_hienthi, tv_ngaythamgia;
     CircleImageView img_avt_user;
     String name, email, phone, url;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +75,22 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         tv_ten_hienthi = findViewById(R.id.tv_name_user_in_thongtinchitiet);
         btn_edit_info = findViewById(R.id.btn_edit_info_user);
         img_avt_user = findViewById(R.id.avt_user_in_thongtinchitiet);
+        tv_ngaythamgia = findViewById(R.id.tv_ngaythamgia_user);
     }
 
     void load() {
         Intent intent = getIntent();
-        name = intent.getStringExtra("name");
-        phone = intent.getStringExtra("phone");
-        email = intent.getStringExtra("email");
         url = intent.getStringExtra("image");
+        user = intent.getParcelableExtra("user");
+        name = user.getUserName();
+        email = user.getEmail();
+        phone = user.getSDT();
 
         tv_ten_hienthi.setText(name);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = dateFormat.format(user.getNgayThamGia());
+        tv_ngaythamgia.setText(formattedDate);
+
         tv_email.setText(email);
 
         tv_sdt.setText("0987654321");

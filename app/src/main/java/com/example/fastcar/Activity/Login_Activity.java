@@ -12,8 +12,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.R;
+import com.example.fastcar.Server.HostApi;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -37,6 +45,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login_Activity extends AppCompatActivity {
     FrameLayout btnGoogle,btnFacebook;
@@ -58,30 +69,12 @@ public class Login_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         find();
         googleBuile();
-        btnFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                facebookSignIn();
-            }
-        });
-        btnGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logInEmail();
-            }
-        });
-        tvSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent  = new Intent(Login_Activity.this,SignUp_Activity.class);
-                startActivity(intent);
-            }
+        btnFacebook.setOnClickListener(view -> facebookSignIn());
+        btnGoogle.setOnClickListener(view -> signIn());
+        btn_login.setOnClickListener(v -> logInEmail());
+        tvSignUp.setOnClickListener(view -> {
+            Intent intent  = new Intent(Login_Activity.this,SignUp_Activity.class);
+            startActivity(intent);
         });
     }
 
@@ -93,6 +86,7 @@ public class Login_Activity extends AppCompatActivity {
         }else if (pass.length() == 0){
             edtPass.setError("Không được để trống");
         }else if (email.length()!=0 && pass.length() != 0 ){
+            // firebase
             mAuth.signInWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -108,6 +102,36 @@ public class Login_Activity extends AppCompatActivity {
                             }
                         }
                     });
+
+
+            // call api login
+//            RequestQueue queue = Volley.newRequestQueue(this);
+//            String url = HostApi.API_URL + "/api/user/login";
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    CustomDialogNotify.showToastCustom(Login_Activity.this, "Đăng nhập thành công");
+//                    System.out.println("Đăng nhập thành công" + response.toString());
+//                    navigateToSecondActivity();
+//                }
+//            }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    CustomDialogNotify.showToastCustom(Login_Activity.this, "Tài khoản hoặc mật khẩu không chính xác");
+//                }
+//            }) {
+//                @androidx.annotation.Nullable
+//                @Override
+//                protected Map<String, String> getParams() {
+//                    Map<String, String> data = new HashMap<>();
+//                    data.put("email", email);
+//                    data.put("pass", pass);
+//                    return data;
+//                }
+//            };
+//
+//            queue.add(stringRequest);
+
         }
     }
 
@@ -226,7 +250,6 @@ public class Login_Activity extends AppCompatActivity {
         finish();
         Intent intent = new Intent(Login_Activity.this, KhamPha_Activity.class);
         startActivity(intent);
-
     }
 
 

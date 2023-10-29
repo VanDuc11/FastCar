@@ -4,18 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_BangGiaChiTiet;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
@@ -25,12 +35,16 @@ import com.example.fastcar.Dialog.Dialog_TT70Per;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 
 import java.text.ParseException;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HoaDon_Activity extends AppCompatActivity {
     AppCompatButton btn_datcoc, btn_huychuyen;
@@ -57,8 +71,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         });
 
         btn_huychuyen.setOnClickListener(view -> {
-            startActivity(new Intent(getBaseContext(), KhamPha_Activity.class));
-            finish();
+            showDialog_HuyChuyen(hoaDon);
         });
     }
 
@@ -130,8 +143,8 @@ public class HoaDon_Activity extends AppCompatActivity {
             if (statusCode == 0) {
                 ln_4stt.setVisibility(View.GONE);
                 ln_view_huy_or_coc.setVisibility(View.GONE);
-                tv_thoiGianThanhToan.setText("Quý khách đã huỷ chuyến");
-                ic_in_4stt.setVisibility(View.GONE);
+                tv_thoiGianThanhToan.setText("Chuyến xe đã bị huỷ\nLý do: " + hoaDon.getLyDo());
+                ic_in_4stt.setImageResource(R.drawable.icon_car_cancel);
                 tv_thoiGianThanhToan.setTextColor(Color.RED);
                 tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe().substring(indexDC + 2));
             } else if (statusCode == 1) {
@@ -140,10 +153,9 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_thoiGianThanhToan.setTextColor(Color.BLACK);
                 stt2.setTextColor(Color.WHITE);
                 stt2.setBackgroundResource(R.drawable.custom_btn5);
-                tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe());
+                tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe().substring(indexDC + 2));
             } else if (statusCode == 2) {
                 ln_4stt.setVisibility(View.VISIBLE);
-                ln_view_huy_or_coc.setVisibility(View.VISIBLE);
                 ln_view_huy_or_coc.setVisibility(View.GONE);
                 tv_thoiGianThanhToan.setText("Quý khách đã đặt cọc thành công. Vui lòng liên hệ chủ xe theo thông tin bên dưới để tiến hành nhận xe");
                 tv_thoiGianThanhToan.setTextColor(Color.BLACK);
@@ -203,14 +215,111 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_thoiGianThanhToan.setTextColor(Color.RED);
                 ln_view_huy_or_coc.setVisibility(View.GONE);
 
-                int indexDC = hoaDon.getXe().getDiaChiXe().indexOf(",");
-                tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe().substring(indexDC + 2));
-
                 // hết time = huỷ chuyến
                 // setTrangThaiHD = 0
+                hoaDon.setTrangThaiHD(0);
+                hoaDon.setLyDo("Hết thời gian thanh toán");
+                updateTrangThaiHD(hoaDon);
             }
         }.start();
 
+    }
+
+    private void updateTrangThaiHD(HoaDon hoaDon) {
+        RetrofitClient.FC_services().updateTrangThaiHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println("Có lỗi khi cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + "  " + t);
+            }
+        });
+    }
+
+    private void showDialog_HuyChuyen(HoaDon hoaDon) {
+        LayoutInflater inflater = LayoutInflater.from(HoaDon_Activity.this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.dialog_lydo_huychuyen, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        ImageView ic_close = dialog.findViewById(R.id.icon_close_dialog_lydo_huychuyen);
+        TextView btn_confirm = dialog.findViewById(R.id.btn_confirm_huyChuyen);
+        CheckBox ckbox1 = dialog.findViewById(R.id.ckbox1);
+        CheckBox ckbox2 = dialog.findViewById(R.id.ckbox2);
+        CheckBox ckbox3 = dialog.findViewById(R.id.ckbox3);
+        CheckBox ckbox4 = dialog.findViewById(R.id.ckbox4);
+        CheckBox ckbox5 = dialog.findViewById(R.id.ckbox5);
+        EditText edt_lydoKhac = dialog.findViewById(R.id.edt_lydoKhac);
+
+        CompoundButton.OnCheckedChangeListener checker = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    ckbox1.setChecked(compoundButton == ckbox1);
+                    ckbox2.setChecked(compoundButton == ckbox2);
+                    ckbox3.setChecked(compoundButton == ckbox3);
+                    ckbox4.setChecked(compoundButton == ckbox4);
+                    ckbox5.setChecked(compoundButton == ckbox5);
+                }
+            }
+        };
+
+        ckbox1.setOnCheckedChangeListener(checker);
+        ckbox2.setOnCheckedChangeListener(checker);
+        ckbox3.setOnCheckedChangeListener(checker);
+        ckbox4.setOnCheckedChangeListener(checker);
+        ckbox5.setOnCheckedChangeListener(checker);
+
+
+        ic_close.setOnClickListener(view -> dialog.dismiss());
+
+        btn_confirm.setOnClickListener(view -> {
+            if(ckbox1.isChecked() || ckbox2.isChecked() || ckbox3.isChecked() || ckbox4.isChecked() || ckbox5.isChecked()) {
+                if(ckbox1.isChecked()) {
+                    hoaDon.setLyDo(ckbox1.getText().toString());
+                } else if(ckbox2.isChecked()) {
+                    hoaDon.setLyDo(ckbox2.getText().toString());
+                } else if(ckbox3.isChecked()) {
+                    hoaDon.setLyDo(ckbox3.getText().toString());
+                } else if(ckbox4.isChecked()) {
+                    hoaDon.setLyDo(ckbox4.getText().toString());
+                } else {
+//                    edt_lydoKhac.setVisibility(View.VISIBLE);
+                    String edt = edt_lydoKhac.getText().toString();
+                    String str;
+                    if(edt.isEmpty()) {
+                        str = ckbox5.getText().toString();
+                    } else {
+                        str = ckbox5.getText().toString() + ": " + edt;
+                    }
+                    hoaDon.setLyDo(str);
+                }
+                hoaDon.setTrangThaiHD(0);
+                updateTrangThaiHD(hoaDon);
+
+                startActivity(new Intent(HoaDon_Activity.this, KhamPha_Activity.class));
+                finish();
+            } else {
+                CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Vui lòng chọn lý do");
+            }
+        });
     }
 
     public void showDialog_DatCoc30Per_inHD(View view) {

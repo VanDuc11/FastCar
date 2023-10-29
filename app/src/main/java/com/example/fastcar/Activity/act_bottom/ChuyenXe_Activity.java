@@ -5,7 +5,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,8 +17,10 @@ import com.example.fastcar.Activity.ChiTietHoaDon_Activity;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Adapter.DanhSachChuyenXeAdapter;
 import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +60,14 @@ public class ChuyenXe_Activity extends AppCompatActivity {
 
     private void load() {
         ln_noResult.setVisibility(View.GONE);
-        RetrofitClient.FC_services().getListHoaDon("1,2,3").enqueue(new Callback<List<HoaDon>>() {
+
+        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+        String userStr = preferences.getString("user", "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(userStr, User.class);
+
+        RetrofitClient.FC_services().getListHoaDon( user.get_id(), "1,2,3").enqueue(new Callback<List<HoaDon>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
                 if (response.code() == 200) {
@@ -75,6 +87,8 @@ public class ChuyenXe_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<HoaDon>> call, Throwable t) {
                 System.out.println("Có lỗi xảy ra: " + t);
+                refreshLayout.setVisibility(View.GONE);
+                ln_noResult.setVisibility(View.VISIBLE);
             }
         });
     }
