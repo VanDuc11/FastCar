@@ -5,7 +5,9 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -24,13 +26,21 @@ import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongTin_User_Activity;
+import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CaNhan_Activity extends AppCompatActivity {
     TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnDeleteAccount, btnXeYeuThich, btnThemXe, btnDoiMK;
@@ -40,6 +50,9 @@ public class CaNhan_Activity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser fBaseuser;
     FirebaseDatabase database;
+    String username, phone, email;
+    Uri uri;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,34 +60,13 @@ public class CaNhan_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_ca_nhan);
 
         mapping();
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        fBaseuser = auth.getCurrentUser();
-
-        String personName = fBaseuser.getDisplayName();
-        String userName = personName == "" ? "UserName" : personName;
-        tv_name_user.setText(userName);
-        Uri uri = fBaseuser.getPhotoUrl();
-        String email = fBaseuser.getEmail();
-        String phone_number = fBaseuser.getPhoneNumber();
-
-        if (uri != null) {
-            Glide.with(getBaseContext())
-                    .load(uri)
-                    .into(avt_user);
-        } else {
-            Glide.with(getBaseContext())
-                    .load(R.drawable.img_avatar_user)
-                    .into(avt_user);
-        }
+        load();
 
         // Thông tin cá nhân
         btnInfoUser.setOnClickListener(view -> {
             Intent intent = new Intent(CaNhan_Activity.this, ThongTin_User_Activity.class);
-            intent.putExtra("name", userName);
-            intent.putExtra("email", email);
-            intent.putExtra("phone", phone_number);
             intent.putExtra("image", String.valueOf(uri));
+            intent.putExtra("user", user);
             startActivity(intent);
         });
 
@@ -104,7 +96,7 @@ public class CaNhan_Activity extends AppCompatActivity {
         btnDeleteAccount.setOnClickListener(view -> showDialog_deleteAccount());
     }
 
-    void mapping() {
+    private void mapping() {
         btnInfoUser = findViewById(R.id.btn_thongtin_canhan_in_tabUser);
         btnVoucher = findViewById(R.id.btn_magiamgia_in_tabUser);
         btnLichSuThueXe = findViewById(R.id.btn_lichsu_ThueXe_in_tabUser);
@@ -115,6 +107,29 @@ public class CaNhan_Activity extends AppCompatActivity {
         avt_user = findViewById(R.id.avt_user_in_user);
         tv_name_user = findViewById(R.id.tv_name_user_in_user);
         btnThemXe = findViewById(R.id.btn_ThemXe_in_tabUser);
+    }
+
+    private void load() {
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        fBaseuser = auth.getCurrentUser();
+
+        String personName = fBaseuser.getDisplayName();
+        username = personName == "" ? "UserName" : personName;
+        tv_name_user.setText(username);
+        uri = fBaseuser.getPhotoUrl();
+        email = fBaseuser.getEmail();
+        phone = fBaseuser.getPhoneNumber();
+
+        if (uri != null) {
+            Glide.with(getBaseContext())
+                    .load(uri)
+                    .into(avt_user);
+        } else {
+            Glide.with(getBaseContext())
+                    .load(R.drawable.img_avatar_user_v1)
+                    .into(avt_user);
+        }
     }
 
     public void tab4_to_tab1(View view) {
@@ -228,5 +243,31 @@ public class CaNhan_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+    }
+
+    private void fetchData_UserLogin() {
+        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+        String userStr = preferences.getString("user", "");
+        Gson gson = new Gson();
+        User userModel = gson.fromJson(userStr, User.class);
+
+        RetrofitClient.FC_services().getListUser(userModel.getEmail()).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                List<User> list = response.body();
+                user = list.get(0);
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                System.out.println("Có lỗi khi fetch user có email: " + user.getEmail() + " --- " + t);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchData_UserLogin();
     }
 }

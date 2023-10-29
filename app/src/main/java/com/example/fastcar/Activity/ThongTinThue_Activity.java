@@ -41,12 +41,11 @@ import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -129,6 +128,11 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             startTime = preferences.getLong("startTime1", 0);
             endTime = preferences.getLong("endTime1", 0);
         }
+
+        SharedPreferences preferences1 = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+        String userStr = preferences1.getString("user", "");
+        Gson gson = new Gson();
+        user = gson.fromJson(userStr, User.class);
 
         Glide.with(this)
                 .load(HostApi.URL_Image + car.getHinhAnh().get(0))
@@ -229,16 +233,13 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     void createHD_and_showDialog() {
         Date getTimeNow = new Date();
 
-//        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
-//        String formattedDate = dateFormat.format(getTimeNow);
-
         String ngayNhan = tv_ngayNhanXe.getText().toString().trim();
         String ngayTra = tv_ngayTraXe.getText().toString().trim();
         String voucher = tv_tenVoucher.getText().toString().trim();
         String maHD = "FCAR" + RandomMaHD.random(5);
 
         HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, getTimeNow, 1);
+                voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, getTimeNow, 1, "");
 
         RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
             @Override
@@ -260,7 +261,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
 
     private void showDialog_DatCoc_or_ThueXeKhac(HoaDon hoaDon) {
         LayoutInflater inflater = LayoutInflater.from(ThongTinThue_Activity.this);
-        View custom = inflater.inflate(R.layout.dialog_xac_nhan_thue_xe, null);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.dialog_xac_nhan_thue_xe, null);
         Dialog dialog = new Dialog(this);
         dialog.setContentView(custom);
         dialog.setCanceledOnTouchOutside(false);
@@ -293,23 +294,6 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             dialog.dismiss();
             startActivity(new Intent(getBaseContext(), DanhSachXe_Activity.class));
             finish();
-        });
-    }
-
-    private void getUser_fromEmail(String email) {
-        RetrofitClient.FC_services().getListUser(email).enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if (response.isSuccessful()) {
-                    List<User> list = response.body();
-                    user = list.get(0);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                System.out.println("Có lỗi: " + t);
-            }
         });
     }
 
@@ -370,12 +354,5 @@ public class ThongTinThue_Activity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-        getUser_fromEmail(preferences.getString("email", ""));
     }
 }

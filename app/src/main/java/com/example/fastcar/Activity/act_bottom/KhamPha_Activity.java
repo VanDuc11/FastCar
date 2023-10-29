@@ -176,10 +176,12 @@ public class KhamPha_Activity extends AppCompatActivity {
             @Nullable
             @Override
             protected Map<String, String> getParams() {
+                Date getTimeNow = new Date();
                 Map<String, String> data = new HashMap<>();
                 data.put("userName", userName);
                 data.put("email", Email);
                 data.put("UID", fBaseuser.getUid());
+                data.put("NgayThamGia", String.valueOf(getTimeNow));
                 return data;
             }
         };

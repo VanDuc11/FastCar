@@ -114,26 +114,6 @@
                 android:background="@drawable/text_input_background"
                 android:paddingStart="10dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edt_email_in_ud"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Email"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:errorEnabled="true"
-                app:helperTextEnabled="false"
-                app:hintTextColor="#1890FF">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/text_input_background"
-                    android:clipToOutline="true"
-                    android:inputType="textEmailAddress"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edt_sdt_in_ud"

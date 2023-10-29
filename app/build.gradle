@@ -39,7 +39,11 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
+
+    implementation fileTree(dir: 'C:\\Users\\tienm\\OneDrive\\Documents\\ZaloPay', include: ['*.aar', '*.jar'], exclude: [])
+
     implementation 'com.google.firebase:firebase-storage:20.2.1'
+
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
@@ -74,5 +78,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'me.relex:circleindicator:2.1.6'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation("com.squareup.okhttp3:okhttp:4.6.0")
+    implementation("commons-codec:commons-codec:1.14")
 
 }

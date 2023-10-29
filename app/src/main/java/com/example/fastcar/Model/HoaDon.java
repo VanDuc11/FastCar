@@ -16,8 +16,9 @@ public class HoaDon implements Parcelable {
     String MaGiamGia;
     int GiamGia, PhuPhi, TongTien, TienCoc, ThanhToan, TrangThaiHD;
     Date GioTaoHD;
+    String LyDo;
 
-    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, Date gioTaoHD, int trangThaiHD) {
+    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, Date gioTaoHD, int trangThaiHD, String lyDo) {
         MaHD = maHD;
         User = user;
         Xe = xe;
@@ -33,6 +34,7 @@ public class HoaDon implements Parcelable {
         ThanhToan = thanhToan;
         GioTaoHD = gioTaoHD;
         TrangThaiHD = trangThaiHD;
+        LyDo = lyDo;
     }
 
     public HoaDon() {
@@ -54,6 +56,7 @@ public class HoaDon implements Parcelable {
         ThanhToan = in.readInt();
         GioTaoHD = new Date(in.readLong());
         TrangThaiHD = in.readInt();
+        LyDo = in.readString();
     }
 
     public static final Creator<HoaDon> CREATOR = new Creator<HoaDon>() {
@@ -90,6 +93,7 @@ public class HoaDon implements Parcelable {
         parcel.writeInt(ThanhToan);
         parcel.writeLong(GioTaoHD.getTime());
         parcel.writeInt(TrangThaiHD);
+        parcel.writeString(LyDo);
     }
 
     public String getMaHD() {
@@ -210,5 +214,13 @@ public class HoaDon implements Parcelable {
 
     public void setTongSoNgayThue(int tongSoNgayThue) {
         TongSoNgayThue = tongSoNgayThue;
+    }
+
+    public String getLyDo() {
+        return LyDo;
+    }
+
+    public void setLyDo(String lyDo) {
+        LyDo = lyDo;
     }
 }

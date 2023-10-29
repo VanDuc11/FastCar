@@ -44,11 +44,14 @@ public interface FastCarServices {
 
     // HoaDon model URL: hoadon/
     @GET("hoadon/list")
-    Call<List<HoaDon>> getListHoaDon(@Query("TrangThaiHD") String TrangThaiHD);
+    Call<List<HoaDon>> getListHoaDon(@Query("User") String id_user, @Query("TrangThaiHD") String TrangThaiHD);
 
     @Headers("Content-Type: application/json; charset=utf-8")
     @POST("hoadon/create")
     Call<ResMessage> createHoaDon(@Body HoaDon hoaDon);
+
+    @POST("hoadon/update_trangthaiHD/{maHD}")
+    Call<String> updateTrangThaiHD(@Path("maHD") String maHD, @Body HoaDon hoaDon);
 
     // Feedback model URL: feedback/
     @GET("feedback/list")
