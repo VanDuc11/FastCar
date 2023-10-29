@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,13 @@ public class XeKhamPhaAdapter extends RecyclerView.Adapter<XeKhamPhaAdapter.View
     @NonNull
     @Override
     public XeKhamPhaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_item_xekhampha, parent, false);
+        View view;
+        try {
+            view = LayoutInflater.from(context).inflate(R.layout.layout_item_xekhampha, parent, false);
+        }catch (Exception e){
+            Log.e("TAG","onCreateView",e);
+            throw e;
+        }
         return new ViewHolder(view);
     }
 

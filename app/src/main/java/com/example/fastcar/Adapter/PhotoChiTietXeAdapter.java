@@ -2,6 +2,7 @@ package com.example.fastcar.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,14 @@ public class PhotoChiTietXeAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_item_photo_inchitietxe, container, false);
+        View view;
+        try {
+            view = LayoutInflater.from(context).inflate(R.layout.layout_item_photo_inchitietxe, container, false);
+
+        }catch (Exception e){
+            Log.e("TAG","onCreateView",e);
+            throw e;
+        }
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageView img = view.findViewById(R.id.img_xe_inChiTietXe);
 
         String photo = listPhoto.get(position);
