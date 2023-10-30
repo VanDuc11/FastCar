@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.LichSu_ThueXe_Activity">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/action_bar_lsthuexe"
+                android:background="#DCFBDE"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:gravity="center"
+                app:titleTextColor="@color/white">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Thông tin cơ bản"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="18dp" />
+
+                <RelativeLayout
+                    android:id="@+id/icon_back_in_thongtincoban"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/custom_btn9">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/baseline_keyboard_arrow_left_24" />
+                </RelativeLayout>
+
+                <RelativeLayout
+
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/custom_btn9">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/icon_close_black" />
+                </RelativeLayout>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:background="#F1ECEC"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="10dp"
+                android:layout_height="1dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:text="Biển số xe"/>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:layout_height="50dp"
+                    android:paddingRight="10dp"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColorHint="#CFCACA"
+                    android:gravity="right|center"
+                    android:background="@drawable/text_input_background"
+                    android:hint="Nhập biển số xe"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:layout_marginVertical="14dp"
+                    android:text="Bạn cần điền chính xác biển số xe theo đăng kiểm. Không dùng biển số giả hoặc biển số không có thực"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginVertical="40dp"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:text="Hãng xe"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:gravity="right"
+                        android:text="Chưa chọn"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:text="Mẫu xe "
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:gravity="right"
+                        android:text="Chưa chọn"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:text="Năm sản xuất"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:gravity="right"
+                        android:text="2023"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:text="Số ghế "
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:gravity="right"
+                        android:text="4"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:padding="18dp"
+                        android:text="Truyền động "
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:background="#E4E1E1"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="5dp"
+                        >
+                        <TextView
+                            android:id="@+id/btn_themxe"
+                            android:layout_width="1dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="Số sàn"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:background="@color/black"
+                            android:textColor="@color/white"
+                            android:textSize="17dp" />
+                        <TextView
+                            android:id="@+id/btn_themxe1"
+                            android:layout_width="1dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="Số tự động"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textColor="@color/button_default_text"
+                            android:textSize="17dp" />
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="1dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="18dp"
+                        android:text="Loại nhiên liệu "
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:background="#E4E1E1"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="5dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="40dp"
+                        >
+                        <TextView
+
+                            android:layout_width="1dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="Xăng"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:background="@color/black"
+                            android:textColor="@color/white"
+                            android:textSize="17dp" />
+                        <TextView
+
+                            android:layout_width="1dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="Dầu Diesel"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textColor="@color/button_default_text"
+                            android:textSize="17dp" />
+                        <TextView
+
+                            android:layout_width="1dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="Điện"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textColor="@color/button_default_text"
+                            android:textSize="17dp" />
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="#F1ECEC"
+                    android:layout_height="1dp"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_tieptuc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/custom_btn3"
+                android:gravity="center"
+                android:text="Tiếp tục"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:textColor="@color/white"
+                android:textSize="17dp"
+                />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
