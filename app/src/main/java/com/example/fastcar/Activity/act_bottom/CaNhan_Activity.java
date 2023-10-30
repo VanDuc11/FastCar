@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Activity.XeYeuThich_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
@@ -80,7 +81,7 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         // Thêm xe
         btnThemXe.setOnClickListener(
-                view -> CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Chức năng đang phát triển"));
+                view -> startActivity(new Intent(getBaseContext(), ThemXe_Activity.class)));
 
         // Lịch sử thuê xe
         btnLichSuThueXe.setOnClickListener(

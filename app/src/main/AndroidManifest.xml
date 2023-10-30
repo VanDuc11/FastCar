@@ -9,7 +9,6 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -28,6 +27,24 @@
         android:theme="@style/Theme.FastCar"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity
+            android:name=".Activity.ThemXe.TinhNangXe_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemXe.ImageXe_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemXe.GiaChoThue_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemXe.ThongTinChiTiet_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemXe.ThongTinCoBan_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemXe.ThemXe_Activity"
+            android:exported="false" />
         <activity
             android:name=".Activity.XeYeuThich_Activity"
             android:exported="false" />

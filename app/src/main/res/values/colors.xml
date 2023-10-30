@@ -15,5 +15,9 @@
     <color name="blue_tv">#67CC88</color>
     <color name="zalopay">#1976D2</color>
     <color name="momo">#E02699</color>
+    <color name="button_default_bg">#E4E1E1</color>
+    <color name="button_selected_bg">#FF5733</color>
+    <color name="button_default_text">#000000</color>
+    <color name="button_selected_text">#FFFFFF</color>
 
 </resources>

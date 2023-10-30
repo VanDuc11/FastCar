@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Login_Activity">
+    tools:context=".Activity.Login_Activity"
+    tools:layout_editor_absoluteX="-55dp"
+    tools:layout_editor_absoluteY="5dp">
 
     <ImageView
         android:id="@+id/imageView3"
@@ -100,8 +102,8 @@
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:text=" đăng kí ngay"
-        android:textColor="#10A816"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textColor="#10A816"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView"
@@ -112,11 +114,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Bạn chưa có tài khoản ?"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintHorizontal_bias="0.281"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/from_data" />
 
@@ -124,8 +126,8 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hoặc đăng nhập với:"
         android:layout_marginTop="5dp"
+        android:text="Hoặc đăng nhập với:"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -150,6 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="15dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -168,7 +171,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/icons8_facebook_48" />
         </androidx.cardview.widget.CardView>
-
 
 
     </FrameLayout>
@@ -197,8 +199,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="0dp"
-                android:background="#CF9898"
                 android:layout_marginEnd="1dp"
+                android:background="#CF9898"
                 android:gravity="center"
                 android:text="Đăng nhập với Google"
                 android:textColor="@color/white"

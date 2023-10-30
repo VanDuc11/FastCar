@@ -24,7 +24,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.relex.circleindicator.CircleIndicator;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

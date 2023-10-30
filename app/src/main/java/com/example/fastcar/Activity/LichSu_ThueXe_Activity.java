@@ -52,7 +52,7 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
         });
     }
 
-    private void mapping() {
+        private void mapping() {
         img_back = findViewById(R.id.icon_back_in_lsthuexe);
         recyclerView = findViewById(R.id.recyclerView_lsthuexe);
         ln_noResult = findViewById(R.id.ln_no_result_inLSChuyenXe);
