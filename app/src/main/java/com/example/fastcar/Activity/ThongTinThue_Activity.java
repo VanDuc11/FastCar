@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import com.example.fastcar.Dialog.Dialog_GoiYLoiNhan;
 import com.example.fastcar.Dialog.Dialog_PhiDVFC;
 import com.example.fastcar.Dialog.Dialog_TS_TheChap;
 import com.example.fastcar.Dialog.Dialog_TT70Per;
+import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
 import com.example.fastcar.Dialog.Dialog_TienThue_1ngay;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.FormatString.RandomMaHD;
@@ -58,6 +60,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     TextView btn_xacnhanThueXe, tv_tenXe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe, tv_diaChiNhanXe, tv_tienThue1ngay;
     TextView tv_tongTienxSoNgay, tv_tenVoucher, tv_giatriVoucher, btn_Select_Voucher, tv_thanhTien, tv_coc30Per, tv_tt70Per;
     TextView tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_maSoXe, tv_phiDV;
+    EditText edt_loiNhan;
     CircleImageView img_chuSH_Xe;
     CheckBox ckbox_dieuKhoan;
     LinearLayout ln_view_voucher;
@@ -109,6 +112,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv_tenChuSH_Xe = findViewById(R.id.tv_tenChuSH_Xe_inTTT);
         tv_soSao_ofChuSH = findViewById(R.id.tv_soSao_ofChuSH_Xe_inTTT);
         tv_soChuyen_ofChuSH = findViewById(R.id.tv_soChuyen_ofChuSH_Xe_inTTT);
+        edt_loiNhan = findViewById(R.id.edt_loiNhanCuaKH);
     }
 
     @SuppressLint("SetTextI18n")
@@ -158,6 +162,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         btn_Select_Voucher.setOnClickListener(
                 view -> {
                     Intent intent1 = new Intent(ThongTinThue_Activity.this, MaGiamGia_Activity.class);
+                    intent1.putExtra("SHOW_ICON_ADD", true);
                     startActivityForResult(intent1, 1);
                 });
 
@@ -237,9 +242,10 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         String ngayTra = tv_ngayTraXe.getText().toString().trim();
         String voucher = tv_tenVoucher.getText().toString().trim();
         String maHD = "FCAR" + RandomMaHD.random(5);
+        String loiNhan = edt_loiNhan.getText().toString();
 
         HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, getTimeNow, 1, "");
+                voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, 1, "");
 
         RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
             @Override
@@ -332,7 +338,11 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     }
 
     public void showDialog_GoiYLoiNhan(View view) {
-        Dialog_GoiYLoiNhan.showDialog(ThongTinThue_Activity.this);
+        Dialog_GoiYLoiNhan.showDialog(this);
+    }
+
+    public void showDialog_DangKy(View view) {
+        Dialog_Thoat_DangKy.showDialog(this, true);
     }
 
     @Override
@@ -355,4 +365,5 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             }
         }
     }
+
 }

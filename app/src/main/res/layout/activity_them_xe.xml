@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.LichSu_ThueXe_Activity">
+    tools:context=".Activity.ThemXe.ThemXe_Activity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Danh Sách Xe"
+                android:text="Xe của tôi"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textSize="18dp" />
 
@@ -64,20 +64,13 @@
             </RelativeLayout>
         </RelativeLayout>
 
-<!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-<!--            android:id="@+id/refresh_data_inLSThueXe"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/action_bar_lsthuexe">-->
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recyclerView_lsthuexe"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
-<!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_listXeCuaToi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,30 +80,31 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ln_no_result_inLSChuyenXe"
+                android:id="@+id/ln_no_result_inThemXe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:src="@drawable/img_khongcochuyen" />
+                    android:layout_height="230dp"
+                    android:src="@drawable/img_noresult_car" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginBottom="10dp"
+                    android:gravity="center"
                     android:text="Không có xe cho thuê"
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="23dp" />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/btn_themxe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/custom_btn3"
                     android:gravity="center"
                     android:paddingHorizontal="80dp"

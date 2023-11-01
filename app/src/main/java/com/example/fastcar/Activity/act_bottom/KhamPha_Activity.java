@@ -1,7 +1,10 @@
 package com.example.fastcar.Activity.act_bottom;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -10,16 +13,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -32,14 +50,20 @@ import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongBao_Activity;
+import com.example.fastcar.Activity.ThongTinThue_Activity;
 import com.example.fastcar.Adapter.KhuyenMaiApdater;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -48,6 +72,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,7 +87,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class KhamPha_Activity extends AppCompatActivity {
-    TextView tvName, btnTim, tvTime_inKhamPha;
+    TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem;
     RecyclerView recyclerView_khuyenmai, recyclerView_xeKhamPha;
     CircleImageView img_user;
     private FirebaseAuth auth;
@@ -72,6 +97,9 @@ public class KhamPha_Activity extends AppCompatActivity {
     Long todayInMillis, tomorrowInMillis;
     private boolean isChooseDatePicker = false;
     ImageView img_notify;
+    Dialog dialogDiaChi;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private final static int REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +116,27 @@ public class KhamPha_Activity extends AppCompatActivity {
         build_DatePicker();
         setDefault_SelectionDate();
 
-        btnTim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), DanhSachXe_Activity.class);
-                startActivity(i);
+        btnTim.setOnClickListener(view -> {
+            String diachiStr = tvDiaDiem.getText().toString();
+
+            if (!diachiStr.isEmpty()) {
+                String diachi;
+                // dùng subString để lấy quận/huyện, thành phố/tỉnh từ địa chỉ chi tiết
+                int endIndex = diachiStr.lastIndexOf(", Việt Nam");
+                if(endIndex > 0) {
+                    int startIndex = diachiStr.lastIndexOf(",", endIndex - 1);
+                    diachi = diachiStr.substring(startIndex + 2, endIndex);
+                } else {
+                    diachi = diachiStr;
+                }
+
+                Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
+                intent.putExtra("diachi", diachi);
+                startActivity(intent);
+            } else {
+                CustomDialogNotify.showToastCustom(KhamPha_Activity.this, "Vui lòng nhập địa chỉ để tìm xe");
             }
+
         });
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
@@ -109,6 +152,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         btnTim = findViewById(R.id.act_khamha_tvTimXe);
         tvTime_inKhamPha = findViewById(R.id.tvTime_inKhamPha);
+        tvDiaDiem = findViewById(R.id.tv_diadiem_inKhamPha);
         recyclerView_khuyenmai = findViewById(R.id.recyclerView_khuyenmai);
         img_user = findViewById(R.id.img_user_inKhamPha);
         recyclerView_xeKhamPha = findViewById(R.id.recyclerView_XeKhamPha);
@@ -323,16 +367,22 @@ public class KhamPha_Activity extends AppCompatActivity {
     }
 
     private void loadXeKhamPha() {
+        String Email = fBaseuser.getEmail();
+
         recyclerView_xeKhamPha.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        RetrofitClient.FC_services().getListCar().enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListTop5Car(Email).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, retrofit2.Response<List<Car>> response) {
-                XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(KhamPha_Activity.this, response.body());
-                recyclerView_xeKhamPha.setAdapter(adapter);
-                SnapHelper snapHelper = new PagerSnapHelper();
-                snapHelper.attachToRecyclerView(recyclerView_xeKhamPha);
-                adapter.notifyDataSetChanged();
+                if (response.code() == 200) {
+                    XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(KhamPha_Activity.this, response.body());
+                    recyclerView_xeKhamPha.setAdapter(adapter);
+                    SnapHelper snapHelper = new PagerSnapHelper();
+                    snapHelper.attachToRecyclerView(recyclerView_xeKhamPha);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    System.out.println("Không có dữ liệu phù hợp in getListTop5Car()");
+                }
             }
 
             @Override
@@ -340,6 +390,92 @@ public class KhamPha_Activity extends AppCompatActivity {
                 System.out.println("Có lỗi khi thực hiện: " + t);
             }
         });
+    }
+
+    public void showDialog_DiaDiem(View view) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_chon_diadiem_thuexe, null);
+        dialogDiaChi = new Dialog(this);
+        dialogDiaChi.setContentView(custom);
+        dialogDiaChi.setCanceledOnTouchOutside(false);
+
+        Window window = dialogDiaChi.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialogDiaChi.show();
+
+        ImageView btn_back = dialogDiaChi.findViewById(R.id.icon_back_in_chon_diadiem_thueXe);
+        TextView getDiaChiHienTai = dialogDiaChi.findViewById(R.id.btn_getVitri_hientai);
+        TextView confirm = dialogDiaChi.findViewById(R.id.btn_confirm_diadiem_inDialog);
+        EditText edt_diachi = dialogDiaChi.findViewById(R.id.edt_diadiem_inDialog);
+
+        // back
+        btn_back.setOnClickListener(view1 -> dialogDiaChi.dismiss());
+
+        // get vị trí hiện tại
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        getDiaChiHienTai.setOnClickListener(view1 -> getLocation(dialogDiaChi));
+
+        // confirm
+        confirm.setOnClickListener(view1 -> {
+            String diachi = edt_diachi.getText().toString();
+            if (!diachi.isEmpty()) {
+                callBackDialog(diachi);
+                dialogDiaChi.dismiss();
+            } else {
+                CustomDialogNotify.showToastCustom(this, "Vui lòng nhập địa điểm hoặc chọn vị trí hiện tại");
+            }
+        });
+    }
+
+    private void getLocation(Dialog dialog) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(location -> {
+                        if (location != null) {
+                            Geocoder geocoder = new Geocoder(KhamPha_Activity.this, Locale.getDefault());
+                            List<Address> addresses;
+                            try {
+                                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                callBackDialog(addresses.get(0).getAddressLine(0));
+                                dialog.dismiss();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        }
+                    });
+        } else {
+            askPermission();
+        }
+    }
+
+    private void askPermission() {
+        ActivityCompat.requestPermissions(KhamPha_Activity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation(dialogDiaChi);
+            } else {
+                CustomDialogNotify.showToastCustom(this, "Vui lòng cấp quyền để sử dụng dịch vụ");
+            }
+        }
+    }
+
+    private void callBackDialog(String diachi) {
+        tvDiaDiem.setText(diachi);
     }
 
 //    @Override

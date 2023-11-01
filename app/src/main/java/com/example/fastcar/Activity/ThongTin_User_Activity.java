@@ -48,7 +48,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
+import com.google.firebase.database.DataSnapshot;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,7 +69,6 @@ public class ThongTin_User_Activity extends AppCompatActivity {
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
     User user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

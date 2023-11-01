@@ -32,8 +32,8 @@
             android:id="@+id/icon_favorite_car_inCTX"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:src="@drawable/icon_nolove" />
     </RelativeLayout>
 
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:layout_marginBottom="68dp"
+        android:layout_above="@+id/ln_view_buttonThueXe_inCTX"
         android:background="@color/backgroud">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -114,8 +114,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:drawablePadding="5dp"
                             android:drawableStart="@drawable/ic_baseline_star_24"
+                            android:drawablePadding="5dp"
                             android:gravity="center"
                             android:text="5.0"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
@@ -222,21 +222,21 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Nhận xe"
                                     android:drawableLeft="@drawable/icon_date"
                                     android:drawablePadding="5dp"
                                     android:gravity="center"
+                                    android:text="Nhận xe"
                                     android:textSize="16dp" />
 
                                 <TextView
                                     android:id="@+id/tv_ngayNhanXe_inChiTietXe"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="12/12/2000"
-                                    android:textStyle="bold"
                                     android:layout_marginLeft="33dp"
+                                    android:text="12/12/2000"
                                     android:textColor="@color/black"
-                                    android:textSize="16dp" />
+                                    android:textSize="16dp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -248,21 +248,21 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Trả xe"
                                     android:drawableLeft="@drawable/icon_date"
                                     android:drawablePadding="5dp"
                                     android:gravity="center"
+                                    android:text="Trả xe"
                                     android:textSize="16dp" />
 
                                 <TextView
                                     android:id="@+id/tv_ngayTraXe_inChiTietXe"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="13/12/2000"
                                     android:layout_marginLeft="33dp"
+                                    android:text="13/12/2000"
                                     android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:textSize="16dp" />
+                                    android:textSize="16dp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -318,18 +318,20 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_weight="1"
                                         android:text="Tôi tự đến lấy xe"
                                         android:textSize="16dp" />
 
                                     <TextView
-                                        android:layout_width="match_parent"
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="right"
+                                        android:layout_weight="1"
                                         android:text="Miễn phí"
                                         android:textColor="@color/button_green"
-                                        android:textSize="18dp"
+                                        android:textSize="16dp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -341,6 +343,13 @@
                                     android:text="Quận Nam Từ Liêm, Hà Nội"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                     android:textSize="17dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="Địa chỉ xe cụ thể sẽ được hiển thị sau khi đặt cọc thành công trên ứng dụng"
+                                    android:textSize="15dp" />
 
                             </LinearLayout>
                         </LinearLayout>
@@ -365,10 +374,10 @@
                             <RadioButton
                                 android:id="@+id/rd_selection2"
                                 android:layout_width="35dp"
-                                android:visibility="visible"
-                                android:clickable="false"
                                 android:layout_height="30dp"
-                                android:layout_marginTop="5dp" />
+                                android:layout_marginTop="5dp"
+                                android:clickable="false"
+                                android:visibility="visible" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -376,12 +385,6 @@
                                 android:orientation="vertical"
                                 android:padding="5dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="3dp"
-                                    android:text="Địa chỉ xe cụ thể sẽ được hiển thị sau khi đặt cọc thành công trên ứng dụng"
-                                    android:textSize="15dp" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -606,9 +609,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/icon_location_black"
+                        android:text="Quận Nam Từ Liêm, Hà Nội"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textColor="@color/grey"
-                        android:text="Quận Nam Từ Liêm, Hà Nội"
                         android:textSize="16dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -642,8 +645,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/img_avatar_chuSHXe_inCTX"
@@ -661,9 +664,9 @@
                                 android:id="@+id/tv_tenChuSH_Xe_inCTX"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="17dp"
+                                android:text="Elon Musk :)"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                                android:text="Elon Musk :)" />
+                                android:textSize="17dp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -676,9 +679,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:drawableStart="@drawable/ic_baseline_star_24"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="5.0"
-                                    android:drawablePadding="5dp"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                                     android:textSize="16dp" />
 
@@ -695,12 +698,12 @@
                             </LinearLayout>
 
                             <TextView
-                                android:layout_marginTop="5dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
                                 android:text="Thông tin liên hệ sẽ được hiển thị sau khi đặt cọc trên ứng dụng."
-                                android:textColor="@color/grey"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                android:textColor="@color/grey"
                                 android:textSize="15dp" />
 
                         </LinearLayout>
@@ -728,12 +731,12 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:onClick="showDialog_GiayToThueXe_inCTX"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/icon_question_16x16"
                         android:drawablePadding="10dp"
                         android:gravity="center"
+                        android:onClick="showDialog_GiayToThueXe_inCTX"
                         android:text="Giấy tờ thuê xe"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                         android:textSize="17dp" />
@@ -856,12 +859,12 @@
                         android:textSize="15dp" />
 
                     <TextView
-                        android:onClick="showDialog_PhuPhiPhatSinh_inCTX"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:drawableRight="@drawable/icon_next_v1"
                         android:drawablePadding="10dp"
+                        android:onClick="showDialog_PhuPhiPhatSinh_inCTX"
                         android:text="Xem thêm"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                         android:textSize="15dp" />
@@ -884,8 +887,8 @@
                         android:id="@+id/tv_dieukhoan_inChiTietXe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/dieukhoan"
                         android:maxLines="5"
+                        android:text="@string/dieukhoan"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textColor="@color/grey"
                         android:textSize="16dp" />
@@ -934,9 +937,9 @@
                         android:id="@+id/act_chitietxe_reyNhanXet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_marginTop="10dp"
                         android:orientation="vertical"
-                        android:layout_marginTop="10dp" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <TextView
                         android:id="@+id/tv_noResult_inFB"
@@ -955,6 +958,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ln_view_buttonThueXe_inCTX"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

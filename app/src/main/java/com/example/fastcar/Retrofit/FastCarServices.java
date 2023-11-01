@@ -25,8 +25,14 @@ public interface FastCarServices {
     @GET("xe/list")
     Call<List<Car>> getListCar();
 
-    @GET("xe/top5xe")
-    Call<List<Car>> getListTop5Car();
+    @GET("xe/listXe_user/{email}")
+    Call<List<Car>> getListCar_ofUser(@Path("email") String email_user);
+
+    @GET("xe/listXe_NotUser/{email}")
+    Call<List<Car>> getListCar_NotUser(@Path("email") String email_user, @Query("DiaChiXe") String diachixe);
+
+    @GET("xe/top5xe/{email}")
+    Call<List<Car>> getListTop5Car(@Path("email") String email_user);
 
     @POST("xe/create")
     Call<ResMessage> createXe(@Body Car car);

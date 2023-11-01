@@ -43,12 +43,9 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         mapping();
         load();
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                load();
-                refreshLayout.setRefreshing(false);
-            }
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            refreshLayout.setRefreshing(false);
         });
     }
 

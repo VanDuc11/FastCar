@@ -41,10 +41,12 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     ViewPager viewPager;
     CircleIndicator circleIndicator;
     PhotoAdapter photoAdapter;
+    boolean isMyCar;
 
-    public DanhSachXeAdapter(Context context, List<Car> listXe) {
+    public DanhSachXeAdapter(Context context, List<Car> listXe, boolean isMyCar) {
         this.listXe = listXe;
         this.context = context;
+        this.isMyCar = isMyCar;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -78,6 +80,13 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DanhSachXeAdapter.ViewHolder holder, int position) {
+        // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( button yêu thích,... )
+        if(isMyCar) {
+            holder.button_favorite.setVisibility(View.GONE);
+        } else {
+            holder.button_favorite.setVisibility(View.VISIBLE);
+        }
+
         Car car = listXe.get(position);
         final boolean[] isFavorite = {false};
 
@@ -136,6 +145,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
         holder.item.setOnClickListener(view -> {
             Intent intent = new Intent(context, ChiTietXe_Activity.class);
             intent.putExtra("car", car);
+            intent.putExtra("isMyCar", isMyCar);
             view.getContext().startActivity(intent);
         });
 

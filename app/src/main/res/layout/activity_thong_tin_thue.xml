@@ -13,21 +13,33 @@
         android:gravity="center"
         app:titleTextColor="@color/white">
 
+
         <ImageView
             android:id="@+id/icon_back_in_thongtin_xethue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
             android:layout_marginStart="10dp"
             android:src="@drawable/icon_back_black" />
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:minWidth="200dp"
             android:text="Xác nhận đặt xe"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textSize="17dp" />
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:onClick="showDialog_DangKy"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/icon_close_black" />
     </RelativeLayout>
 
 
@@ -117,7 +129,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/tv_soSao_inThongTinThue"
@@ -293,8 +305,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/img_avatar_chuSHXe_inTTT"
@@ -312,10 +324,9 @@
                                 android:id="@+id/tv_tenChuSH_Xe_inTTT"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="17dp"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:text="Elon Musk :)"
-                                />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                                android:textSize="17dp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -328,9 +339,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:drawableStart="@drawable/ic_baseline_star_24"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="5.0"
-                                    android:drawablePadding="5dp"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                                     android:textSize="16dp" />
 
@@ -343,17 +354,17 @@
                                     android:drawablePadding="5dp"
                                     android:text="4 chuyến"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                                    android:textSize="16dp"/>
+                                    android:textSize="16dp" />
                             </LinearLayout>
 
                             <TextView
-                                android:layout_marginTop="5dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
                                 android:text="Thông tin liên hệ sẽ được hiển thị sau khi đặt cọc trên ứng dụng."
-                                android:textColor="@color/grey"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                                android:textSize="15dp"/>
+                                android:textColor="@color/grey"
+                                android:textSize="15dp" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -367,8 +378,8 @@
                 android:layout_margin="10dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="2dp"
-                app:layout_constraintTop_toBottomOf="@+id/cardView_chuxe"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_chuxe">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -383,35 +394,35 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="Lời nhắn cho chủ xe"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                             android:textSize="17dp" />
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Gợi ý lời nhắn"
+                            android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="showDialog_GoiYLoiNhan"
+                            android:text="Gợi ý lời nhắn"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                             android:textSize="15dp" />
                     </LinearLayout>
 
                     <EditText
-                        android:id="@+id/editText"
+                        android:id="@+id/edt_loiNhanCuaKH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_border_edittext"
+                        android:gravity="start"
                         android:hint="Nhập nội dung lời nhắn cho chủ xe"
                         android:inputType="textMultiLine"
-                        android:background="@drawable/custom_border_edittext"
-                        android:textSize="16dp"
+                        android:lines="4"
                         android:padding="10dp"
-                        android:gravity="start"
-                        android:layout_marginTop="10dp"
-                        android:lines="4" />
+                        android:textSize="16dp" />
                 </LinearLayout>
 
 
@@ -790,8 +801,8 @@
             android:id="@+id/ckbox_dieuKhoan_inThongTinThue"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:clickable="false"
             android:layout_marginLeft="3dp"
+            android:clickable="false"
             android:text="Tôi đồng ý với điều khoản của FastCar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

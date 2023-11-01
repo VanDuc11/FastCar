@@ -12,11 +12,11 @@ public class Voucher implements Parcelable {
     String MaGiamGia, Code;
     int GiaTri, GiaTriMax;
     String NoiDung, HinhAnh;
-    Date HSD;
+    Date NgayBD, HSD;
     boolean TrangThai;
     boolean isSelected;
 
-    public Voucher(String _id, String maGiamGia, String code, int giaTri, int giaTriMax, String noiDung, String hinhAnh, Date HSD, boolean trangThai, boolean isSelected) {
+    public Voucher(String _id, String maGiamGia, String code, int giaTri, int giaTriMax, String noiDung, String hinhAnh, Date ngayBD, Date HSD, boolean trangThai, boolean isSelected) {
         this._id = _id;
         MaGiamGia = maGiamGia;
         Code = code;
@@ -24,6 +24,7 @@ public class Voucher implements Parcelable {
         GiaTriMax = giaTriMax;
         NoiDung = noiDung;
         HinhAnh = hinhAnh;
+        this.NgayBD = ngayBD;
         this.HSD = HSD;
         TrangThai = trangThai;
         isSelected = isSelected;
@@ -41,6 +42,8 @@ public class Voucher implements Parcelable {
         GiaTriMax = in.readInt();
         NoiDung = in.readString();
         HinhAnh = in.readString();
+        NgayBD = new Date(in.readLong());
+        HSD = new Date(in.readLong());
         TrangThai = in.readByte() != 0;
         isSelected = in.readByte() != 0;
     }
@@ -137,6 +140,14 @@ public class Voucher implements Parcelable {
         isSelected = selected;
     }
 
+    public Date getNgayBD() {
+        return NgayBD;
+    }
+
+    public void setNgayBD(Date ngayBD) {
+        NgayBD = ngayBD;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -151,6 +162,8 @@ public class Voucher implements Parcelable {
         parcel.writeInt(GiaTriMax);
         parcel.writeString(NoiDung);
         parcel.writeString(HinhAnh);
+        parcel.writeLong(NgayBD.getTime());
+        parcel.writeLong(HSD.getTime());
         parcel.writeByte((byte) (TrangThai ? 1 : 0));
         parcel.writeByte((byte) (isSelected ? 1 : 0));
     }

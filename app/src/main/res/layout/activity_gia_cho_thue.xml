@@ -4,130 +4,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.LichSu_ThueXe_Activity">
+    tools:context=".Activity.ThemXe.GiaChoThue_Activity">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/action_bar_giaChoThue"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center"
+            app:titleTextColor="@color/white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Giá cho thuê"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="18dp" />
+
+            <RelativeLayout
+                android:id="@+id/icon_back_in_giaChoThue"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/custom_btn9">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/baseline_keyboard_arrow_left_24" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/icon_close_in_giaChoThue"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/custom_btn9">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_close_black" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/black">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginVertical="10dp"
+                android:textSize="15dp"
+                android:text="Giá mặc định sẽ được sử dụng cho các ngày không có giá tùy chỉnh"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:layout_height="wrap_content"
+                    android:textSize="40dp"
+                    android:gravity="right"
+                    android:background="@drawable/custom_edittext_no_border_black"
+                    android:textColor="#4FB553"
+                    android:text="2760" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text=" K"
+                    android:textSize="40dp"
+                    android:textColor="#4FB553" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:background="#4FB553"
+                android:layout_marginHorizontal="60dp"
+                android:layout_marginVertical="2dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginVertical="20dp"
+                android:text="Giá đề xuất: 2760 nghìn đồng"
+                android:textSize="16dp"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="bottom"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/action_bar_lsthuexe"
-                android:background="#DCFBDE"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:gravity="center"
-                app:titleTextColor="@color/white">
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Thông tin chi tiết "
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="18dp" />
-
-                <RelativeLayout
-                    android:id="@+id/icon_back_in_thongtincoban"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/custom_btn9">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/baseline_keyboard_arrow_left_24" />
-                </RelativeLayout>
-
-                <RelativeLayout
-
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/custom_btn9">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/icon_close_black" />
-                </RelativeLayout>
-            </RelativeLayout>
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_tieptuc_in_giaChoThue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="40dp"
-                android:background="@color/black">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginVertical="10dp"
-                    android:text="Giá mặc định sẽ được sử dụng cho các ngày không có giá tùy chỉnh"
-                    android:textColor="@color/white"
-                    />
-                
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="2760  K"
-                    android:textSize="50dp"
-                    android:textColor="#4FB553"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:background="#4FB553"
-                    android:layout_marginHorizontal="60dp"
-                    android:layout_marginVertical="2dp"
-                    android:layout_height="1dp"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginVertical="20dp"
-                    android:text="Giá đề xuất: 2760 nghìn đồng"
-                    android:textSize="16dp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:id="@+id/btn_tieptuc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/custom_btn3"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:text="Tiếp tục"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                    android:textColor="@color/white"
-                    android:textSize="17dp"
-                    />
-            </LinearLayout>
+                android:layout_margin="10dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/custom_btn4"
+                android:gravity="center"
+                android:layout_gravity="bottom"
+                android:text="Tiếp tục"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
         </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

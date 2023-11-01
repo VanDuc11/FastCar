@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
+import com.example.fastcar.Activity.MaGiamGia_Activity;
+import com.example.fastcar.Activity.ThongTinThue_Activity;
 import com.example.fastcar.Activity.XeYeuThich_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
@@ -77,7 +79,11 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         // Voucher
         btnVoucher.setOnClickListener(
-                view -> CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Chức năng đang phát triển"));
+                view -> {
+                    Intent intent = new Intent(CaNhan_Activity.this, MaGiamGia_Activity.class);
+                    intent.putExtra("SHOW_ICON_ADD", false);
+                    startActivity(intent);
+                });
 
         // Thêm xe
         btnThemXe.setOnClickListener(
@@ -261,7 +267,7 @@ public class CaNhan_Activity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                System.out.println("Có lỗi khi fetch user có email: " + user.getEmail() + " --- " + t);
+                System.out.println("Có lỗi khi fetch user có email: " + userModel.getEmail() + " --- " + t);
             }
         });
     }

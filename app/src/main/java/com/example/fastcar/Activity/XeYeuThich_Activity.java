@@ -68,7 +68,7 @@ public class XeYeuThich_Activity extends AppCompatActivity {
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.code() == 200) {
                     if (!response.body().isEmpty()) {
-                        adapter = new DanhSachXeAdapter(XeYeuThich_Activity.this, response.body());
+                        adapter = new DanhSachXeAdapter(XeYeuThich_Activity.this, response.body(), false);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         ln_no_result.setVisibility(View.GONE);

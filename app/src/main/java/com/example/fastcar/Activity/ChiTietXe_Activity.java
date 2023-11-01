@@ -2,6 +2,7 @@ package com.example.fastcar.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -57,8 +58,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_noResult_inFB, tv_soTien1ngay;
     TextView tv_diaChiXe;
     boolean isSeeMore_inDieuKhoan = false;
-    CardView selection1, selection2;
+    CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi;
     RadioButton rd_selection1, rd_selection2;
+    ConstraintLayout ln_view_buttonThueXe_inCTX;
     ImageView ic_back, ic_favorite;
     boolean isFavorite;
     RecyclerView reyNhanXet;
@@ -130,12 +132,28 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_soSao_ofChuSH = findViewById(R.id.tv_soSao_ofChuSH_Xe_inCTX);
         tv_soChuyen_ofChuSH = findViewById(R.id.tv_soChuyen_ofChuSH_Xe_inCTX);
         tv_noResult_inFB = findViewById(R.id.tv_noResult_inFB);
+        cardview_DieuKhoan_PhuPhi = findViewById(R.id.cardview_DieuKhoan_PhuPhi);
+        cardview_thoigianThueXe = findViewById(R.id.cardview_thoigianThueXe);
+        ln_view_buttonThueXe_inCTX = findViewById(R.id.ln_view_buttonThueXe_inCTX);
     }
 
     @SuppressLint("SetTextI18n")
     void load() {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
+        boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
+        // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( thuê xe, chọn thời gian,... )
+        if(isMyCar) {
+            cardview_thoigianThueXe.setVisibility(View.GONE);
+            cardview_DieuKhoan_PhuPhi.setVisibility(View.GONE);
+            ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
+            ic_favorite.setVisibility(View.GONE);
+        } else {
+            cardview_thoigianThueXe.setVisibility(View.VISIBLE);
+            cardview_DieuKhoan_PhuPhi.setVisibility(View.VISIBLE);
+            ln_view_buttonThueXe_inCTX.setVisibility(View.VISIBLE);
+            ic_favorite.setVisibility(View.VISIBLE);
+        }
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
 

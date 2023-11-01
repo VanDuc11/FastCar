@@ -17,8 +17,9 @@ public class HoaDon implements Parcelable {
     int GiamGia, PhuPhi, TongTien, TienCoc, ThanhToan, TrangThaiHD;
     Date GioTaoHD;
     String LyDo;
+    String LoiNhan;
 
-    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, Date gioTaoHD, int trangThaiHD, String lyDo) {
+    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, String loiNhan, Date gioTaoHD, int trangThaiHD, String lyDo) {
         MaHD = maHD;
         User = user;
         Xe = xe;
@@ -32,6 +33,7 @@ public class HoaDon implements Parcelable {
         TongTien = tongTien;
         TienCoc = tienCoc;
         ThanhToan = thanhToan;
+        LoiNhan = loiNhan;
         GioTaoHD = gioTaoHD;
         TrangThaiHD = trangThaiHD;
         LyDo = lyDo;
@@ -54,6 +56,7 @@ public class HoaDon implements Parcelable {
         TongTien = in.readInt();
         TienCoc = in.readInt();
         ThanhToan = in.readInt();
+        LoiNhan = in.readString();
         GioTaoHD = new Date(in.readLong());
         TrangThaiHD = in.readInt();
         LyDo = in.readString();
@@ -91,6 +94,7 @@ public class HoaDon implements Parcelable {
         parcel.writeInt(TongTien);
         parcel.writeInt(TienCoc);
         parcel.writeInt(ThanhToan);
+        parcel.writeString(LoiNhan);
         parcel.writeLong(GioTaoHD.getTime());
         parcel.writeInt(TrangThaiHD);
         parcel.writeString(LyDo);
@@ -222,5 +226,13 @@ public class HoaDon implements Parcelable {
 
     public void setLyDo(String lyDo) {
         LyDo = lyDo;
+    }
+
+    public String getLoiNhan() {
+        return LoiNhan;
+    }
+
+    public void setLoiNhan(String loiNhan) {
+        LoiNhan = loiNhan;
     }
 }
