@@ -1,5 +1,6 @@
 package com.example.fastcar.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHoder>{
@@ -47,7 +50,9 @@ public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHode
     public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
         FeedBack feedBack = list.get(position);
         holder.tvTen.setText(feedBack.getUser().getUserName());
-        holder.tvDate.setText(feedBack.getThoiGian());
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy 'lúc' HH:mm");
+        String formattedDate = sdf.format(feedBack.getThoiGian());
+        holder.tvDate.setText(formattedDate);
         holder.tvSao.setText(String.valueOf(feedBack.getSoSao()));
         if(feedBack.getNoiDung() != null) {
             holder.tvContent.setText(feedBack.getNoiDung());

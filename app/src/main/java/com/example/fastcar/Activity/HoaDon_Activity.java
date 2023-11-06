@@ -33,13 +33,17 @@ import com.example.fastcar.Dialog.Dialog_PhuPhi_PhatSinh;
 import com.example.fastcar.Dialog.Dialog_TS_TheChap;
 import com.example.fastcar.Dialog.Dialog_TT70Per;
 import com.example.fastcar.FormatString.NumberFormatVND;
+import com.example.fastcar.Model.Car;
+import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -55,6 +59,8 @@ public class HoaDon_Activity extends AppCompatActivity {
     TextView tv_tenChuSH, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_coc;
     HoaDon hoaDon;
+    boolean isPaymentCompleted = false;
+    float TrungBinhSao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +114,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     private void load() {
         Intent intent = getIntent();
         hoaDon = intent.getParcelableExtra("hoadon");
+
         if (hoaDon != null) {
             Glide.with(this)
                     .load(HostApi.URL_Image + hoaDon.getXe().getHinhAnh().get(0))
@@ -138,7 +145,16 @@ public class HoaDon_Activity extends AppCompatActivity {
             // 4: hoàn thành đơn
 
             // dùng subString để ẩn đi địa chỉ chi tiết
-            int indexDC = hoaDon.getXe().getDiaChiXe().indexOf(",");
+            String diaChiXe = hoaDon.getXe().getDiaChiXe();
+            String[] parts = diaChiXe.split(",");
+            int lastIndex = parts.length - 1;
+            String diachi = null;
+            if (lastIndex >= 2) {
+                String quanHuyen = parts[lastIndex - 2].trim();
+                String thanhPhoTinh = parts[lastIndex - 1].trim();
+
+                diachi = quanHuyen + ", " + thanhPhoTinh;
+            }
 
             if (statusCode == 0) {
                 ln_4stt.setVisibility(View.GONE);
@@ -146,14 +162,14 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_thoiGianThanhToan.setText("Chuyến xe đã bị huỷ\nLý do: " + hoaDon.getLyDo());
                 ic_in_4stt.setImageResource(R.drawable.icon_car_cancel);
                 tv_thoiGianThanhToan.setTextColor(Color.RED);
-                tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe().substring(indexDC + 2));
+                tv_diachiXe.setText(diachi);
             } else if (statusCode == 1) {
                 ln_4stt.setVisibility(View.VISIBLE);
                 update_Time(hoaDon.getGioTaoHD());
                 tv_thoiGianThanhToan.setTextColor(Color.BLACK);
                 stt2.setTextColor(Color.WHITE);
                 stt2.setBackgroundResource(R.drawable.custom_btn5);
-                tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe().substring(indexDC + 2));
+                tv_diachiXe.setText(diachi);
             } else if (statusCode == 2) {
                 ln_4stt.setVisibility(View.VISIBLE);
                 ln_view_huy_or_coc.setVisibility(View.GONE);
@@ -173,6 +189,14 @@ public class HoaDon_Activity extends AppCompatActivity {
                 stt3.setBackgroundResource(R.drawable.custom_btn5);
                 tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe());
             } else {
+                // hoàn thành chuyến xe
+                // cập nhật lại số chuyến += 1
+                Car car = hoaDon.getXe();
+                int i = car.getSoChuyen();
+                i += 1;
+                car.setSoChuyen(i);
+                updateRateXeAndSoChuyen(car);
+
                 ln_4stt.setVisibility(View.VISIBLE);
                 ln_view_huy_or_coc.setVisibility(View.GONE);
                 tv_thoiGianThanhToan.setText("Đã kết thúc");
@@ -181,6 +205,9 @@ public class HoaDon_Activity extends AppCompatActivity {
                 stt4.setTextColor(Color.WHITE);
                 stt4.setBackgroundResource(R.drawable.custom_btn5);
                 tv_diachiXe.setText(hoaDon.getXe().getDiaChiXe());
+
+                // user đăng nhận xét, update lại TrungBinhSao
+                getListFeedBack(hoaDon.getXe());
             }
 
             btn_xemChiTietGia.setOnClickListener(view -> Dialog_BangGiaChiTiet.showDialog(this, hoaDon));
@@ -193,6 +220,10 @@ public class HoaDon_Activity extends AppCompatActivity {
         new CountDownTimer(oneHour - System.currentTimeMillis(), 1000) {
             @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
+                if(hoaDon.getTrangThaiHD() == 2) {
+                    cancel();
+                    return;
+                }
                 long seconds = 1000;
                 long minutes = seconds * 60;
 
@@ -210,19 +241,26 @@ public class HoaDon_Activity extends AppCompatActivity {
 
             @SuppressLint("SetTextI18n")
             public void onFinish() {
-                ic_in_4stt.setImageResource(R.drawable.icon_time_red);
-                tv_thoiGianThanhToan.setText("Đã hết thời gian thanh toán");
-                tv_thoiGianThanhToan.setTextColor(Color.RED);
-                ln_view_huy_or_coc.setVisibility(View.GONE);
+                if(hoaDon.getTrangThaiHD() == 1) {
+                    ic_in_4stt.setImageResource(R.drawable.icon_time_red);
+                    tv_thoiGianThanhToan.setText("Đã hết thời gian thanh toán");
+                    tv_thoiGianThanhToan.setTextColor(Color.RED);
+                    ln_view_huy_or_coc.setVisibility(View.GONE);
 
-                // hết time = huỷ chuyến
-                // setTrangThaiHD = 0
-                hoaDon.setTrangThaiHD(0);
-                hoaDon.setLyDo("Hết thời gian thanh toán");
-                updateTrangThaiHD(hoaDon);
+                    // hết time = huỷ chuyến
+                    // setTrangThaiHD = 0
+                    hoaDon.setTrangThaiHD(0);
+                    hoaDon.setLyDo("Hết thời gian thanh toán");
+                    updateTrangThaiHD(hoaDon);
+                }
             }
         }.start();
 
+    }
+
+    private void onPaymentSuccess() {
+        isPaymentCompleted = true;
+        // Cập nhật TrangThai = 2 và thực hiện các hành động liên quan
     }
 
     private void updateTrangThaiHD(HoaDon hoaDon) {
@@ -344,5 +382,73 @@ public class HoaDon_Activity extends AppCompatActivity {
 
     public void back_inHoaDon(View view) {
         onBackPressed();
+    }
+
+    private void getListFeedBack(Car car) {
+        TrungBinhSao = 0;
+        RetrofitClient.FC_services().getListFeedBack(car.get_id()).enqueue(new Callback<List<FeedBack>>() {
+            @Override
+            public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
+                List<FeedBack> feedBackList = response.body();
+                if (response.code() == 200) {
+                    if (feedBackList != null && !feedBackList.isEmpty()) {
+                        float number = 0;
+                        for (FeedBack feedBack : feedBackList) {
+                            number += feedBack.getSoSao();
+                        }
+                        TrungBinhSao = number / feedBackList.size();
+                        car.setTrungBinhSao(TrungBinhSao);
+                        updateRateXeAndSoChuyen( car);
+                    } else {
+                        TrungBinhSao = 0;
+                        car.setTrungBinhSao(0);
+                        updateRateXeAndSoChuyen(car);
+                    }
+                } else {
+                    System.out.println("Có lỗi khi get feedback id: " + car.get_id());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FeedBack>> call, Throwable t) {
+                System.out.println("Có lỗi khi get feedback id: " + car.get_id() + " --- " + t);
+                car.setTrungBinhSao(0);
+                updateRateXeAndSoChuyen(car);
+            }
+        });
+    }
+
+    private void createFeedback(FeedBack feedBack) {
+        RetrofitClient.FC_services().createFeedBack(feedBack).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if(response.code() == 201) {
+                    CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Đã đăng nhận xét");
+                } else {
+                    System.out.println("Có lỗi khi createFeedback(): " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi khi createFeedback(): " + t);
+            }
+        });
+    }
+
+    private void updateRateXeAndSoChuyen(Car car) {
+        RetrofitClient.FC_services().updateXe(car.get_id(), car).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if(response.code() == 200) {
+                    System.out.println("updateRateXe() success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi khi updateRateXe(): " + t);
+            }
+        });
     }
 }

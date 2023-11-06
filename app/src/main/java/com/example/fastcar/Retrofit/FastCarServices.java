@@ -17,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,13 +30,19 @@ public interface FastCarServices {
     Call<List<Car>> getListCar_ofUser(@Path("email") String email_user);
 
     @GET("xe/listXe_NotUser/{email}")
-    Call<List<Car>> getListCar_NotUser(@Path("email") String email_user, @Query("DiaChiXe") String diachixe);
+    Call<List<Car>> getListCar_NotUser(@Path("email") String email_user,
+                                       @Query("TrangThai") int TrangThai,
+                                       @Query("DiaChiXe") String diachixe);
 
     @GET("xe/top5xe/{email}")
-    Call<List<Car>> getListTop5Car(@Path("email") String email_user);
+    Call<List<Car>> getListTop5Car(@Path("email") String email_user,
+                                   @Query("TrangThai") int TrangThai);
 
     @POST("xe/create")
     Call<ResMessage> createXe(@Body Car car);
+
+    @PUT("xe/update/{id}")
+    Call<ResMessage> updateXe(@Path("id") String id_xe, @Body Car car);
 
     // User Model URL: user/
     @GET("user/list")
@@ -50,7 +57,10 @@ public interface FastCarServices {
 
     // HoaDon model URL: hoadon/
     @GET("hoadon/list")
-    Call<List<HoaDon>> getListHoaDon(@Query("User") String id_user, @Query("TrangThaiHD") String TrangThaiHD);
+    Call<List<HoaDon>> getListHoaDon(@Query("Xe") String id_xe, @Query("TrangThaiHD") String TrangThaiHD);
+
+    @GET("hoadon/list")
+    Call<List<HoaDon>> getListHoaDonUser(@Query("User") String id_user, @Query("TrangThaiHD") String TrangThaiHD);
 
     @Headers("Content-Type: application/json; charset=utf-8")
     @POST("hoadon/create")

@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.example.fastcar.Adapter.TinhNangXeAdpater;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
+import com.example.fastcar.Model.TinhNangXe;
 import com.example.fastcar.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -48,7 +49,7 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
     Dialog dialogDiaChi;
     FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
-    ArrayList<String> listTinhNang;
+    ArrayList<TinhNangXe> listTinhNang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,24 +172,24 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
 
     private void addItemTinhNang() {
         listTinhNang.clear();
-        listTinhNang.add("Bản đồ");
-        listTinhNang.add("Bluetooth");
-        listTinhNang.add("Camera 360");
-        listTinhNang.add("Camera cập lề");
-        listTinhNang.add("Camera hành trình");
-        listTinhNang.add("Camera lùi");
-        listTinhNang.add("Cảm biến lốp");
-        listTinhNang.add("Cảm biến va chạm");
-        listTinhNang.add("Cảnh báo tốc độ");
-        listTinhNang.add("Cửa sổ trời");
-        listTinhNang.add("Định vị GPS");
-        listTinhNang.add("Ghế trẻ em");
-        listTinhNang.add("Khe cắm USB");
-        listTinhNang.add("Lốp dự phòng");
-        listTinhNang.add("Màn hình DVD");
-        listTinhNang.add("Nắp thùng xe bán tải");
-        listTinhNang.add("ETC");
-        listTinhNang.add("Túi khí");
+        listTinhNang.add(new TinhNangXe("Bản đồ", R.drawable.ictn_bando));
+        listTinhNang.add(new TinhNangXe("Bluetooth", R.drawable.ictn_bluetooth));
+        listTinhNang.add(new TinhNangXe("Camera 360", R.drawable.ictn_cam360));
+        listTinhNang.add(new TinhNangXe("Camera cập lề", R.drawable.ictn_caple));
+        listTinhNang.add(new TinhNangXe("Camera hành trình", R.drawable.ictn_cam_hanhtrinh));
+        listTinhNang.add(new TinhNangXe("Camera lùi", R.drawable.ictn_cam_lui));
+        listTinhNang.add(new TinhNangXe("Cảm biến lốp", R.drawable.ictn_cambienlop));
+        listTinhNang.add(new TinhNangXe("Cảm biến va chạm", R.drawable.ictn_cambien_vacham));
+        listTinhNang.add(new TinhNangXe("Cảnh báo tốc độ", R.drawable.ictn_canhbao_tocdo));
+        listTinhNang.add(new TinhNangXe("Cửa sổ trời", R.drawable.ictn_cusotroi));
+        listTinhNang.add(new TinhNangXe("Định vị GPS", R.drawable.ictn_gps));
+        listTinhNang.add(new TinhNangXe("Ghế trẻ em", R.drawable.ictn_ghetreem));
+        listTinhNang.add(new TinhNangXe("Khe cắm USB", R.drawable.ictn_usb));
+        listTinhNang.add(new TinhNangXe("Lốp dự phòng", R.drawable.ictn_lop_duphong));
+        listTinhNang.add(new TinhNangXe("Màn hình DVD", R.drawable.ictn_manhinhdvd));
+        listTinhNang.add(new TinhNangXe("Nắp thùng xe bán tải", R.drawable.ictn_napthung_bantai));
+        listTinhNang.add(new TinhNangXe("ETC", R.drawable.ictn_etc));
+        listTinhNang.add(new TinhNangXe("Túi khí", R.drawable.ictn_tuikhi));
     }
 
 }

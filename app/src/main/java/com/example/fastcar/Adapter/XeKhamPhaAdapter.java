@@ -28,6 +28,7 @@ import com.example.fastcar.Server.HostApi;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import retrofit2.Call;
@@ -88,7 +89,26 @@ public class XeKhamPhaAdapter extends RecyclerView.Adapter<XeKhamPhaAdapter.View
 
         holder.tv_tenXe.setText(car.getMauXe());
         holder.tv_truyenDong.setText(car.getChuyenDong());
-        holder.tv_soChuyen.setText(car.getSoChuyen() + " chuyến");
+        int soChuyen = car.getSoChuyen();
+        float trungbinhSao = car.getTrungBinhSao();
+
+        if (soChuyen == 0) {
+            holder.tv_soChuyen.setText("Chưa có chuyến");
+            holder.tv_soSao.setVisibility(View.GONE);
+        } else {
+            holder.tv_soChuyen.setText(soChuyen + " chuyến");
+            holder.tv_soSao.setVisibility(View.VISIBLE);
+        }
+
+        if(trungbinhSao > 0) {
+            DecimalFormat df = new DecimalFormat("0.0");
+            String formattedNumber = df.format(trungbinhSao);
+
+            holder.tv_soSao.setVisibility(View.VISIBLE);
+            holder.tv_soSao.setText(formattedNumber);
+        } else {
+            holder.tv_soSao.setVisibility(View.GONE);
+        }
 
         holder.tv_soTien1ngay.setText(NumberFormatK.format(car.getGiaThue1Ngay()));
 

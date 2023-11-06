@@ -18,6 +18,7 @@ import android.os.Parcel;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.FavoriteCar;
 import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.FormatString.NumberFormatK;
+import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
@@ -39,6 +41,8 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,11 +60,12 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     TextView btnThueXe, tv_tenxe_actionbar, tv_tenxe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe;
     TextView tv_truyendong, tv_soGhe, tv_nhienlieu, tv_tieuhao, tv_mota, tv_soNgayThueXe, tv_tongTien, tv_xeDaThue;
     TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_noResult_inFB, tv_soTien1ngay;
-    TextView tv_diaChiXe;
+    TextView tv_diaChiXe, tv_diaChiXe2;
     boolean isSeeMore_inDieuKhoan = false;
     CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi;
     RadioButton rd_selection1, rd_selection2;
     ConstraintLayout ln_view_buttonThueXe_inCTX;
+    LinearLayout btn_showDatePicker;
     ImageView ic_back, ic_favorite;
     boolean isFavorite;
     RecyclerView reyNhanXet;
@@ -69,7 +74,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     CircleImageView img_chuSH_Xe;
     PhotoChiTietXeAdapter photoAdapter;
     NhanXetAdapter nhanXetAdapter;
-    Long startTime, endTime;
+    Long startTimeLong, endTimeLong;
+    Date startDate, endDate;
     MaterialDatePicker<Pair<Long, Long>> datePicker;
     long soNgayThueXe;
     Car car;
@@ -83,8 +89,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         mapping();
         load();
 
-        build_DatePicker();
-        func_TinhTongTien(startTime, endTime);
+        func_TinhTongTien(startTimeLong, endTimeLong);
+
+        btn_showDatePicker.setOnClickListener(view -> showDatePicker_inChiTietXe(car));
 
         btnThueXe.setOnClickListener(v -> {
             Intent intent = new Intent(this, ThongTinThue_Activity.class);
@@ -117,6 +124,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_mota = findViewById(R.id.tv_moTa_inChiTietXe);
         tv_soNgayThueXe = findViewById(R.id.tv_soNgayThueXe_inChiTietXe);
         tv_diaChiXe = findViewById(R.id.tv_diachiXe_inCTX);
+        tv_diaChiXe2 = findViewById(R.id.tv_diachiXe2_inCTX);
         tv_tongTien = findViewById(R.id.tv_tongTien_inChiTietXe);
         tv_xeDaThue = findViewById(R.id.tv_xedaThue_inChiTietXe);
         tv_soTien1ngay = findViewById(R.id.tv_soTienThue_1ngay_inChiTietXe);
@@ -127,6 +135,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_400km = findViewById(R.id.tv_400km_inChiTietXe);
         tv_dieuKhoan = findViewById(R.id.tv_dieukhoan_inChiTietXe);
         btn_see_more = findViewById(R.id.btn_see_more);
+        btn_showDatePicker = findViewById(R.id.btn_showDatePicker_inCTX);
         img_chuSH_Xe = findViewById(R.id.img_avatar_chuSHXe_inCTX);
         tv_tenChuSH_Xe = findViewById(R.id.tv_tenChuSH_Xe_inCTX);
         tv_soSao_ofChuSH = findViewById(R.id.tv_soSao_ofChuSH_Xe_inCTX);
@@ -142,8 +151,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
         boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
+
         // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( thuê xe, chọn thời gian,... )
-        if(isMyCar) {
+        if (isMyCar) {
             cardview_thoigianThueXe.setVisibility(View.GONE);
             cardview_DieuKhoan_PhuPhi.setVisibility(View.GONE);
             ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
@@ -160,12 +170,14 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         boolean check = preferences.getBoolean("check", false);
 
         if (check) {
-            startTime = preferences.getLong("startTime2", 0);
-            endTime = preferences.getLong("endTime2", 0);
+            startTimeLong = preferences.getLong("startTime2", 0);
+            endTimeLong = preferences.getLong("endTime2", 0);
         } else {
-            startTime = preferences.getLong("startTime1", 0);
-            endTime = preferences.getLong("endTime1", 0);
+            startTimeLong = preferences.getLong("startTime1", 0);
+            endTimeLong = preferences.getLong("endTime1", 0);
         }
+        tv_xeDaThue.setVisibility(View.GONE);
+        build_DatePicker();
 
         SharedPreferences preferences1 = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences1.getString("user", "");
@@ -209,20 +221,47 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         tv_tenxe_actionbar.setText(car.getMauXe());
         tv_tenxe.setText(car.getMauXe());
-        tv_soSao.setText("5.0");
-        tv_soChuyen.setText(car.getSoChuyen() + " chuyến");
+
+        int soChuyen = car.getSoChuyen();
+        float trungbinhSao = car.getTrungBinhSao();
+
+        if (soChuyen == 0) {
+            tv_soChuyen.setText("Chưa có chuyến");
+            tv_soSao.setVisibility(View.GONE);
+        } else {
+            tv_soChuyen.setText(soChuyen + " chuyến");
+            tv_soSao.setVisibility(View.VISIBLE);
+        }
+
+        if (trungbinhSao > 0) {
+            DecimalFormat df = new DecimalFormat("0.0");
+            String formattedNumber = df.format(trungbinhSao);
+
+            tv_soSao.setVisibility(View.VISIBLE);
+            tv_soSao.setText(formattedNumber);
+        } else {
+            tv_soSao.setVisibility(View.GONE);
+        }
+
         tv_soTien1ngay.setText(NumberFormatK.format(car.getGiaThue1Ngay()));
         tv_mota.setText(car.getMoTa());
         tv_truyendong.setText(car.getChuyenDong());
         tv_soGhe.setText(car.getSoGhe() + " chỗ");
         tv_nhienlieu.setText(car.getLoaiNhienLieu());
         tv_tieuhao.setText(car.getTieuHao() + "l/100km");
-        tv_xeDaThue.setVisibility(View.GONE);
 
+        String diaChiXe = car.getDiaChiXe();
+        String[] parts = diaChiXe.split(",");
+        int lastIndex = parts.length - 1;
+        String diachi = null;
+        if (lastIndex >= 2) {
+            String quanHuyen = parts[lastIndex - 2].trim();
+            String thanhPhoTinh = parts[lastIndex - 1].trim();
 
-        // dùng subString để ẩn đi địa chỉ chi tiết
-        int indexDC = car.getDiaChiXe().indexOf(",");
-        tv_diaChiXe.setText(car.getDiaChiXe().substring(indexDC + 2));
+            diachi = quanHuyen + ", " + thanhPhoTinh;
+        }
+        tv_diaChiXe.setText(diachi);
+        tv_diaChiXe2.setText(diachi);
 
         // chủ SH
 //        Glide.with(this)
@@ -266,16 +305,14 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void build_DatePicker() {
-        datePicker = MaterialDatePicker.Builder.dateRangePicker()
-                .setSelection(Pair.create(startTime, endTime))
-                .setCalendarConstraints(buildCalendarConstraints())
-                .build();
+        datePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(Pair.create(startTimeLong, endTimeLong)).setCalendarConstraints(buildCalendarConstraints()).build();
 
-        setValue_forDate(startTime, endTime);
+        setValue_forDate(startTimeLong, endTimeLong);
+        getListHoaDon_hasTrangThai2a3(car.get_id());
     }
 
 
-    public void showDatePicker_inChiTietXe(View view) {
+    private void showDatePicker_inChiTietXe(Car car) {
         datePicker.show(getSupportFragmentManager(), "Material_Range");
 
         datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
@@ -294,6 +331,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
                 setValue_forDate(startDate, endDate);
                 func_TinhTongTien(startDate, endDate);
+                getListHoaDon_hasTrangThai2a3(car.get_id());
             }
         });
     }
@@ -388,5 +426,68 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
     public void showDialog_PhuPhiPhatSinh_inCTX(View view) {
         Dialog_PhuPhi_PhatSinh.showDialog(this);
+    }
+
+    private void getListHoaDon_hasTrangThai2a3(String id_xe) {
+        // convert kiểu dữ liệu của ngày đã chọn từ String sang Date
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        startDate = null;
+        endDate = null;
+
+        try {
+            startDate = sdf.parse(tv_ngayNhanXe.getText().toString());
+            endDate = sdf.parse(tv_ngayTraXe.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // lấy list hoá đơn đã đặt cọc và đang vận hành của xe để check
+        // 2,3 = đã cọc, đang vận hành
+        RetrofitClient.FC_services().getListHoaDon(id_xe, "2,3").enqueue(new Callback<List<HoaDon>>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+                List<HoaDon> hoaDonList = response.body();
+                if (response.code() == 200) {
+                    if (hoaDonList != null) {
+                        StringBuilder valid = new StringBuilder();
+                        for (HoaDon hoaDon : hoaDonList) {
+                            // convert kiểu dữ liệu của ngày bd, kt trong HĐ từ String sang Date
+                            Date ngayBD = null;
+                            Date ngayKT = null;
+                            try {
+                                ngayBD = sdf.parse(hoaDon.getNgayThue());
+                                ngayKT = sdf.parse(hoaDon.getNgayTra());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            if ((startDate.equals(ngayBD) || startDate.equals(ngayKT) ||
+                                    endDate.equals(ngayBD) || endDate.equals(ngayKT)) ||
+                                    (startDate.before(ngayKT) && endDate.after(ngayBD))) {
+                                // Khoảng ngày đã chọn trùng với khoảng ngày trong HoaDon
+                                tv_xeDaThue.setVisibility(View.VISIBLE);
+                                btnThueXe.setEnabled(false);
+                                btnThueXe.setBackgroundResource(R.drawable.disable_custom_btn3);
+                                String text = "- Xe đã được thuê từ ngày " + hoaDon.getNgayThue() + " đến hết ngày " + hoaDon.getNgayTra() + "\n";
+                                valid.append(text);
+                            } else {
+                                tv_xeDaThue.setVisibility(View.GONE);
+                                btnThueXe.setEnabled(true);
+                                btnThueXe.setBackgroundResource(R.drawable.custom_btn3);
+                            }
+                        }
+                        tv_xeDaThue.setText(valid);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HoaDon>> call, Throwable t) {
+                System.out.println("Có lỗi xảy ra: " + t);
+                tv_xeDaThue.setVisibility(View.GONE);
+                btnThueXe.setEnabled(true);
+            }
+        });
     }
 }

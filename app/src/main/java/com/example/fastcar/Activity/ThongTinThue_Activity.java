@@ -45,6 +45,7 @@ import com.example.fastcar.Server.HostApi;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -144,12 +145,40 @@ public class ThongTinThue_Activity extends AppCompatActivity {
 
         tv_tenXe.setText(car.getMauXe());
         tv_maSoXe.setText(car.get_id().substring(car.get_id().length() - 6));
-        tv_soSao.setText("5.0");
-        tv_soChuyen.setText(car.getSoChuyen() + " chuyến");
+
+        int soChuyen = car.getSoChuyen();
+        float trungbinhSao = car.getTrungBinhSao();
+
+        if (soChuyen == 0) {
+            tv_soChuyen.setText("Chưa có chuyến");
+            tv_soSao.setVisibility(View.GONE);
+        } else {
+            tv_soChuyen.setText(soChuyen + " chuyến");
+            tv_soSao.setVisibility(View.VISIBLE);
+        }
+
+        if(trungbinhSao > 0) {
+            DecimalFormat df = new DecimalFormat("0.0");
+            String formattedNumber = df.format(trungbinhSao);
+
+            tv_soSao.setVisibility(View.VISIBLE);
+            tv_soSao.setText(formattedNumber);
+        } else {
+            tv_soSao.setVisibility(View.GONE);
+        }
 
         // dùng subString để ẩn đi địa chỉ chi tiết
-        int indexDC = car.getDiaChiXe().indexOf(",");
-        tv_diaChiNhanXe.setText(car.getDiaChiXe().substring(indexDC + 2));
+        String diaChiXe = car.getDiaChiXe();
+        String[] parts = diaChiXe.split(",");
+        int lastIndex = parts.length - 1;
+        String diachi = null;
+        if (lastIndex >= 2) {
+            String quanHuyen = parts[lastIndex - 2].trim();
+            String thanhPhoTinh = parts[lastIndex - 1].trim();
+
+            diachi = quanHuyen + ", " + thanhPhoTinh;
+        }
+        tv_diaChiNhanXe.setText(diachi);
 
         tv_tenChuSH_Xe.setText(car.getChuSH().getUserName());
         tv_soSao_ofChuSH.setText("5.0");

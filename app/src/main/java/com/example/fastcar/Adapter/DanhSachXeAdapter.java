@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -22,11 +24,13 @@ import com.example.fastcar.FavoriteCar_Method;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.FormatString.NumberFormatK;
 import com.example.fastcar.Model.FavoriteCar;
+import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +55,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay;
-        ConstraintLayout item;
+        CardView item;
         ImageView img_favorite;
         RelativeLayout button_favorite;
 
@@ -80,19 +84,41 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DanhSachXeAdapter.ViewHolder holder, int position) {
+        Car car = listXe.get(position);
+        final boolean[] isFavorite = {false};
         // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( button yêu thích,... )
-        if(isMyCar) {
+        if (isMyCar) {
             holder.button_favorite.setVisibility(View.GONE);
+            if (car.getTrangThai() != 1) {
+                holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
+            }
         } else {
             holder.button_favorite.setVisibility(View.VISIBLE);
         }
 
-        Car car = listXe.get(position);
-        final boolean[] isFavorite = {false};
-
         holder.tv_tenXe.setText(car.getMauXe());
         holder.tv_truyenDong.setText(car.getChuyenDong());
-        holder.tv_soChuyen.setText(car.getSoChuyen() + " chuyến");
+
+        int soChuyen = car.getSoChuyen();
+        float trungbinhSao = car.getTrungBinhSao();
+
+        if (soChuyen == 0) {
+            holder.tv_soChuyen.setText("Chưa có chuyến");
+            holder.tv_soSao.setVisibility(View.GONE);
+        } else {
+            holder.tv_soChuyen.setText(soChuyen + " chuyến");
+            holder.tv_soSao.setVisibility(View.VISIBLE);
+        }
+
+        if(trungbinhSao > 0) {
+            DecimalFormat df = new DecimalFormat("0.0");
+            String formattedNumber = df.format(trungbinhSao);
+
+            holder.tv_soSao.setVisibility(View.VISIBLE);
+            holder.tv_soSao.setText(formattedNumber);
+        } else {
+            holder.tv_soSao.setVisibility(View.GONE);
+        }
 
         holder.tv_soTien1ngay.setText(NumberFormatK.format(car.getGiaThue1Ngay()));
 
@@ -110,7 +136,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
         RetrofitClient.FC_services().findFavoriteCar(user.get_id(), car.get_id()).enqueue(new Callback<List<Car>>() {
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
-                if(response.body().isEmpty()) {
+                if (response.body().isEmpty()) {
                     holder.img_favorite.setImageResource(R.drawable.icon_nolove);
                     isFavorite[0] = false;
                 } else {

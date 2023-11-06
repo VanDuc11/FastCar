@@ -12,9 +12,9 @@ public class FeedBack implements Parcelable {
     Car Xe;
     String NoiDung;
     int SoSao;
-    String ThoiGian;
+    Date ThoiGian;
 
-    public FeedBack(User user, Car xe, String noiDung, int soSao, String thoiGian) {
+    public FeedBack(User user, Car xe, String noiDung, int soSao, Date thoiGian) {
         this.User = user;
         this.Xe = xe;
         NoiDung = noiDung;
@@ -31,7 +31,7 @@ public class FeedBack implements Parcelable {
         Xe = in.readParcelable(Car.class.getClassLoader());
         NoiDung = in.readString();
         SoSao = in.readInt();
-        ThoiGian = in.readString();
+        ThoiGian = new Date(in.readLong());
     }
 
     public static final Creator<FeedBack> CREATOR = new Creator<FeedBack>() {
@@ -56,7 +56,7 @@ public class FeedBack implements Parcelable {
         parcel.writeParcelable(Xe, i);
         parcel.writeString(NoiDung);
         parcel.writeInt(SoSao);
-        parcel.writeString(ThoiGian);
+        parcel.writeLong(ThoiGian.getTime());
     }
 
     public com.example.fastcar.Model.User getUser() {
@@ -91,11 +91,11 @@ public class FeedBack implements Parcelable {
         SoSao = soSao;
     }
 
-    public String getThoiGian() {
+    public Date getThoiGian() {
         return ThoiGian;
     }
 
-    public void setThoiGian(String thoiGian) {
+    public void setThoiGian(Date thoiGian) {
         ThoiGian = thoiGian;
     }
 }

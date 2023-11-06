@@ -18,8 +18,9 @@ public class Car implements Parcelable {
     int GiaThue1Ngay;
     User ChuSH;
     int TrangThai, SoChuyen;
+    float TrungBinhSao;
 
-    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String diaChiXe, int giaThue1Ngay, User chuSH, int trangThai, int soChuyen, ArrayList<FeedBack> feedBack) {
+    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String diaChiXe, int giaThue1Ngay, User chuSH, int trangThai, int soChuyen, float trungBinhSao) {
         this._id = _id;
         this.BKS = BKS;
         this.HangXe = hangXe;
@@ -36,6 +37,7 @@ public class Car implements Parcelable {
         this.ChuSH = chuSH;
         this.TrangThai = trangThai;
         this.SoChuyen = soChuyen;
+        this.TrungBinhSao = trungBinhSao;
     }
 
 
@@ -59,6 +61,7 @@ public class Car implements Parcelable {
         ChuSH = in.readParcelable(User.class.getClassLoader());
         TrangThai = in.readInt();
         SoChuyen = in.readInt();
+        TrungBinhSao = in.readFloat();
     }
 
     public static final Creator<Car> CREATOR = new Creator<Car>() {
@@ -202,6 +205,14 @@ public class Car implements Parcelable {
         GiaThue1Ngay = giaThue1Ngay;
     }
 
+    public float getTrungBinhSao() {
+        return TrungBinhSao;
+    }
+
+    public void setTrungBinhSao(float trungBinhSao) {
+        TrungBinhSao = trungBinhSao;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -225,5 +236,6 @@ public class Car implements Parcelable {
         parcel.writeParcelable(ChuSH, i);
         parcel.writeInt(TrangThai);
         parcel.writeInt(SoChuyen);
+        parcel.writeFloat(TrungBinhSao);
     }
 }

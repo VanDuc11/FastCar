@@ -63,7 +63,7 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
 
-        RetrofitClient.FC_services().getListHoaDon( user.get_id(), "1,2,3").enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "1,2,3").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {

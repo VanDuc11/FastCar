@@ -152,6 +152,9 @@ public class CaNhan_Activity extends AppCompatActivity {
     }
 
     private void showDialog_logOut() {
+        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
         LayoutInflater inflater = LayoutInflater.from(CaNhan_Activity.this);
         View custom = inflater.inflate(R.layout.dialog_logout, null);
         Dialog dialog = new Dialog(CaNhan_Activity.this);
@@ -182,6 +185,9 @@ public class CaNhan_Activity extends AppCompatActivity {
             LoginManager.getInstance().logOut();
             startActivity(new Intent(getBaseContext(), Login_Activity.class));
             finish();
+
+            editor.clear();
+            editor.apply();
         });
 
     }

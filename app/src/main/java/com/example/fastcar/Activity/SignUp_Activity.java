@@ -63,10 +63,10 @@ public class SignUp_Activity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                createUser_inMongoDB(email, pass);
                                 Toast.makeText(SignUp_Activity.this, "Đăng nhập thành công.",
                                         Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SignUp_Activity.this, KhamPha_Activity.class);
+                                intent.putExtra("pass", pass);
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -83,35 +83,6 @@ public class SignUp_Activity extends AppCompatActivity {
         }
     }
 
-    private void createUser_inMongoDB(String email, String pass) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = HostApi.API_URL + "/api/user/create";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                System.out.println("Đăng ký thành công in MongoDB" + response.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Đăng ký thất bại in MongoDB" + error.getMessage());
-            }
-        }) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() {
-                Date getTimeNow = new Date();
-                Map<String, String> data = new HashMap<>();
-                data.put("userName", "UserName");
-                data.put("email", email);
-                data.put("MatKhau", pass);
-                data.put("NgayThamGia", String.valueOf(getTimeNow));
-                return data;
-            }
-        };
-
-        queue.add(stringRequest);
-    }
     private void find(){
         edtEamil = findViewById(R.id.SignUp_sdt_email);
         edtPass = findViewById(R.id.SignUp_matkhau);

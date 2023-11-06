@@ -106,13 +106,13 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHode
 
         // tính toán thời gian còn lại của voucher
         long diffInMillies = hsd.getTime() - today.getTime();
-        long daysBetween = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) + 1;
+        long daysBetween = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
         if(daysBetween < 0) {
             holder.tv_checkDate.setText("Mã khuyến mãi không khả dụng");
             holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
             holder.ic_add.setVisibility(View.GONE);
-        } else if(daysBetween == 1) {
+        } else if(daysBetween == 0) {
             holder.tv_checkDate.setText("Mã khuyến mãi sẽ hết hạn trong hôm nay");
         } else {
             if(daysBetween <= 5) {

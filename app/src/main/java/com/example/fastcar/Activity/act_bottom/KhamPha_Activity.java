@@ -7,11 +7,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -24,20 +22,16 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -50,7 +44,6 @@ import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongBao_Activity;
-import com.example.fastcar.Activity.ThongTinThue_Activity;
 import com.example.fastcar.Adapter.KhuyenMaiApdater;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
@@ -62,8 +55,6 @@ import com.example.fastcar.Server.HostApi;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -118,14 +109,16 @@ public class KhamPha_Activity extends AppCompatActivity {
 
         btnTim.setOnClickListener(view -> {
             String diachiStr = tvDiaDiem.getText().toString();
+            String[] parts = diachiStr.split(",");
 
+            int lastIndex = parts.length - 1;
             if (!diachiStr.isEmpty()) {
                 String diachi;
-                // dùng subString để lấy quận/huyện, thành phố/tỉnh từ địa chỉ chi tiết
-                int endIndex = diachiStr.lastIndexOf(", Việt Nam");
-                if(endIndex > 0) {
-                    int startIndex = diachiStr.lastIndexOf(",", endIndex - 1);
-                    diachi = diachiStr.substring(startIndex + 2, endIndex);
+                if (lastIndex >= 2) {
+                    String quanHuyen = parts[lastIndex - 2].trim();
+                    String thanhPhoTinh = parts[lastIndex - 1].trim();
+
+                    diachi = quanHuyen + ", " + thanhPhoTinh;
                 } else {
                     diachi = diachiStr;
                 }
@@ -172,9 +165,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView_khuyenmai);
 
-        img_notify.setOnClickListener(view -> {
-            startActivity(new Intent(KhamPha_Activity.this, ThongBao_Activity.class));
-        });
+        img_notify.setOnClickListener(view -> startActivity(new Intent(KhamPha_Activity.this, ThongBao_Activity.class)));
 
         loadXeKhamPha();
 
@@ -189,11 +180,17 @@ public class KhamPha_Activity extends AppCompatActivity {
     }
 
     void Save() {
+        Intent intent = getIntent();
         String personName = fBaseuser.getDisplayName();
         String userName = personName == null ? "UserName" : personName;
         String Email = fBaseuser.getEmail();
+        String pass = intent.getStringExtra("pass");
         Uri uri = fBaseuser.getPhotoUrl();
         tvName.setText(userName);
+
+        if(pass == null) {
+            pass = "";
+        }
 
         getUser_fromEmail(Email);
 
@@ -206,10 +203,12 @@ public class KhamPha_Activity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = HostApi.API_URL + "/api/user/create";
+        String finalPass = pass;
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("Đăng nhập thành công" + response.toString());
+                System.out.println("Đăng nhập thành công" + response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -217,7 +216,6 @@ public class KhamPha_Activity extends AppCompatActivity {
                 System.out.println("error" + error.getMessage());
             }
         }) {
-            @Nullable
             @Override
             protected Map<String, String> getParams() {
                 Date getTimeNow = new Date();
@@ -225,6 +223,7 @@ public class KhamPha_Activity extends AppCompatActivity {
                 data.put("userName", userName);
                 data.put("email", Email);
                 data.put("UID", fBaseuser.getUid());
+                data.put("MatKhau", finalPass);
                 data.put("NgayThamGia", String.valueOf(getTimeNow));
                 return data;
             }
@@ -370,7 +369,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         String Email = fBaseuser.getEmail();
 
         recyclerView_xeKhamPha.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        RetrofitClient.FC_services().getListTop5Car(Email).enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListTop5Car( Email, 1).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, retrofit2.Response<List<Car>> response) {

@@ -75,7 +75,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        RetrofitClient.FC_services().getListCar_NotUser( user.getEmail(), diachi).enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_NotUser( user.getEmail(), 1, diachi).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {

@@ -77,7 +77,7 @@ public class LichSuThueXeAdapter extends RecyclerView.Adapter<LichSuThueXeAdapte
         holder.tv_ngayTra.setText("Kết thúc: " + hoaDon.getNgayTra());
         holder.tvTongTien.setText(NumberFormatVND.format(hoaDon.getTongTien()));
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");
         String formattedDate = dateFormat.format(hoaDon.getGioTaoHD());
         holder.tvTime.setText(formattedDate);
 
