@@ -32,6 +32,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -53,14 +54,18 @@ import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.facebook.login.LoginManager;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -82,6 +87,8 @@ public class KhamPha_Activity extends AppCompatActivity {
     RecyclerView recyclerView_khuyenmai, recyclerView_xeKhamPha;
     CircleImageView img_user;
     private FirebaseAuth auth;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
     private FirebaseUser fBaseuser;
     FirebaseDatabase database;
     MaterialDatePicker<Pair<Long, Long>> datePicker;
@@ -91,6 +98,7 @@ public class KhamPha_Activity extends AppCompatActivity {
     Dialog dialogDiaChi;
     FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
+    String tokenFCM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +158,8 @@ public class KhamPha_Activity extends AppCompatActivity {
         img_user = findViewById(R.id.img_user_inKhamPha);
         recyclerView_xeKhamPha = findViewById(R.id.recyclerView_XeKhamPha);
         img_notify = findViewById(R.id.ic_notify);
+        data_view = findViewById(R.id.data_view_inXeKhamPha);
+        shimmer_view = findViewById(R.id.shimmer_view_inXeKhamPha);
     }
 
     void load() {
@@ -168,6 +178,19 @@ public class KhamPha_Activity extends AppCompatActivity {
         img_notify.setOnClickListener(view -> startActivity(new Intent(KhamPha_Activity.this, ThongBao_Activity.class)));
 
         loadXeKhamPha();
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            tokenFCM = task.getResult();
+                            System.out.println("TokenFCM: " + tokenFCM);
+                        } else {
+                            System.out.println("Lỗi lấy token FCM: " + task.getException());
+                        }
+                    }
+                });
 
     }
 
@@ -188,7 +211,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         Uri uri = fBaseuser.getPhotoUrl();
         tvName.setText(userName);
 
-        if(pass == null) {
+        if (pass == null) {
             pass = "";
         }
 
@@ -220,8 +243,8 @@ public class KhamPha_Activity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Date getTimeNow = new Date();
                 Map<String, String> data = new HashMap<>();
-                data.put("userName", userName);
-                data.put("email", Email);
+                data.put("UserName", userName);
+                data.put("Email", Email);
                 data.put("UID", fBaseuser.getUid());
                 data.put("MatKhau", finalPass);
                 data.put("NgayThamGia", String.valueOf(getTimeNow));
@@ -368,11 +391,18 @@ public class KhamPha_Activity extends AppCompatActivity {
     private void loadXeKhamPha() {
         String Email = fBaseuser.getEmail();
 
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
+
         recyclerView_xeKhamPha.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        RetrofitClient.FC_services().getListTop5Car( Email, 1).enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListTop5Car(Email, 1).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, retrofit2.Response<List<Car>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if (response.code() == 200) {
                     XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(KhamPha_Activity.this, response.body());
                     recyclerView_xeKhamPha.setAdapter(adapter);

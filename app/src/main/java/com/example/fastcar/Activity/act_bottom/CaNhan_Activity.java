@@ -12,27 +12,31 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Activity.MaGiamGia_Activity;
-import com.example.fastcar.Activity.ThongTinThue_Activity;
+import com.example.fastcar.Activity.XeCuaToi_Activity;
 import com.example.fastcar.Activity.XeYeuThich_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongTin_User_Activity;
+import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.facebook.login.LoginManager;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,7 +50,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CaNhan_Activity extends AppCompatActivity {
-    TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnDeleteAccount, btnXeYeuThich, btnThemXe, btnDoiMK;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
+    TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnDeleteAccount, btnXeYeuThich, btnDoiMK;
+    LinearLayout btnXeCuaToi, btnThemXe;
     AppCompatButton btnLogout;
     CircleImageView avt_user;
     TextView tv_name_user;
@@ -56,6 +63,7 @@ public class CaNhan_Activity extends AppCompatActivity {
     String username, phone, email;
     Uri uri;
     User user;
+    List<Car> listCars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,7 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         mapping();
         load();
+        getCar_ofUserLogin();
 
         // Thông tin cá nhân
         btnInfoUser.setOnClickListener(view -> {
@@ -87,11 +96,13 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         // Thêm xe
         btnThemXe.setOnClickListener(
-                view -> startActivity(new Intent(getBaseContext(), ThemXe_Activity.class)));
+                view -> startActivity(new Intent(this, ThemXe_Activity.class)));
+
+        // Xe của tôi
+        btnXeCuaToi.setOnClickListener(view -> startActivity(new Intent(this, XeCuaToi_Activity.class)));
 
         // Lịch sử thuê xe
-        btnLichSuThueXe.setOnClickListener(
-                view -> startActivity(new Intent(getBaseContext(), LichSu_ThueXe_Activity.class)));
+        btnLichSuThueXe.setOnClickListener(view -> startActivity(new Intent(this, LichSu_ThueXe_Activity.class)));
 
         // Đổi mật khẩu
         btnDoiMK.setOnClickListener(view -> showDialog_DoiMK());
@@ -104,6 +115,8 @@ public class CaNhan_Activity extends AppCompatActivity {
     }
 
     private void mapping() {
+        data_view = findViewById(R.id.data_view_inCaNhan);
+        shimmer_view = findViewById(R.id.shimmer_view_inCaNhan);
         btnInfoUser = findViewById(R.id.btn_thongtin_canhan_in_tabUser);
         btnVoucher = findViewById(R.id.btn_magiamgia_in_tabUser);
         btnLichSuThueXe = findViewById(R.id.btn_lichsu_ThueXe_in_tabUser);
@@ -114,6 +127,7 @@ public class CaNhan_Activity extends AppCompatActivity {
         avt_user = findViewById(R.id.avt_user_in_user);
         tv_name_user = findViewById(R.id.tv_name_user_in_user);
         btnThemXe = findViewById(R.id.btn_ThemXe_in_tabUser);
+        btnXeCuaToi = findViewById(R.id.btn_XeCuaToi_in_tabUser);
     }
 
     private void load() {
@@ -259,12 +273,12 @@ public class CaNhan_Activity extends AppCompatActivity {
     }
 
     private void fetchData_UserLogin() {
-        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
-        String userStr = preferences.getString("user", "");
-        Gson gson = new Gson();
-        User userModel = gson.fromJson(userStr, User.class);
+//        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+//        String userStr = preferences.getString("user", "");
+//        Gson gson = new Gson();
+//        User userModel = gson.fromJson(userStr, User.class);
 
-        RetrofitClient.FC_services().getListUser(userModel.getEmail()).enqueue(new Callback<List<User>>() {
+        RetrofitClient.FC_services().getListUser(email).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 List<User> list = response.body();
@@ -273,7 +287,42 @@ public class CaNhan_Activity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                System.out.println("Có lỗi khi fetch user có email: " + userModel.getEmail() + " --- " + t);
+                System.out.println("Có lỗi khi fetch user có email: " + email + " --- " + t);
+            }
+        });
+    }
+
+    private void getCar_ofUserLogin() {
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
+
+        // get data
+        RetrofitClient.FC_services().getListCar_ofUser(email).enqueue(new Callback<List<Car>>() {
+            @Override
+            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
+                if (response.code() == 200) {
+                    if (!response.body().isEmpty()) {
+                        listCars = response.body();
+                        btnThemXe.setVisibility(View.GONE);
+                        btnXeCuaToi.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    listCars = null;
+                    btnThemXe.setVisibility(View.VISIBLE);
+                    btnXeCuaToi.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Car>> call, Throwable t) {
+                System.out.println("Có lỗi khi getListCar_ofUser(): " + user.getEmail() + " --- " + t);
+                listCars = null;
+                btnThemXe.setVisibility(View.VISIBLE);
+                btnXeCuaToi.setVisibility(View.GONE);
             }
         });
     }

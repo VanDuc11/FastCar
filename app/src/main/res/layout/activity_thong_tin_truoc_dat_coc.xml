@@ -89,7 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
-                            android:src="@drawable/icon_car" />
+                            android:src="@drawable/icon_car_v1_green_25x25" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -307,7 +307,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineHeight="22dp"
-                        android:text="Đang chờ khách hàng thanh toán 59 phút 33 giâythành toán 59 phút 33 giây"
+                        android:text="Đang chờ khách hàng thanh toán trong 59 phút 33 giây"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textSize="15dp" />
                 </LinearLayout>

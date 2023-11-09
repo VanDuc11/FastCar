@@ -4,6 +4,7 @@ import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.FavoriteCar;
 import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.Model.LichSuGiaoDich;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
@@ -51,6 +52,10 @@ public interface FastCarServices {
     @GET("user/findUserEmail")
     Call<List<User>> findUserEmail();
 
+    @Headers("Content-Type: application/json; charset=utf-8")
+    @PUT("user/updateUser/{email}")
+    Call<ResMessage> updateUser(@Path("email") String email, @Body User user);
+
     // Voucher Model URL: voucher/
     @GET("voucher/list")
     Call<List<Voucher>> getListVoucher();
@@ -92,4 +97,11 @@ public interface FastCarServices {
     @DELETE("favoriteCar/delete/{userId}/{carId}")
     Call<ResMessage> deleteFavoriteCar(
             @Path("userId") String userId, @Path("carId") String carId);
+
+    // model LSGD
+    @GET("lsgd/list")
+    Call<List<LichSuGiaoDich>> getLSGD_ofUser(@Query("User") String idUser);
+
+    @POST("lsgd/create")
+    Call<ResMessage> createLSGD(@Body LichSuGiaoDich lichSuGiaoDich);
 }

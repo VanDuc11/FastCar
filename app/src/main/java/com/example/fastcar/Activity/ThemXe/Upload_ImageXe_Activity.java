@@ -14,7 +14,7 @@ import com.example.fastcar.R;
 
 public class Upload_ImageXe_Activity extends AppCompatActivity {
     RelativeLayout ic_back, ic_close;
-    ImageView img_truoc, img_sau, img_trai, img_phai;
+    ImageView img_truoc, img_sau, img_trai, img_phai, img_dangky, img_dangkiem, img_baohiem;
     TextView btn_confirm;
 
     @Override

@@ -17,6 +17,7 @@ import com.example.fastcar.Model.FavoriteCar;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -30,6 +31,8 @@ public class XeYeuThich_Activity extends AppCompatActivity {
     DanhSachXeAdapter adapter;
     LinearLayout ln_no_result;
     SwipeRefreshLayout refreshLayout;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,9 @@ public class XeYeuThich_Activity extends AppCompatActivity {
         mapping();
         load();
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                load();
-                refreshLayout.setRefreshing(false);
-            }
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            refreshLayout.setRefreshing(false);
         });
     }
 
@@ -52,6 +52,8 @@ public class XeYeuThich_Activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView_xeYeuThich);
         ln_no_result = findViewById(R.id.ln_no_result_inXeYeuThich);
         refreshLayout = findViewById(R.id.refresh_data_inXeYeuThich);
+        data_view = findViewById(R.id.data_view_inXeYeuThich);
+        shimmer_view = findViewById(R.id.shimmer_view_inXeYeuThich);
     }
 
     private void load() {
@@ -61,11 +63,17 @@ public class XeYeuThich_Activity extends AppCompatActivity {
         User user = gson.fromJson(userStr, User.class);
 
         ln_no_result.setVisibility(View.GONE);
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
 
         RetrofitClient.FC_services().getListFavoriteCar(user.get_id()).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if (response.code() == 200) {
                     if (!response.body().isEmpty()) {
                         adapter = new DanhSachXeAdapter(XeYeuThich_Activity.this, response.body(), false);

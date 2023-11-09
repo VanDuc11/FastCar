@@ -63,8 +63,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/action_bar_in_upload_imageCar"
-        android:layout_above="@+id/ln_btn_continue">
+        android:layout_above="@+id/ln_btn_continue"
+        android:layout_below="@id/action_bar_in_upload_imageCar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,9 +79,9 @@
                 <ImageView
                     android:id="@+id/img_anhtruoc_xe"
                     android:layout_width="match_parent"
-                    android:src="@drawable/img_xe_truoc"
+                    android:layout_height="200dp"
                     android:background="#f8f9fb"
-                    android:layout_height="200dp" />
+                    android:src="@drawable/img_xe_truoc" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -92,35 +92,95 @@
                         android:id="@+id/img_anhtrai_xe"
                         android:layout_width="0dp"
                         android:layout_height="160dp"
-                        android:src="@drawable/img_xe_trai"
+                        android:layout_weight="1"
                         android:background="#f8f9fb"
-                        android:layout_weight="1" />
+                        android:src="@drawable/img_xe_trai" />
 
                     <ImageView
                         android:id="@+id/img_anhphai_xe"
                         android:layout_width="0dp"
                         android:layout_height="160dp"
-                        android:src="@drawable/img_xe_phai"
+                        android:layout_weight="1"
                         android:background="#f8f9fb"
-                        android:layout_weight="1" />
+                        android:src="@drawable/img_xe_phai" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/img_anhsau_xe"
                     android:layout_width="match_parent"
-                    android:src="@drawable/img_xe_sau"
+                    android:layout_height="200dp"
                     android:background="#f8f9fb"
-                    android:layout_height="200dp" />
+                    android:src="@drawable/img_xe_sau" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
                 android:background="#F6F1EA"
                 android:padding="10dp"
+                android:text="Bạn vui lòng đăng đủ 4 ảnh (trước - sau - trái - phải) để tăng hiệu quả cho thuê."
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Bạn vui lòng đăng ít nhất 4 ảnh (trước - sau - trái - phải) để tăng hiệu quả cho thuê." />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Giấy đăng ký xe:"
+                    android:layout_marginHorizontal="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/img_dangky_xe"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="170dp"
+                    android:background="#f8f9fb"
+                    android:src="@drawable/image_dangkyxe" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Giấy đăng kiểm xe:"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/img_dangkiem_xe"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="170dp"
+                    android:background="#f8f9fb"
+                    android:src="@drawable/image_dangkiem" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bảo hiểm xe:"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/img_baohiem_xe"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="170dp"
+                    android:background="#f8f9fb"
+                    android:src="@drawable/image_baohiemxe" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

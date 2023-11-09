@@ -19,6 +19,7 @@ import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public class ThemXe_Activity extends AppCompatActivity {
     RecyclerView recyclerView;
     DanhSachXeAdapter adapter;
     LinearLayout ln_no_result;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +46,10 @@ public class ThemXe_Activity extends AppCompatActivity {
         load();
 
         img_back.setOnClickListener(view -> {
-            startActivity(new Intent(this, CaNhan_Activity.class));
+            onBackPressed();
             finish();
         });
+
         img_add.setOnClickListener(view -> nextToScreen());
         btn_add.setOnClickListener(view -> nextToScreen());
     }
@@ -55,10 +59,14 @@ public class ThemXe_Activity extends AppCompatActivity {
         btn_add = findViewById(R.id.btn_themxe);
         ln_no_result = findViewById(R.id.ln_no_result_inThemXe);
         recyclerView = findViewById(R.id.recyclerView_listXeCuaToi);
+        data_view = findViewById(R.id.data_view_inXeCuaToi);
+        shimmer_view = findViewById(R.id.shimmer_view_inXeCuaToi);
     }
 
     private void load() {
         ln_no_result.setVisibility(View.GONE);
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
 
         // lấy user từ shared
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
@@ -71,6 +79,10 @@ public class ThemXe_Activity extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if(response.code() == 200) {
                     adapter = new DanhSachXeAdapter(ThemXe_Activity.this, response.body(), true);
                     recyclerView.setAdapter(adapter);

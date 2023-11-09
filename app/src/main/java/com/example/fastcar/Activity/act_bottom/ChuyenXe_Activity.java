@@ -20,6 +20,7 @@ import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChuyenXe_Activity extends AppCompatActivity {
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
     RecyclerView recyclerView_chuyenXe;
     DanhSachChuyenXeAdapter adapter;
     LinearLayout ln_noResult;
@@ -53,22 +56,30 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         recyclerView_chuyenXe = findViewById(R.id.recyclerView_chuyenxe);
         ln_noResult = findViewById(R.id.ln_no_result_inChuyenXe);
         refreshLayout = findViewById(R.id.refresh_data_inChuyenXe);
+        data_view = findViewById(R.id.data_view_inChuyenXe);
+        shimmer_view = findViewById(R.id.shimmer_view_inChuyenXe);
     }
 
     private void load() {
-        ln_noResult.setVisibility(View.GONE);
-
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences.getString("user", "");
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
 
+        ln_noResult.setVisibility(View.GONE);
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
+
         RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "1,2,3").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if (response.code() == 200) {
-                    if(response.body() != null) {
+                    if(!response.body().isEmpty()) {
                         ln_noResult.setVisibility(View.GONE);
                         adapter = new DanhSachChuyenXeAdapter(ChuyenXe_Activity.this, response.body());
                         recyclerView_chuyenXe.setAdapter(adapter);
@@ -110,9 +121,9 @@ public class ChuyenXe_Activity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        load();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        load();
+//    }
 }

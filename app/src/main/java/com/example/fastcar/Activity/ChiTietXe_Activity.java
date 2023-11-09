@@ -151,6 +151,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
         boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
+        isNotContinue();
 
         // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( thuê xe, chọn thời gian,... )
         if (isMyCar) {
@@ -447,6 +448,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+                isContinue();
+
                 List<HoaDon> hoaDonList = response.body();
                 if (response.code() == 200) {
                     if (hoaDonList != null) {
@@ -467,14 +470,12 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                                     (startDate.before(ngayKT) && endDate.after(ngayBD))) {
                                 // Khoảng ngày đã chọn trùng với khoảng ngày trong HoaDon
                                 tv_xeDaThue.setVisibility(View.VISIBLE);
-                                btnThueXe.setEnabled(false);
-                                btnThueXe.setBackgroundResource(R.drawable.disable_custom_btn3);
+                                isNotContinue();
                                 String text = "- Xe đã được thuê từ ngày " + hoaDon.getNgayThue() + " đến hết ngày " + hoaDon.getNgayTra() + "\n";
                                 valid.append(text);
                             } else {
                                 tv_xeDaThue.setVisibility(View.GONE);
-                                btnThueXe.setEnabled(true);
-                                btnThueXe.setBackgroundResource(R.drawable.custom_btn3);
+                                isContinue();
                             }
                         }
                         tv_xeDaThue.setText(valid);
@@ -486,8 +487,18 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             public void onFailure(Call<List<HoaDon>> call, Throwable t) {
                 System.out.println("Có lỗi xảy ra: " + t);
                 tv_xeDaThue.setVisibility(View.GONE);
-                btnThueXe.setEnabled(true);
+                btnThueXe.setEnabled(false);
             }
         });
+    }
+
+    private void isContinue() {
+        btnThueXe.setBackgroundResource(R.drawable.custom_btn3);
+        btnThueXe.setEnabled(true);
+    }
+
+    private void isNotContinue() {
+        btnThueXe.setBackgroundResource(R.drawable.disable_custom_btn3);
+        btnThueXe.setEnabled(false);
     }
 }

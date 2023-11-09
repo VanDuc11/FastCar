@@ -15,8 +15,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -29,6 +29,22 @@
         android:theme="@style/Theme.FastCar"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+
+        <service
+            android:name=".FireBaseCloudMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".Activity.ViChuXe_Activity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".Activity.XeCuaToi_Activity"
+            android:exported="false" />
         <activity
             android:name=".Activity.ThemXe.Upload_ImageXe_Activity"
             android:exported="false" />
@@ -55,38 +71,29 @@
             android:exported="false" />
         <activity
             android:name=".Activity.ThongBao_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.act_bottom.HoTro_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.act_bottom.CaNhan_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.act_bottom.ChuyenXe_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.act_bottom.KhamPha_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.HoaDon_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.ThongTin_User_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
-
+            android:exported="false" />
         <activity
             android:name=".Activity.ThanhToan_Activity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -98,31 +105,24 @@
                     android:scheme="demozpdk" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Activity.ThongTinThue_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.LichSu_ThueXe_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.DanhSachXe_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.ChiTietXe_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.ChiTietHoaDon_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".Activity.SignUp_Activity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -137,8 +137,7 @@
 
         <activity
             android:name=".Activity.Login_Activity"
-            android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

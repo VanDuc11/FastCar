@@ -10,11 +10,15 @@ import java.util.Date;
 
 public class User implements Parcelable {
     String _id, UID, UserName, SDT, NgaySinh, GioiTinh , Email;
-    ArrayList<String> GPLX, CCCD;
+    String So_GPLX, HoTen_GPLX, NgayCap_GPLX, DiaChi_GPLX;
+    ArrayList<String> HinhAnh_GPLX;
+    int TrangThai_GPLX;
+    String So_CCCD, NgayCap_CCCD, NoiCap_CCCD;
     String MatKhau, Avatar;
     Date NgayThamGia;
+    int SoDu;
 
-    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, ArrayList<String> GPLX, ArrayList<String> CCCD, String matKhau, String avatar, Date ngayThamGia) {
+    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, String so_GPLX, String hoTen_GPLX, String ngayCap_GPLX, String diaChi_GPLX, ArrayList<String> hinhAnh_GPLX, int trangThai_GPLX, String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD, String matKhau, String avatar, Date ngayThamGia, int soDu) {
         this._id = _id;
         this.UID = UID;
         UserName = userName;
@@ -22,15 +26,30 @@ public class User implements Parcelable {
         NgaySinh = ngaySinh;
         GioiTinh = gioiTinh;
         Email = email;
-        this.GPLX = GPLX;
-        this.CCCD = CCCD;
+        So_GPLX = so_GPLX;
+        HoTen_GPLX = hoTen_GPLX;
+        NgayCap_GPLX = ngayCap_GPLX;
+        DiaChi_GPLX = diaChi_GPLX;
+        HinhAnh_GPLX = hinhAnh_GPLX;
+        TrangThai_GPLX = trangThai_GPLX;
+        So_CCCD = so_CCCD;
+        NgayCap_CCCD = ngayCap_CCCD;
+        NoiCap_CCCD = noiCap_CCCD;
         MatKhau = matKhau;
-        this.Avatar = avatar;
-        this.NgayThamGia = ngayThamGia;
+        Avatar = avatar;
+        NgayThamGia = ngayThamGia;
+        SoDu = soDu;
+    }
+
+    public User(String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD) {
+        So_CCCD = so_CCCD;
+        NgayCap_CCCD = ngayCap_CCCD;
+        NoiCap_CCCD = noiCap_CCCD;
     }
 
     public User() {
     }
+
 
     protected User(Parcel in) {
         _id = in.readString();
@@ -40,11 +59,18 @@ public class User implements Parcelable {
         NgaySinh = in.readString();
         GioiTinh = in.readString();
         Email = in.readString();
-        GPLX = in.createStringArrayList();
-        CCCD = in.createStringArrayList();
+        So_GPLX = in.readString();
+        HoTen_GPLX = in.readString();
+        NgayCap_GPLX = in.readString();
+        DiaChi_GPLX = in.readString();
+        HinhAnh_GPLX = in.createStringArrayList();
+        TrangThai_GPLX = in.readInt();
+        So_CCCD = in.readString();
+        NgayCap_CCCD = in.readString();
+        NoiCap_CCCD = in.readString();
         MatKhau = in.readString();
         Avatar = in.readString();
-        NgayThamGia = new Date(in.readLong());
+        SoDu = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -58,6 +84,7 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
 
     @Override
     public int describeContents() {
@@ -73,11 +100,18 @@ public class User implements Parcelable {
         parcel.writeString(NgaySinh);
         parcel.writeString(GioiTinh);
         parcel.writeString(Email);
-        parcel.writeStringList(GPLX);
-        parcel.writeStringList(CCCD);
+        parcel.writeString(So_GPLX);
+        parcel.writeString(HoTen_GPLX);
+        parcel.writeString(NgayCap_GPLX);
+        parcel.writeString(DiaChi_GPLX);
+        parcel.writeStringList(HinhAnh_GPLX);
+        parcel.writeInt(TrangThai_GPLX);
+        parcel.writeString(So_CCCD);
+        parcel.writeString(NgayCap_CCCD);
+        parcel.writeString(NoiCap_CCCD);
         parcel.writeString(MatKhau);
         parcel.writeString(Avatar);
-        parcel.writeLong(NgayThamGia.getTime());
+        parcel.writeInt(SoDu);
     }
 
     public String get_id() {
@@ -136,20 +170,76 @@ public class User implements Parcelable {
         Email = email;
     }
 
-    public ArrayList<String> getGPLX() {
-        return GPLX;
+    public String getSo_GPLX() {
+        return So_GPLX;
     }
 
-    public void setGPLX(ArrayList<String> GPLX) {
-        this.GPLX = GPLX;
+    public void setSo_GPLX(String so_GPLX) {
+        So_GPLX = so_GPLX;
     }
 
-    public ArrayList<String> getCCCD() {
-        return CCCD;
+    public String getHoTen_GPLX() {
+        return HoTen_GPLX;
     }
 
-    public void setCCCD(ArrayList<String> CCCD) {
-        this.CCCD = CCCD;
+    public void setHoTen_GPLX(String hoTen_GPLX) {
+        HoTen_GPLX = hoTen_GPLX;
+    }
+
+    public String getNgayCap_GPLX() {
+        return NgayCap_GPLX;
+    }
+
+    public void setNgayCap_GPLX(String ngayCap_GPLX) {
+        NgayCap_GPLX = ngayCap_GPLX;
+    }
+
+    public String getDiaChi_GPLX() {
+        return DiaChi_GPLX;
+    }
+
+    public void setDiaChi_GPLX(String diaChi_GPLX) {
+        DiaChi_GPLX = diaChi_GPLX;
+    }
+
+    public ArrayList<String> getHinhAnh_GPLX() {
+        return HinhAnh_GPLX;
+    }
+
+    public void setHinhAnh_GPLX(ArrayList<String> hinhAnh_GPLX) {
+        HinhAnh_GPLX = hinhAnh_GPLX;
+    }
+
+    public int getTrangThai_GPLX() {
+        return TrangThai_GPLX;
+    }
+
+    public void setTrangThai_GPLX(int trangThai_GPLX) {
+        TrangThai_GPLX = trangThai_GPLX;
+    }
+
+    public String getSo_CCCD() {
+        return So_CCCD;
+    }
+
+    public void setSo_CCCD(String so_CCCD) {
+        So_CCCD = so_CCCD;
+    }
+
+    public String getNgayCap_CCCD() {
+        return NgayCap_CCCD;
+    }
+
+    public void setNgayCap_CCCD(String ngayCap_CCCD) {
+        NgayCap_CCCD = ngayCap_CCCD;
+    }
+
+    public String getNoiCap_CCCD() {
+        return NoiCap_CCCD;
+    }
+
+    public void setNoiCap_CCCD(String noiCap_CCCD) {
+        NoiCap_CCCD = noiCap_CCCD;
     }
 
     public String getMatKhau() {
@@ -174,5 +264,13 @@ public class User implements Parcelable {
 
     public void setNgayThamGia(Date ngayThamGia) {
         NgayThamGia = ngayThamGia;
+    }
+
+    public int getSoDu() {
+        return SoDu;
+    }
+
+    public void setSoDu(int soDu) {
+        SoDu = soDu;
     }
 }

@@ -14,13 +14,14 @@ public class Car implements Parcelable {
     float TieuHao;
     String MoTa;
     ArrayList<String> HinhAnh;
+    String DangKyXe, DangKiem, BaoHiem;
     String DiaChiXe;
     int GiaThue1Ngay;
     User ChuSH;
     int TrangThai, SoChuyen;
     float TrungBinhSao;
 
-    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String diaChiXe, int giaThue1Ngay, User chuSH, int trangThai, int soChuyen, float trungBinhSao) {
+    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, int giaThue1Ngay, User chuSH, int trangThai, int soChuyen, float trungBinhSao) {
         this._id = _id;
         this.BKS = BKS;
         this.HangXe = hangXe;
@@ -32,6 +33,9 @@ public class Car implements Parcelable {
         this.TieuHao = tieuHao;
         this.MoTa = moTa;
         this.HinhAnh = hinhAnh;
+        this.DangKyXe = dangKyXe;
+        this.DangKiem = dangKiem;
+        this.BaoHiem = baoHiem;
         this.DiaChiXe = diaChiXe;
         this.GiaThue1Ngay = giaThue1Ngay;
         this.ChuSH = chuSH;
@@ -56,6 +60,9 @@ public class Car implements Parcelable {
         TieuHao = in.readFloat();
         MoTa = in.readString();
         HinhAnh = in.createStringArrayList();
+        DangKyXe = in.readString();
+        DangKiem = in.readString();
+        BaoHiem = in.readString();
         DiaChiXe = in.readString();
         GiaThue1Ngay = in.readInt();
         ChuSH = in.readParcelable(User.class.getClassLoader());
@@ -213,6 +220,30 @@ public class Car implements Parcelable {
         TrungBinhSao = trungBinhSao;
     }
 
+    public String getDangKyXe() {
+        return DangKyXe;
+    }
+
+    public void setDangKyXe(String dangKyXe) {
+        DangKyXe = dangKyXe;
+    }
+
+    public String getDangKiem() {
+        return DangKiem;
+    }
+
+    public void setDangKiem(String dangKiem) {
+        DangKiem = dangKiem;
+    }
+
+    public String getBaoHiem() {
+        return BaoHiem;
+    }
+
+    public void setBaoHiem(String baoHiem) {
+        BaoHiem = baoHiem;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -231,6 +262,9 @@ public class Car implements Parcelable {
         parcel.writeFloat(TieuHao);
         parcel.writeString(MoTa);
         parcel.writeStringList(HinhAnh);
+        parcel.writeString(DangKyXe);
+        parcel.writeString(DangKiem);
+        parcel.writeString(BaoHiem);
         parcel.writeString(DiaChiXe);
         parcel.writeInt(GiaThue1Ngay);
         parcel.writeParcelable(ChuSH, i);

@@ -4,30 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
-import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.R;
-import com.example.fastcar.Server.HostApi;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,28 +23,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Login_Activity extends AppCompatActivity {
-    FrameLayout btnGoogle,btnFacebook;
-
-    ProgressDialog progressDialog;
-
+    FrameLayout btnGoogle;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     CallbackManager callbackManager;
     FirebaseAuth mAuth;
     GoogleSignInAccount acct;
-
     AppCompatButton btn_login;
     TextView tvSignUp;
     TextInputLayout edtEmail,edtPass;
@@ -69,7 +44,6 @@ public class Login_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         find();
         googleBuile();
-        btnFacebook.setOnClickListener(view -> facebookSignIn());
         btnGoogle.setOnClickListener(view -> signIn());
         btn_login.setOnClickListener(v -> logInEmail());
         tvSignUp.setOnClickListener(view -> {
@@ -137,7 +111,6 @@ public class Login_Activity extends AppCompatActivity {
 
     private void find() {
         btnGoogle = findViewById(R.id.loginAct_btnGoogle);
-        btnFacebook = findViewById(R.id.loginAct_btnFacebook);
         btn_login =findViewById(R.id.Logint_btn_login);
         tvSignUp = findViewById(R.id.Login_Signup);
         edtEmail = findViewById(R.id.Login_sdt_email);
@@ -158,52 +131,6 @@ public class Login_Activity extends AppCompatActivity {
         Intent signInIntent = gsc.getSignInIntent();
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
-    private void facebookSignIn() {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Toast.makeText(Login_Activity.this, "facebook:onSuccess", Toast.LENGTH_SHORT).show();
-
-                        handleFacebookAccessToken(loginResult.getAccessToken());
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App codec
-                        Toast.makeText(Login_Activity.this, "facebook:onCancel", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                        Toast.makeText(Login_Activity.this, "facebook:onError", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-    }
-
-    private void handleFacebookAccessToken(AccessToken accessToken) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            navigateToSecondActivity();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(Login_Activity.this, "Authentication failed."+task.getException(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -216,7 +143,6 @@ public class Login_Activity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 acct = GoogleSignIn.getLastSignedInAccount(this);
                 handleGoogleAccessToken(acct);
-//                navigateToSecondActivity();
             } catch (ApiException e) {
                 Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             }

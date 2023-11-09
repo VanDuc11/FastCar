@@ -9,7 +9,7 @@ public class FavoriteCar implements Parcelable {
     User User;
     Car Xe;
 
-    public FavoriteCar(com.example.fastcar.Model.User user, Car xe) {
+    public FavoriteCar(User user, Car xe) {
         User = user;
         Xe = xe;
     }
@@ -19,7 +19,7 @@ public class FavoriteCar implements Parcelable {
 
 
     protected FavoriteCar(Parcel in) {
-        User = in.readParcelable(com.example.fastcar.Model.User.class.getClassLoader());
+        User = in.readParcelable(User.class.getClassLoader());
         Xe = in.readParcelable(Car.class.getClassLoader());
     }
 

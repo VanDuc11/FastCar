@@ -1,209 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.act_bottom.CaNhan_Activity">
 
-    <ScrollView
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_inCaNhan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="55dp">
+        android:layout_above="@+id/bottom_nav_canhan">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="-20dp"
-                    app:cardBackgroundColor="#5767CC88"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/cv"
-                    android:layout_marginTop="-50dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/avt_user_in_user"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/img_avatar_user_v1" />
-
-                    <TextView
-                        android:id="@+id/tv_name_user_in_user"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:text="Tên người dùng"
-                        android:textColor="@color/black"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-            </RelativeLayout>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/btn_thongtin_canhan_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_user_black"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="15dp"
-                        android:text="Thông tin tài khoản"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/btn_xeyeuthich_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_love_v2"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Xe yêu thích"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/btn_ThemXe_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_wallet"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Đăng kí cho thuê xe"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/btn_magiamgia_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_voucher_v1"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Mã giảm giá"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/btn_lichsu_ThueXe_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_truck_black"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Lịch sử xe đã thuê"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/btn_doiMK_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_password"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Đổi mật khẩu"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/btn_deleteAccount_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_delete"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Yêu cầu xoá tài khoản"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/custom_btn4"
-                android:text="Đăng xuất"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="17dp" />
-
-        </LinearLayout>
-    </ScrollView>
+        <include layout="@layout/layout_ca_nhan_placeholder" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
+        android:id="@+id/data_view_inCaNhan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_nav_canhan"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_ca_nhan" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_nav_canhan"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
@@ -238,7 +60,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/icon_truck_black" />
+                android:src="@drawable/icon_car_v2_black" />
 
         </LinearLayout>
 

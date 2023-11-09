@@ -94,7 +94,7 @@ public class DanhSachChuyenXeAdapter extends RecyclerView.Adapter<DanhSachChuyen
             holder.imgStatus.setImageResource(R.drawable.icon_dadatcoc);
             holder.tvStatus.setText("Đã đặt cọc");
         } else {
-            holder.imgStatus.setImageResource(R.drawable.icon_truck_black);
+            holder.imgStatus.setImageResource(R.drawable.icon_car_v1_black);
             holder.tvStatus.setText("Đang vận hành");
         }
     }

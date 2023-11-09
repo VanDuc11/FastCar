@@ -18,6 +18,7 @@ import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
     List<HoaDon> lists = new ArrayList<>();
     LinearLayout ln_noResult;
     SwipeRefreshLayout refreshLayout;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,36 +46,41 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
         mapping();
         load();
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                load();
-                refreshLayout.setRefreshing(false);
-            }
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            refreshLayout.setRefreshing(false);
         });
     }
 
-        private void mapping() {
+    private void mapping() {
         img_back = findViewById(R.id.icon_back_in_lsthuexe);
         recyclerView = findViewById(R.id.recyclerView_lsthuexe);
         ln_noResult = findViewById(R.id.ln_no_result_inLSChuyenXe);
         refreshLayout = findViewById(R.id.refresh_data_inLSThueXe);
+        data_view = findViewById(R.id.data_view_inLSThueXe);
+        shimmer_view = findViewById(R.id.shimmer_view_inLSThueXe);
     }
 
     private void load() {
         ln_noResult.setVisibility(View.GONE);
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
 
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences.getString("user", "");
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
 
-        RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "0,4").enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDonUser(user.get_id(), "0,4").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if (response.code() == 200) {
-                    if(response.body() != null) {
+                    if (!response.body().isEmpty()) {
                         ln_noResult.setVisibility(View.GONE);
                         lists = response.body();
                         adapter = new LichSuThueXeAdapter(LichSu_ThueXe_Activity.this, lists);

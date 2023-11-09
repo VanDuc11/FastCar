@@ -22,6 +22,7 @@ import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,6 +42,8 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     DanhSachXeAdapter adapter;
     LinearLayout ln_noResult;
     NestedScrollView ln_listView;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,8 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         ic_back = findViewById(R.id.icon_back_in_dsxe);
         ln_noResult = findViewById(R.id.ln_no_result_inListXe);
         ln_listView = findViewById(R.id.view_listXe);
+        data_view = findViewById(R.id.data_view_inDSXe);
+        shimmer_view = findViewById(R.id.shimmer_view_inDSXe);
     }
 
     private void getData() {
@@ -73,12 +78,19 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
 
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         RetrofitClient.FC_services().getListCar_NotUser( user.getEmail(), 1, diachi).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if(response.code() == 200) {
                     ln_noResult.setVisibility(View.GONE);
                     adapter = new DanhSachXeAdapter(getApplicationContext(), response.body(), false);

@@ -6,116 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ThemXe.ThemXe_Activity">
 
-    <LinearLayout
+
+    <RelativeLayout
+        android:id="@+id/action_bar_listXeCuaToi"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="55dp"
+        android:gravity="center"
+        app:titleTextColor="@color/white">
 
         <RelativeLayout
-            android:id="@+id/action_bar_lsthuexe"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="center"
-            app:titleTextColor="@color/white">
+            android:id="@+id/icon_back_in_themxe"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_btn9">
 
-            <RelativeLayout
-                android:id="@+id/icon_back_in_themxe"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/custom_btn9">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/icon_close_black" />
-            </RelativeLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Xe của tôi"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textSize="18dp" />
-
-            <RelativeLayout
-                android:id="@+id/icon_add_in_themxe"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/custom_btn9">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/icon_add" />
-            </RelativeLayout>
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_close_black" />
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_listXeCuaToi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="55dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:text="Xe của tôi"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textSize="18dp" />
 
-            <LinearLayout
-                android:id="@+id/ln_no_result_inThemXe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/icon_add_in_themxe"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_btn9">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="230dp"
-                    android:src="@drawable/img_noresult_car" />
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_add" />
+        </RelativeLayout>
+    </RelativeLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="Không có xe cho thuê"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="20dp" />
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_inXeCuaToi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/action_bar_listXeCuaToi">
 
-                <TextView
-                    android:id="@+id/btn_themxe"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/custom_btn3"
-                    android:gravity="center"
-                    android:paddingHorizontal="80dp"
-                    android:text="Đăng Xe"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                    android:textColor="@color/white"
-                    android:textSize="17dp" />
+        <include layout="@layout/layout_xe_yeu_thich_placeholder" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-            </LinearLayout>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/data_view_inXeCuaToi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/action_bar_listXeCuaToi"
+        android:orientation="vertical">
 
-
+        <include layout="@layout/layout_them_xe" />
     </LinearLayout>
+
+
 </RelativeLayout>

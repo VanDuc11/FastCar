@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        app:titleTextColor="@color/white">
+
+        <ImageView
+            android:id="@+id/icon_back_in_ttbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_back_black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Thông tin bổ sung"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textSize="18dp" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="10dp"
+                android:text="Số CCCD/CMND"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/icon_batbuoc_16x16" />
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/edt_soCCCD_inTTBS"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_border_edittext"
+            android:hint="Nhập số CCCD/CMND"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="10dp"
+                android:text="Ngày cấp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/icon_batbuoc_16x16" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/edt_ngaycap_inTTBS"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_border_edittext"
+            android:hint="Chọn ngày cấp"
+            android:gravity="center_vertical"
+            android:drawableRight="@drawable/icon_date"
+            android:padding="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="10dp"
+                android:text="Nơi cấp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/icon_batbuoc_16x16" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edt_noicap_inTTBS"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_border_edittext"
+            android:hint="Nhập nơi cấp"
+            android:padding="10dp"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textSize="15dp" />
+
+
+        <TextView
+            android:id="@+id/btn_confirm_inTTBS"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/custom_btn"
+            android:gravity="center"
+            android:text="Hoàn tất"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+
+</LinearLayout>
