@@ -134,15 +134,18 @@
                 <TextView
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="Hãng xe"
+                    android:layout_gravity="center"
                     android:textSize="16dp" />
 
-                <Spinner
+                <TextView
+                    android:id="@+id/txt_ten_hang"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:onClick="Select_Hang_Xe"
                     android:padding="18dp"
                     android:text="Chưa chọn" />
             </LinearLayout>
@@ -161,15 +164,17 @@
                 <TextView
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="Mẫu xe "
+                    android:layout_gravity="center"
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/txt_ten_mau_xe"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
+                    android:layout_weight="2"
+                    android:gravity="center"
                     android:padding="18dp"
                     android:text="Chưa chọn" />
             </LinearLayout>
@@ -189,17 +194,31 @@
                 <TextView
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="Năm sản xuất"
                     android:textSize="16dp" />
 
-                <TextView
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:padding="18dp"
-                    android:text="2023" />
+
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    android:layout_weight="2">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_comple_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:dropDownHeight="200dp"
+                        android:inputType="none"
+                        android:paddingVertical="10dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <View
@@ -217,17 +236,32 @@
                 <TextView
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="Số ghế "
                     android:textSize="16dp" />
-
-                <TextView
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:padding="18dp"
-                    android:text="4" />
+
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    android:layout_weight="2">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_comple"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:dropDownHeight="200dp"
+                        android:inputType="none"
+                        android:paddingVertical="10dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
 
             <View
@@ -358,26 +392,33 @@
                         android:textSize="16dp" />
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/btn_continue_ttcb_inThemXe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/custom_btn4"
+                    android:gravity="center"
+                    android:text="Tiếp tục"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                    android:textColor="@color/white"
+                    android:textSize="17dp" />
+                <TextView
+                    android:id="@+id/id_make"
+                    android:layout_width="1dp"
+                    android:text="0"
+                    android:layout_height="1dp"
+                    android:textSize="1dp"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/btn_continue_ttcb_inThemXe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/custom_btn4"
-            android:gravity="center"
-            android:text="Tiếp tục"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-            android:textColor="@color/white"
-            android:textSize="17dp" />
-
-    </LinearLayout>
 </RelativeLayout>

@@ -53,11 +53,12 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
     Spinner spinner;
     AppCompatButton btnUpdate;
     Calendar calendar;
-    ShapeableImageView img_gplx;
-    ImageView ic_add_gplx;
+    ShapeableImageView img_cccd, img_gplx;
+    ImageView ic_add_cccd, ic_add_gplx;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
+    private boolean uploadCCCD_Clicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,9 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
         edt_ngaysinh = findViewById(R.id.edt_ngaysinh_in_ud);
         spinner = findViewById(R.id.spinner_gioittinh_in_ud);
         btnUpdate = findViewById(R.id.btn_update_infoUser);
+//        img_cccd = findViewById(R.id.img_cccd);
         img_gplx = findViewById(R.id.img_gplx);
+//        ic_add_cccd = findViewById(R.id.icon_add_in_cccd);
         ic_add_gplx = findViewById(R.id.icon_add_in_gplx);
     }
 
@@ -124,7 +127,13 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    public void upload_CCCD(View view) {
+        uploadCCCD_Clicked = true;
+        showImageDialog();
+    }
+
     public void upload_GPLX(View view) {
+        uploadCCCD_Clicked = false;
         showImageDialog();
     }
 
@@ -239,10 +248,16 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
                 Uri selectedImageUri = cameraImageUri;
                 // Xử lý ảnh được chọn từ thư viện
                 // check điều kiện -> set Image
-
-                if (img_gplx != null) {
-                    ic_add_gplx.setVisibility(View.GONE);
-                    img_gplx.setImageURI(selectedImageUri);
+                if (uploadCCCD_Clicked) {
+                    if (img_cccd != null) {
+                        ic_add_cccd.setVisibility(View.GONE);
+                        img_cccd.setImageURI(selectedImageUri);
+                    }
+                } else {
+                    if (img_gplx != null) {
+                        ic_add_gplx.setVisibility(View.GONE);
+                        img_gplx.setImageURI(selectedImageUri);
+                    }
                 }
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -253,10 +268,16 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 // Xử lý ảnh được chọn từ thư viện
                 // check điều kiện -> set Image
-
-                if (img_gplx != null) {
-                    ic_add_gplx.setVisibility(View.GONE);
-                    img_gplx.setImageURI(selectedImageUri);
+                if (uploadCCCD_Clicked) {
+                    if (img_cccd != null) {
+                        ic_add_cccd.setVisibility(View.GONE);
+                        img_cccd.setImageURI(selectedImageUri);
+                    }
+                } else {
+                    if (img_gplx != null) {
+                        ic_add_gplx.setVisibility(View.GONE);
+                        img_gplx.setImageURI(selectedImageUri);
+                    }
                 }
 
             } else if (resultCode == Activity.RESULT_CANCELED) {

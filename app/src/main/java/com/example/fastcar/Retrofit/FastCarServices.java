@@ -1,24 +1,30 @@
 package com.example.fastcar.Retrofit;
 
+import com.example.fastcar.Model.AddCar;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.FavoriteCar;
 import com.example.fastcar.Model.FeedBack;
+import com.example.fastcar.Model.HangXe.CarApiResponse;
 import com.example.fastcar.Model.HoaDon;
-import com.example.fastcar.Model.LichSuGiaoDich;
+import com.example.fastcar.Model.MauXe.CarModelApiResponse;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -51,10 +57,6 @@ public interface FastCarServices {
 
     @GET("user/findUserEmail")
     Call<List<User>> findUserEmail();
-
-    @Headers("Content-Type: application/json; charset=utf-8")
-    @PUT("user/updateUser/{email}")
-    Call<ResMessage> updateUser(@Path("email") String email, @Body User user);
 
     // Voucher Model URL: voucher/
     @GET("voucher/list")
@@ -98,10 +100,28 @@ public interface FastCarServices {
     Call<ResMessage> deleteFavoriteCar(
             @Path("userId") String userId, @Path("carId") String carId);
 
-    // model LSGD
-    @GET("lsgd/list")
-    Call<List<LichSuGiaoDich>> getLSGD_ofUser(@Query("User") String idUser);
+    @GET("makes")
+    Call<CarApiResponse> getListHang();
 
-    @POST("lsgd/create")
-    Call<ResMessage> createLSGD(@Body LichSuGiaoDich lichSuGiaoDich);
+    @GET("models")
+    Call<CarModelApiResponse> getListModel(@Query("make_id") int make_id,@Query("year") int year);
+
+    @Multipart
+    @POST("xe/create")
+    Call<ResMessage>addCarUser(@Part  List<MultipartBody.Part> HinhAnh,
+                               @Part List<MultipartBody.Part> DangKy,
+                               @Part List<MultipartBody.Part> DangKiem,
+                               @Part List<MultipartBody.Part>  BaoHiem,
+                               @Part("BKS") RequestBody  BKS,
+                               @Part("HangXe")RequestBody  hangxe,
+                               @Part("MauXe")RequestBody  mauxe,
+                               @Part("NSX") RequestBody  nxs,
+                               @Part("ChuyenDong") RequestBody  ChuyenDong,
+                               @Part("SoGhe")RequestBody  soghe,
+                               @Part("LoaiNhienLieu") RequestBody  LNL,
+                               @Part("TieuHao") RequestBody  TH,
+                               @Part("MoTa") RequestBody  MOTA,
+                               @Part("DiaChiXe")RequestBody  diachi,
+                               @Part("GiaThue1Ngay") RequestBody  giathue,
+                               @Part("ChuSH")RequestBody  id_user);
 }

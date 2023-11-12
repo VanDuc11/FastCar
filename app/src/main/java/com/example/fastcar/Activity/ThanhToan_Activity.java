@@ -33,10 +33,10 @@ import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import vn.zalopay.sdk.Environment;
-import vn.zalopay.sdk.ZaloPayError;
-import vn.zalopay.sdk.ZaloPaySDK;
-import vn.zalopay.sdk.listeners.PayOrderListener;
+//import vn.zalopay.sdk.Environment;
+//import vn.zalopay.sdk.ZaloPayError;
+//import vn.zalopay.sdk.ZaloPaySDK;
+//import vn.zalopay.sdk.listeners.PayOrderListener;
 
 
 public class ThanhToan_Activity extends AppCompatActivity {
@@ -55,7 +55,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX);
+//        ZaloPaySDK.init(2553, Environment.SANDBOX);
 
         mapping();
         load();
@@ -98,7 +98,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
                 CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Chưa chọn phương thức thanh toán");
             } else {
                 if (rd_zalopay.isChecked()) {
-                    requestZaloPay(hoaDon);
+//                    requestZaloPay(hoaDon);
                 } else {
                     CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Chức năng thanh toán qua ví Momo đang phát tiển");
                 }
@@ -106,38 +106,38 @@ public class ThanhToan_Activity extends AppCompatActivity {
         });
     }
 
-    private void requestZaloPay(HoaDon hoaDon) {
-        CreateOrder orderApi = new CreateOrder();
-        try {
-            JSONObject data = orderApi.createOrder(String.valueOf(hoaDon.getTienCoc()));
-            String code = data.getString("return_code");
-
-            if (code.equals("1")) {
-                String token = data.getString("zp_trans_token");
-
-                ZaloPaySDK.getInstance().payOrder(ThanhToan_Activity.this, token, "demozpdk://app", new PayOrderListener() {
-                    @Override
-                    public void onPaymentSucceeded(String s, String s1, String s2) {
-                        hoaDon.setTrangThaiHD(2);
-                        updateTrangThaiHD(hoaDon);
-                        showDialog(hoaDon);
-                    }
-
-                    @Override
-                    public void onPaymentCanceled(String s, String s1) {
-                        CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Bạn đã huỷ thanh toán");
-                    }
-
-                    @Override
-                    public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
-                        CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Thanh toán thất bại");
-                    }
-                });
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private void requestZaloPay(HoaDon hoaDon) {
+//        CreateOrder orderApi = new CreateOrder();
+//        try {
+//            JSONObject data = orderApi.createOrder(String.valueOf(hoaDon.getTienCoc()));
+//            String code = data.getString("return_code");
+//
+//            if (code.equals("1")) {
+//                String token = data.getString("zp_trans_token");
+//
+//                ZaloPaySDK.getInstance().payOrder(ThanhToan_Activity.this, token, "demozpdk://app", new PayOrderListener() {
+//                    @Override
+//                    public void onPaymentSucceeded(String s, String s1, String s2) {
+//                        hoaDon.setTrangThaiHD(2);
+//                        updateTrangThaiHD(hoaDon);
+//                        showDialog(hoaDon);
+//                    }
+//
+//                    @Override
+//                    public void onPaymentCanceled(String s, String s1) {
+//                        CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Bạn đã huỷ thanh toán");
+//                    }
+//
+//                    @Override
+//                    public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+//                        CustomDialogNotify.showToastCustom(ThanhToan_Activity.this, "Thanh toán thất bại");
+//                    }
+//                });
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     private void showDialog(HoaDon hoaDon) {
         LayoutInflater inflater = LayoutInflater.from(ThanhToan_Activity.this);
@@ -200,6 +200,6 @@ public class ThanhToan_Activity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        ZaloPaySDK.getInstance().onResult(intent);
+//        ZaloPaySDK.getInstance().onResult(intent);
     }
 }

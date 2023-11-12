@@ -81,6 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:background="#f8f9fb"
+
                     android:src="@drawable/img_xe_truoc" />
 
                 <LinearLayout
@@ -94,12 +95,14 @@
                         android:layout_height="160dp"
                         android:layout_weight="1"
                         android:background="#f8f9fb"
+                        android:onClick="Select_Image_Add_Xe"
                         android:src="@drawable/img_xe_trai" />
 
                     <ImageView
                         android:id="@+id/img_anhphai_xe"
                         android:layout_width="0dp"
                         android:layout_height="160dp"
+
                         android:layout_weight="1"
                         android:background="#f8f9fb"
                         android:src="@drawable/img_xe_phai" />
@@ -110,6 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:background="#f8f9fb"
+
                     android:src="@drawable/img_xe_sau" />
             </LinearLayout>
 
@@ -191,7 +195,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_confirm_ThemXe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

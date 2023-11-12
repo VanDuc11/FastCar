@@ -191,17 +191,17 @@ public class XeCuaToi_Activity extends AppCompatActivity {
     }
 
     private void func_updateUser(String email, User user) {
-        RetrofitClient.FC_services().updateUser(email, user).enqueue(new Callback<ResMessage>() {
-            @Override
-            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                CustomDialogNotify.showToastCustom(XeCuaToi_Activity.this, "Cập nhật thành công");
-            }
-
-            @Override
-            public void onFailure(Call<ResMessage> call, Throwable t) {
-                System.out.println("Có lỗi khi updateUser() " + t);
-            }
-        });
+//        RetrofitClient.FC_services().updateUser(email, user).enqueue(new Callback<ResMessage>() {
+//            @Override
+//            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+//                CustomDialogNotify.showToastCustom(XeCuaToi_Activity.this, "Cập nhật thành công");
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResMessage> call, Throwable t) {
+//                System.out.println("Có lỗi khi updateUser() " + t);
+//            }
+//        });
     }
 
 }

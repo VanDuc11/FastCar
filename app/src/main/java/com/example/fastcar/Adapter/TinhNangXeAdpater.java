@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 public class TinhNangXeAdpater extends RecyclerView.Adapter<TinhNangXeAdpater.ViewHolder>{
     ArrayList<TinhNangXe> list;
     Context context;
+    ArrayList<String> selectedItems;
 
-    public TinhNangXeAdpater(ArrayList<TinhNangXe> list, Context context) {
+    public TinhNangXeAdpater(ArrayList<TinhNangXe> list, Context context, ArrayList<String> selectedItems) {
         this.list = list;
         this.context = context;
+        this.selectedItems = selectedItems;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,10 +54,14 @@ public class TinhNangXeAdpater extends RecyclerView.Adapter<TinhNangXeAdpater.Vi
         holder.itemView.setOnClickListener(view -> {
             if(isSelected[0]) {
                 holder.itemView.setBackgroundResource(R.drawable.custom_border_item_tinhnangxe_non_selected);
+                selectedItems.remove(tinhNangXe.getTenTinhNang());
                 isSelected[0] = false;
             } else {
                 holder.itemView.setBackgroundResource(R.drawable.custom_border_item_tinhnangxe_selected);
+                selectedItems.add(tinhNangXe.getTenTinhNang());
+
                 isSelected[0] = true;
+
             }
         });
     }
@@ -62,6 +69,9 @@ public class TinhNangXeAdpater extends RecyclerView.Adapter<TinhNangXeAdpater.Vi
     @Override
     public int getItemCount() {
         return list.size();
+    }
+    public ArrayList<String> getSelectedItems() {
+        return selectedItems;
     }
 
 

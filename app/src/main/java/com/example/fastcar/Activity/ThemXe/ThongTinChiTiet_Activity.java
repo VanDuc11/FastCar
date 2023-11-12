@@ -26,10 +26,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fastcar.Adapter.TinhNangXeAdpater;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
+import com.example.fastcar.Model.AddCar;
 import com.example.fastcar.Model.TinhNangXe;
 import com.example.fastcar.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -50,18 +52,53 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
     ArrayList<TinhNangXe> listTinhNang;
+    AddCar addCar;
+    ArrayList<String> mota ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thong_tin_chi_tiet);
-
         mapping();
         load();
+
         btn_back.setOnClickListener(view -> onBackPressed());
         btn_close.setOnClickListener(view -> Dialog_Thoat_DangKy.showDialog(this, false));
-        btn_tieptuc.setOnClickListener(view -> startActivity(new Intent(getBaseContext(), GiaChoThue_Activity.class)));
+        btn_tieptuc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              if(tv_diachi.getText().toString().length()==0){
+                  Toast.makeText(ThongTinChiTiet_Activity.this, "Vui lòng chọn địa chỉ", Toast.LENGTH_SHORT).show();
+              } else if (edt_TieuHao.getText().toString().length()==0) {
+                  edt_TieuHao.setError("Vui lòng nhập số tiêu hao");
+
+              } else {
+                  String motaXe="Các tính năng trên xe :";
+                  for (int i =0 ;i<mota.size();i++){
+                      if(i==0){
+                          motaXe=motaXe+mota.get(i);
+                      }else {
+                          motaXe=motaXe+", "+mota.get(i);
+                      }
+
+                  }
+                  addCar.setDiaChiXe(tv_diachi.getText().toString());
+                  addCar.setMoTa(edt_mota.getText().toString()+"\n"+motaXe);
+                  addCar.setTieuHao(Float.parseFloat(edt_TieuHao.getText().toString()));
+                  Intent i = new Intent(getBaseContext(),GiaChoThue_Activity.class);
+                  i.putExtra("addCar1",addCar );
+                  startActivity(i);
+              }
+
+
+            }
+
+        });
         btn_chonDiaChiXe.setOnClickListener(view -> showDialog_DiaDiem());
+
+
+
     }
 
     private void mapping() {
@@ -74,13 +111,15 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
         btn_back = findViewById(R.id.icon_back_in_ttct);
         btn_close = findViewById(R.id.icon_close_dangky_inThemXe);
         recyclerView_tinhNangXe = findViewById(R.id.recyclerView_tinhnangXe);
+        mota = new ArrayList<>();
+        addCar =  (AddCar) getIntent().getSerializableExtra("addCar");
     }
 
     private void load() {
         listTinhNang = new ArrayList<>();
         recyclerView_tinhNangXe.setLayoutManager(new GridLayoutManager(this, 3));
         addItemTinhNang();
-        tinhNangXeAdpater = new TinhNangXeAdpater(listTinhNang, this);
+        tinhNangXeAdpater = new TinhNangXeAdpater(listTinhNang,this,mota);
         recyclerView_tinhNangXe.setAdapter(tinhNangXeAdpater);
     }
 

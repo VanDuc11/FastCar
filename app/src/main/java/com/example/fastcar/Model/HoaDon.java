@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Date;
 
-public class HoaDon implements Parcelable {
+    public class HoaDon implements Parcelable {
     String MaHD;
     User User;
     Car Xe;
