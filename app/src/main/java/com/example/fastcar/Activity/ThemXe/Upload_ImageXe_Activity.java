@@ -70,7 +70,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
     int index=0;
-    String pathBaoHiem,pathDangKy,pathDangkiem;
+    String pathBaoHiem="",pathDangKy="",pathDangkiem="";
     RequestBody BKS,HangXe,MauXe,NSX,Soghe,lnl,tieuHao,mota,diachi,giathue,id_user,chuyenDong;
 
 

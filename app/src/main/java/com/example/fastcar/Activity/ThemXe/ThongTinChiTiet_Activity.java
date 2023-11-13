@@ -96,7 +96,11 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
 
         });
         btn_chonDiaChiXe.setOnClickListener(view -> showDialog_DiaDiem());
-
+        if(addCar.getLoaiNhienLieu().equals("Điện")){
+            tv_tieuHao.setText("km/ 1 lần sạc đầy");
+        }  else {
+            tv_tieuHao.setText("l/100km");
+        }
 
 
     }

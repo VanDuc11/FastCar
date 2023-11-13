@@ -14,6 +14,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.example.fastcar.Adapter.DanhSachTenModelXeAdapter;
 import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
 import com.example.fastcar.Model.AddCar;
 import com.example.fastcar.Model.HangXe.CarApiResponse;
+import com.example.fastcar.Model.HangXe.HangXe;
 import com.example.fastcar.Model.MauXe.CarModelApiResponse;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -63,6 +66,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
 
     List<String> years;
     ArrayAdapter<Integer> adapterItems;
+    List<HangXe> listfind,list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,13 +248,19 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         RecyclerView lv_ten_hang_xe = dialog.findViewById(R.id.lv_ten_hang_xe);
+        EditText textFind = dialog.findViewById(R.id.ed_search_list);
+        TextView tv_list_null = dialog.findViewById(R.id.id_list_null);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         lv_ten_hang_xe.setLayoutManager(layoutManager);
         RetrofitClent1.FC_services().getListHang().enqueue(new Callback<CarApiResponse>() {
             @Override
             public void onResponse(Call<CarApiResponse> call, Response<CarApiResponse> response) {
                 if(response.code()==200){
-                    adapter=new DanhSachTenHangXeAdapter(response.body().getData(),getApplicationContext(),ten_hang,make_id,dialog);
+                    ten_mau.setText("Chưa chọn");
+                    tv_list_null.setVisibility(View.GONE);
+                    list = new ArrayList<>(response.body().getData());
+                    listfind= new ArrayList<>(list);
+                    adapter=new DanhSachTenHangXeAdapter(listfind,getApplicationContext(),ten_hang,make_id,dialog);
                     lv_ten_hang_xe.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
@@ -265,6 +275,36 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
             }
         });
 
+        textFind.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tv_list_null.setText("Không tìm thấy hãng xe bạn tìm");
+                listfind.clear();
+                for (HangXe item : list) {
+                    if (item.getName().toLowerCase().contains(s.toString().toLowerCase())) {
+                        listfind.add(item);
+                    }
+                }
+                if(listfind.size()>0){
+                    tv_list_null.setVisibility(View.GONE);
+                    lv_ten_hang_xe.setVisibility(View.VISIBLE);
+                }else {
+                    tv_list_null.setVisibility(View.VISIBLE);
+                    lv_ten_hang_xe.setVisibility(View.GONE);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
     public void showMauXeDialog() {
@@ -282,6 +322,9 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialog.getWindow().setGravity(Gravity.BOTTOM);
             RecyclerView lv_ten_hang_xe = dialog.findViewById(R.id.lv_ten_hang_xe);
+            TextView tv_list_null = dialog.findViewById(R.id.id_list_null);
+            EditText textFind = dialog.findViewById(R.id.ed_search_list);
+            textFind.setVisibility(View.GONE);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             lv_ten_hang_xe.setLayoutManager(layoutManager);
             RetrofitClent1.FC_services().getListModel(Integer.parseInt(make_id.getText().toString()),2020).enqueue(new Callback<CarModelApiResponse>() {
@@ -292,6 +335,13 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
                         DanhSachTenModelXeAdapter  adapter=new DanhSachTenModelXeAdapter(response.body().getData(),getApplicationContext(),ten_mau,dialog);
                         lv_ten_hang_xe.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
+                        if(response.body().getData().size()>0){
+                            lv_ten_hang_xe.setVisibility(View.VISIBLE);
+                            tv_list_null.setVisibility(View.GONE);
+                        }else {
+                            lv_ten_hang_xe.setVisibility(View.GONE);
+                            tv_list_null.setVisibility(View.VISIBLE);
+                        }
 
                     }else {
                         System.out.println("đểu "+response.code());

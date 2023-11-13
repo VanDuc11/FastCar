@@ -2,21 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="260dp"
     android:background="@drawable/border_dialog_custom"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingHorizontal="10dp"
-    android:paddingTop="20dp"
-
     app:cardCornerRadius="15dp">
 
+<EditText
+    android:id="@+id/ed_search_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="@drawable/custom_border_edittext"
+    android:hint="Tìm kiếm hãng xe"
+
+    android:drawableLeft="@drawable/baseline_search_24"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/lv_ten_hang_xe"
         />
-
-
-
+    <TextView
+        android:id="@+id/id_list_null"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_height="200dp"
+        android:text="Hãng bạn chọn chưa có mẫu xe nào"/>
 </LinearLayout>

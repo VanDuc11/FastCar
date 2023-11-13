@@ -30,7 +30,7 @@ public class GiaChoThue_Activity extends AppCompatActivity {
         btn_tieptuc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addCar.setGiaThue1Ngay(Integer.parseInt(ed_giathue.getText().toString()));
+                addCar.setGiaThue1Ngay(Integer.parseInt(ed_giathue.getText().toString())*1000);
                 Intent i = new Intent(getBaseContext(),Upload_ImageXe_Activity.class);
                 i.putExtra("addCar2",addCar );
                 startActivity(i);
