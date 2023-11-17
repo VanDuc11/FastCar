@@ -17,8 +17,9 @@ public class User implements Parcelable {
     String MatKhau, Avatar;
     Date NgayThamGia;
     int SoDu;
+    String TokenFCM;
 
-    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, String so_GPLX, String hoTen_GPLX, String ngayCap_GPLX, String diaChi_GPLX, ArrayList<String> hinhAnh_GPLX, int trangThai_GPLX, String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD, String matKhau, String avatar, Date ngayThamGia, int soDu) {
+    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, String so_GPLX, String hoTen_GPLX, String ngayCap_GPLX, String diaChi_GPLX, ArrayList<String> hinhAnh_GPLX, int trangThai_GPLX, String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD, String matKhau, String avatar, Date ngayThamGia, int soDu, String tokenFCM) {
         this._id = _id;
         this.UID = UID;
         UserName = userName;
@@ -39,13 +40,38 @@ public class User implements Parcelable {
         Avatar = avatar;
         NgayThamGia = ngayThamGia;
         SoDu = soDu;
+        TokenFCM = tokenFCM;
     }
+
+    public User(String UID, String userName, String email, String matKhau, String avatar, Date ngayThamGia, String tokenFCM) {
+        this.UID = UID;
+        UserName = userName;
+        Email = email;
+        MatKhau = matKhau;
+        Avatar = avatar;
+        NgayThamGia = ngayThamGia;
+        TokenFCM = tokenFCM;
+    }
+
 
     public User(String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD) {
         So_CCCD = so_CCCD;
         NgayCap_CCCD = ngayCap_CCCD;
         NoiCap_CCCD = noiCap_CCCD;
     }
+
+    public User(String userName, String SDT, String ngaySinh, String gioiTinh) {
+        UserName = userName;
+        this.SDT = SDT;
+        NgaySinh = ngaySinh;
+        GioiTinh = gioiTinh;
+    }
+
+    public User(String tokenFCM, String avatar) {
+        TokenFCM = tokenFCM;
+        Avatar = avatar;
+    }
+
 
     public User() {
     }
@@ -71,6 +97,7 @@ public class User implements Parcelable {
         MatKhau = in.readString();
         Avatar = in.readString();
         SoDu = in.readInt();
+        TokenFCM = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -112,6 +139,7 @@ public class User implements Parcelable {
         parcel.writeString(MatKhau);
         parcel.writeString(Avatar);
         parcel.writeInt(SoDu);
+        parcel.writeString(TokenFCM);
     }
 
     public String get_id() {
@@ -272,5 +300,13 @@ public class User implements Parcelable {
 
     public void setSoDu(int soDu) {
         SoDu = soDu;
+    }
+
+    public String getTokenFCM() {
+        return TokenFCM;
+    }
+
+    public void setTokenFCM(String tokenFCM) {
+        TokenFCM = tokenFCM;
     }
 }

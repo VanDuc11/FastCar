@@ -103,7 +103,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_edittext"
                     android:gravity="right|center"
-                    android:hint="Nhập biển số xe"
+                    android:hint="11A - 11111"
                     android:paddingRight="15dp"
                     android:textColorHint="#CFCACA"
                     android:textSize="16dp" />
@@ -144,7 +144,7 @@
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:gravity="center"
+                    android:gravity="right"
                     android:onClick="Select_Hang_Xe"
                     android:padding="18dp"
                     android:text="Chưa chọn" />
@@ -174,7 +174,7 @@
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:gravity="center"
+                    android:gravity="right"
                     android:padding="18dp"
                     android:text="Chưa chọn" />
             </LinearLayout>

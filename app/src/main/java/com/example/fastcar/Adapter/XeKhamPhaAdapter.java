@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.Activity.ChiTietXe_Activity;
+import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
 import com.example.fastcar.FavoriteCar_Method;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.FormatString.NumberFormatK;

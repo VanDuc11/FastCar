@@ -12,24 +12,43 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo_fast_car"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/logo_fast_car"
         android:supportsRtl="true"
         android:theme="@style/Theme.FastCar"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity
+            android:name=".Activity.ChuXe.HoaDon_ChuSH_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChuXe.ChuyenXe_ChuSH_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChuXe.ChiTietXeCuaToi_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThongTinGPLX_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.TaiKhoanNganHang_Activity"
+            android:exported="false" />
 
         <service
             android:name=".FireBaseCloudMessageService"
@@ -40,11 +59,10 @@
         </service>
 
         <activity
-            android:name=".Activity.ViChuXe_Activity"
-            android:exported="false"
-            />
+            android:name=".Activity.ChuXe.ViChuXe_Activity"
+            android:exported="false" />
         <activity
-            android:name=".Activity.XeCuaToi_Activity"
+            android:name=".Activity.ChuXe.XeCuaToi_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.ThemXe.Upload_ImageXe_Activity"
@@ -86,15 +104,15 @@
             android:name=".Activity.act_bottom.KhamPha_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.HoaDon_Activity"
+            android:name=".Activity.KhachHang.HoaDon_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.ThongTin_User_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ThanhToan_Activity"
+            android:name=".Activity.KhachHang.ThanhToan_Activity"
             android:exported="true"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -107,7 +125,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.ThongTinThue_Activity"
+            android:name=".Activity.KhachHang.ThongTinThue_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.LichSu_ThueXe_Activity"
@@ -116,14 +134,11 @@
             android:name=".Activity.DanhSachXe_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ChiTietXe_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.ChiTietHoaDon_Activity"
+            android:name=".Activity.KhachHang.ChiTietXe_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.SignUp_Activity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -138,7 +153,7 @@
 
         <activity
             android:name=".Activity.Login_Activity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

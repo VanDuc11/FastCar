@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.XeCuaToi_Activity">
+    tools:context=".Activity.ChuXe.XeCuaToi_Activity">
 
     <RelativeLayout
         android:id="@+id/action_bar_xeCuaToi"
@@ -84,24 +84,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center"
                     android:padding="25dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="right"
                         android:text="Số dư: "
                         android:textColor="@color/black"
                         android:textSize="18dp" />
 
                     <TextView
-                        android:id="@+id/tv_soDu_ofChuXe"
-                        android:layout_width="0dp"
+                        android:id="@+id/tv_soDu_inXeCuaToi"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="left"
                         android:text="0 đ"
+                        android:maxLines="1"
                         android:textColor="@color/button_green"
                         android:textSize="18dp" />
                 </LinearLayout>

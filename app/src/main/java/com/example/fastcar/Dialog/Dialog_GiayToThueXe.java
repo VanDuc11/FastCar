@@ -24,8 +24,6 @@ public class Dialog_GiayToThueXe {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         ImageView btn_close = dialog.findViewById(R.id.icon_close_dialog_giayto_thuexe);
-        btn_close.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
+        btn_close.setOnClickListener(view -> dialog.dismiss());
     }
 }

@@ -141,6 +141,25 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/btn_nganhang_in_tabUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_wallet"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Tài khoản ngân hàng"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E1D7D7" />
+
+                    <TextView
                         android:id="@+id/btn_xeyeuthich_in_tabUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -192,22 +211,10 @@
                         android:textColor="@color/black"
                         android:textSize="16dp" />
 
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E1D7D7" />
 
                     <TextView
                         android:id="@+id/btn_doiMK_in_tabUser"
@@ -223,25 +230,8 @@
                         android:textColor="@color/black"
                         android:textSize="16dp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E1D7D7" />
-
-                    <TextView
-                        android:id="@+id/btn_deleteAccount_in_tabUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_delete"
-                        android:drawableRight="@drawable/icon_next_v1"
-                        android:drawablePadding="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="Yêu cầu xoá tài khoản"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <androidx.appcompat.widget.AppCompatButton

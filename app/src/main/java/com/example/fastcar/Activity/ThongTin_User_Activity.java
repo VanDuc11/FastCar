@@ -18,10 +18,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,40 +30,38 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.act_bottom.CaNhan_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
-import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.User_Method;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ThongTin_User_Activity extends AppCompatActivity {
     ImageView btn_edit_info;
-    TextView tv_hoten, tv_email, tv_sdt, tv_gioitinh, tv_ngaysinh, tv_ten_hienthi, tv_ngaythamgia;
+    TextView tv_email, tv_sdt, tv_gioitinh, tv_ngaysinh, tv_ten_hienthi, tv_ngaythamgia, tv_tt_gplx;
+    LinearLayout btn_updateGPLX;
     CircleImageView img_avt_user;
     String name, email, phone, url;
+    ShimmerFrameLayout shimmer_view;
+    LinearLayout data_view;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
@@ -80,20 +77,19 @@ public class ThongTin_User_Activity extends AppCompatActivity {
 
         // button edit info user
         btn_edit_info.setOnClickListener(view -> {
-            startActivity(new Intent(getBaseContext(), CapNhatThongTinUser_Activity.class));
+            Intent intent = new Intent(getBaseContext(), CapNhatThongTinUser_Activity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
         });
-        tv_ten_hienthi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSetNameDialog();
-                load();
 
-            }
+        btn_updateGPLX.setOnClickListener(view -> {
+            Intent intent = new Intent(ThongTin_User_Activity.this, ThongTinGPLX_Activity.class);
+            intent.putExtra("emailUser", user.getEmail());
+            startActivity(intent);
         });
     }
 
     private void mapping() {
-        tv_hoten = findViewById(R.id.tv_hoten_user_in_thongtinchitiet);
         tv_ngaysinh = findViewById(R.id.tv_ngaysinh_user_in_thongtinchitiet);
         tv_email = findViewById(R.id.tv_email_user_in_thongtinchitiet);
         tv_sdt = findViewById(R.id.tv_sdt_user_in_thongtinchitiet);
@@ -102,35 +98,20 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         btn_edit_info = findViewById(R.id.btn_edit_info_user);
         img_avt_user = findViewById(R.id.avt_user_in_thongtinchitiet);
         tv_ngaythamgia = findViewById(R.id.tv_ngaythamgia_user);
+        data_view = findViewById(R.id.data_view_inThongTinUser);
+        shimmer_view = findViewById(R.id.shimmer_view_inThongTinUser);
+        btn_updateGPLX = findViewById(R.id.btn_updateGPLX);
+        tv_tt_gplx = findViewById(R.id.tv_tt_gplx);
     }
 
     void load() {
+        data_view.setVisibility(View.GONE);
+        shimmer_view.startShimmerAnimation();
+
         Intent intent = getIntent();
-        url = intent.getStringExtra("image");
-        user = intent.getParcelableExtra("user");
-        name = user.getUserName();
-        email = user.getEmail();
-        phone = user.getSDT();
+        email = intent.getStringExtra("emailUser");
 
-        tv_ten_hienthi.setText(name);
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String formattedDate = dateFormat.format(user.getNgayThamGia());
-        tv_ngaythamgia.setText(formattedDate);
-
-        tv_email.setText(email);
-
-        tv_sdt.setText("0987654321");
-
-        tv_hoten.setText(name);
-        tv_gioitinh.setText("Nam");
-        tv_ngaysinh.setText("11/11/2011");
-
-
-        if (url != null) {
-            Glide.with(getBaseContext()).load(url).into(img_avt_user);
-        } else {
-            Glide.with(getBaseContext()).load(R.drawable.img_avatar_user).into(img_avt_user);
-        }
+        fetchData_UserLogin(email);
     }
 
     public void backTo_CaNhanACT(View view) {
@@ -138,70 +119,76 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void update_Avatar_User(View view) {
-        showImageDialog();
-    }
-
-    public void showSetNameDialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_set_name);
-        dialog.show();
-
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-        EditText edtName = dialog.findViewById(R.id.dialog_set_name_edt_userName);
-        TextView btnThaydoi = dialog.findViewById(R.id.dialog_set_name_btn_thaydoi);
-        edtName.setText(name);
-        btnThaydoi.setOnClickListener(new View.OnClickListener() {
+    private void fetchData_UserLogin(String emailUser) {
+        RetrofitClient.FC_services().getListUser(emailUser).enqueue(new Callback<List<User>>() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onClick(View view) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
 
-                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(edtName.getText().toString())
-                        .build();
+                List<User> list = response.body();
+                user = list.get(0);
+                name = user.getUserName();
+                phone = user.getSDT();
+                url = user.getAvatar();
 
-                user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // Cập nhật thành công.
-                        Toast.makeText(ThongTin_User_Activity.this, "Thông tin username đã được cập nhật", Toast.LENGTH_SHORT).show();
-                        RequestQueue queue = Volley.newRequestQueue(ThongTin_User_Activity.this);
-                        String url = HostApi.API_URL + "/api/user/updateUser";
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(ThongTin_User_Activity.this, "Đã cập nhật thay đổi",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                System.out.println("error" + error.getMessage());
-                            }
-                        }) {
-                            @Nullable
-                            @Override
-                            protected Map<String, String> getParams() {
-                                Map<String, String> data = new HashMap<>();
-                                data.put("email", email);
-                                data.put("UserName", edtName.getText().toString());
-                                return data;
-                            }
-                        };
-                        queue.add(stringRequest);
-                    }
-                });
-                Intent intent = new Intent(ThongTin_User_Activity.this, CaNhan_Activity.class);
-                startActivity(intent);
-                dialog.dismiss();
+                tv_ten_hienthi.setText(name);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = dateFormat.format(user.getNgayThamGia());
+                tv_ngaythamgia.setText(formattedDate);
+
+                if (user.getGioiTinh() == null || user.getGioiTinh().equals("")) {
+                    tv_gioitinh.setText("");
+                } else {
+                    tv_gioitinh.setText(user.getGioiTinh());
+                }
+
+                if (user.getNgaySinh() == null || user.getNgaySinh().equals("")) {
+                    tv_ngaysinh.setText("");
+                } else {
+                    tv_ngaysinh.setText(user.getNgaySinh());
+                }
+
+                if (phone == null || user.getSDT().equals("")) {
+                    tv_sdt.setText("");
+                } else {
+                    tv_sdt.setText(phone);
+                }
+
+                tv_email.setText(email);
+
+                if (user.getTrangThai_GPLX() == 0) {
+                    tv_tt_gplx.setText("Chưa xác minh");
+                    tv_tt_gplx.setTextColor(Color.RED);
+                } else if (user.getTrangThai_GPLX() == 1) {
+                    tv_tt_gplx.setText("Đang chờ duyệt");
+                    tv_tt_gplx.setTextColor(Color.parseColor("#CCC32B"));
+                } else if (user.getTrangThai_GPLX() == 2) {
+                    tv_tt_gplx.setText("Đã xác minh");
+                    tv_tt_gplx.setTextColor(Color.parseColor("#1F2EB5"));
+                } else {
+                    tv_tt_gplx.setText("Xác minh thất bại");
+                    tv_tt_gplx.setTextColor(Color.RED);
+                }
+
+                if (url != null) {
+                    Glide.with(getBaseContext()).load(url).into(img_avt_user);
+                } else {
+                    Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(img_avt_user);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                System.out.println("Có lỗi khi fetch user có email: " + emailUser + " --- " + t);
             }
         });
+    }
 
+    public void update_Avatar_User(View view) {
+        showImageDialog();
     }
 
     public void showImageDialog() {
@@ -219,27 +206,21 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         TextView cameraButton = dialog.findViewById(R.id.btn_open_camera);
         TextView libraryButton = dialog.findViewById(R.id.btn_open_library);
 
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkCameraPermission()) {
-                        openCamera();
-                    }
-                    dialog.dismiss();
+        cameraButton.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkCameraPermission()) {
+                    openCamera();
                 }
+                dialog.dismiss();
             }
         });
 
-        libraryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkGalleryPermission()) {
-                        openGallery();
-                    }
-                    dialog.dismiss();
+        libraryButton.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkGalleryPermission()) {
+                    openGallery();
                 }
+                dialog.dismiss();
             }
         });
     }
@@ -315,7 +296,9 @@ public class ThongTin_User_Activity extends AppCompatActivity {
                 // Xử lý ảnh được chọn từ thư viện
                 if (img_avt_user != null) {
                     img_avt_user.setImageURI(selectedImageUri);
+                    updateAvatarUser_inFirebase_andMongoDB(selectedImageUri);
                 }
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Xử lý khi hoạt động bị hủy bỏ
             }
@@ -325,28 +308,34 @@ public class ThongTin_User_Activity extends AppCompatActivity {
                 // Xử lý ảnh được chọn từ thư viện
                 if (img_avt_user != null) {
                     img_avt_user.setImageURI(selectedImageUri);
-
-                    // Lấy hồ sơ người dùng
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                    // Cập nhật ID hình ảnh
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setPhotoUri(Uri.parse(selectedImageUri.toString()))
-                            .build();
-
-                    // Cập nhật hồ sơ người dùng
-                    user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(ThongTin_User_Activity.this, "Thông tin username đã được cập nhật", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+                    updateAvatarUser_inFirebase_andMongoDB(selectedImageUri);
                 }
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Xử lý khi hoạt động bị hủy bỏ
             }
         }
+    }
+
+
+    private void updateAvatarUser_inFirebase_andMongoDB(Uri selectedImageUri) {
+        // Lấy hồ sơ người dùng
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Cập nhật ID hình ảnh
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(Uri.parse(selectedImageUri.toString()))
+                .build();
+
+        // Cập nhật hồ sơ người dùng
+        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                User userModel = new User(null, String.valueOf(user.getPhotoUrl()));
+                User_Method.func_updateUser(ThongTin_User_Activity.this, email, userModel, true);
+                load();
+            }
+        });
     }
 
     @Override

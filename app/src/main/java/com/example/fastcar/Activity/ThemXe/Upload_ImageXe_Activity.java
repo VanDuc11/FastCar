@@ -23,6 +23,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,6 +40,7 @@ import com.example.fastcar.Activity.ThongTin_User_Activity;
 import com.example.fastcar.Activity.act_bottom.CaNhan_Activity;
 import com.example.fastcar.Adapter.DanhSachTenHangXeAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
+import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
 import com.example.fastcar.Model.AddCar;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.R;
@@ -69,17 +72,9 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
-    int index=0;
-    String pathBaoHiem="",pathDangKy="",pathDangkiem="";
-    RequestBody BKS,HangXe,MauXe,NSX,Soghe,lnl,tieuHao,mota,diachi,giathue,id_user,chuyenDong;
-
-
-
-    List<Uri> listImage;
-
-
-
-
+    int index = 0;
+    String pathTruoc, pathSau, pathTrai, pathPhai, pathBaoHiem, pathDangKy, pathDangkiem;
+    RequestBody BKS, HangXe, MauXe, NSX, Soghe, lnl, tieuHao, mota, diachi, giathue, id_user, chuyenDong;
     AddCar addCar;
 
     @Override
@@ -88,92 +83,63 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_image_xe);
 
         mapping();
-        load();
 
         ic_back.setOnClickListener(view -> onBackPressed());
+        ic_close.setOnClickListener(view -> Dialog_Thoat_DangKy.showDialog(this, false));
 
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listImage.size()<4||pathBaoHiem.length()==0||pathDangkiem.length()==0||pathDangKy.length()==0){
-                    System.out.println("1 : "+listImage.size()+" 2: "+pathBaoHiem.length()+" 3 :"+pathDangkiem.length()+" 4 : "+pathDangKy.length());
-           }else {
-               RetrofitClient.FC_services().addCarUser(OutImagePats(),filePart("DangKyXe",pathDangKy),filePart("DangKiem",pathDangkiem),filePart("BaoHiem",pathBaoHiem),BKS,HangXe,MauXe,NSX,chuyenDong,Soghe, lnl,tieuHao, mota, diachi, giathue, id_user).enqueue(new Callback<ResMessage>() {
-                   @Override
-                   public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                       if(response.code()==201){
-                           Toast.makeText(Upload_ImageXe_Activity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                           startActivity(new Intent(getBaseContext(), CaNhan_Activity.class));
-                           finish();
-                       }else {
-                           System.out.println("messs"+response.message());
-                       }
-                   }
+        btn_confirm.setOnClickListener(v -> {
+            if (validateImage()) {
+                RetrofitClient.FC_services().addCarUser(OutImagePaths(), filePart("DangKyXe", pathDangKy), filePart("DangKiem", pathDangkiem), filePart("BaoHiem", pathBaoHiem), BKS, HangXe, MauXe, NSX, chuyenDong, Soghe, lnl, tieuHao, mota, diachi, giathue, id_user).enqueue(new Callback<ResMessage>() {
+                    @Override
+                    public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                        if (response.code() == 201) {
+                            CustomDialogNotify.showToastCustom(getBaseContext(), "Thêm xe thành công");
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            Runnable myRunnable = () -> {
+                                startActivity(new Intent(getBaseContext(), CaNhan_Activity.class));
+                                finish();
+                            };
+                            handler.postDelayed(() -> handler.post(myRunnable), 1000);
+                        } else {
+                            System.out.println("Có lỗi khi thêm xe" + response.message());
+                        }
+                    }
 
-                   @Override
-                   public void onFailure(Call<ResMessage> call, Throwable t) {
-                       System.out.println("Có lỗi khi thực hiện: " + t);
-                   }
-               });
-           }
+                    @Override
+                    public void onFailure(Call<ResMessage> call, Throwable t) {
+                        System.out.println("Có lỗi khi thực hiện addCarUser(): " + t);
+                    }
+                });
             }
         });
-//            Toast.makeText(this, listImage+"", Toast.LENGTH_SHORT).show();
-////            CustomDialogNotify.showToastCustom(this, "Chức năng đang phát triển");
-////            startActivity(new Intent(this, CaNhan_Activity.class));
-////            finish();
-//
 
-
-
-        img_truoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=0;
-                showImageDialog();
-            }
+        img_truoc.setOnClickListener(v -> {
+            index = 0;
+            showImageDialog();
         });
-        img_trai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=2;
-                showImageDialog();
-            }
+        img_trai.setOnClickListener(v -> {
+            index = 2;
+            showImageDialog();
         });
-        img_phai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=3;
-                showImageDialog();
-            }
+        img_phai.setOnClickListener(v -> {
+            index = 3;
+            showImageDialog();
         });
-        img_sau.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=1;
-                showImageDialog();
-            }
+        img_sau.setOnClickListener(v -> {
+            index = 1;
+            showImageDialog();
         });
-        img_dangkiem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=4;
-                showImageDialog();
-            }
+        img_dangkiem.setOnClickListener(v -> {
+            index = 4;
+            showImageDialog();
         });
-        img_baohiem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=5;
-                showImageDialog();
-            }
+        img_baohiem.setOnClickListener(v -> {
+            index = 5;
+            showImageDialog();
         });
-        img_dangky.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index=6;
-                showImageDialog();
-            }
+        img_dangky.setOnClickListener(v -> {
+            index = 6;
+            showImageDialog();
         });
     }
 
@@ -183,26 +149,57 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         ic_close = findViewById(R.id.icon_close_in_upload_imageCar);
         img_truoc = findViewById(R.id.img_anhtruoc_xe);
         img_sau = findViewById(R.id.img_anhsau_xe);
-        img_phai=findViewById(R.id.img_anhphai_xe);
+        img_phai = findViewById(R.id.img_anhphai_xe);
         img_trai = findViewById(R.id.img_anhtrai_xe);
         img_dangky = findViewById(R.id.img_dangky_xe);
         img_baohiem = findViewById(R.id.img_baohiem_xe);
         img_dangkiem = findViewById(R.id.img_dangkiem_xe);
-        listImage = new ArrayList<>();
-        addCar =  (AddCar) getIntent().getSerializableExtra("addCar2");
+        addCar = (AddCar) getIntent().getSerializableExtra("addCar2");
 
-       BKS = RequestBody.create(MultipartBody.FORM, addCar.getBKS());
-       HangXe = RequestBody.create(MultipartBody.FORM,addCar.getHangXe() );
-       MauXe = RequestBody.create(MultipartBody.FORM,addCar.getMauXe() );
-       NSX = RequestBody.create(MultipartBody.FORM,addCar.getNSX() );
-       Soghe=RequestBody.create(MultipartBody.FORM,addCar.getSoGhe()+"" );
-       lnl =RequestBody.create(MultipartBody.FORM,addCar.getLoaiNhienLieu() );
-       tieuHao =RequestBody.create(MultipartBody.FORM,addCar.getTieuHao()+"" );
-       mota =RequestBody.create(MultipartBody.FORM,addCar.getMoTa() );
-       diachi =RequestBody.create(MultipartBody.FORM,addCar.getDiaChiXe());
-       giathue=RequestBody.create(MultipartBody.FORM,addCar.getGiaThue1Ngay()+"");
-       id_user = RequestBody.create(MultipartBody.FORM,addCar.getId_user());
-       chuyenDong =  RequestBody.create(MultipartBody.FORM,addCar.getChuyenDong());
+        BKS = RequestBody.create(MultipartBody.FORM, addCar.getBKS());
+        HangXe = RequestBody.create(MultipartBody.FORM, addCar.getHangXe());
+        MauXe = RequestBody.create(MultipartBody.FORM, addCar.getMauXe());
+        NSX = RequestBody.create(MultipartBody.FORM, addCar.getNSX());
+        Soghe = RequestBody.create(MultipartBody.FORM, addCar.getSoGhe() + "");
+        lnl = RequestBody.create(MultipartBody.FORM, addCar.getLoaiNhienLieu());
+        tieuHao = RequestBody.create(MultipartBody.FORM, addCar.getTieuHao() + "");
+        mota = RequestBody.create(MultipartBody.FORM, addCar.getMoTa());
+        diachi = RequestBody.create(MultipartBody.FORM, addCar.getDiaChiXe());
+        giathue = RequestBody.create(MultipartBody.FORM, addCar.getGiaThue1Ngay() + "");
+        id_user = RequestBody.create(MultipartBody.FORM, addCar.getId_user());
+        chuyenDong = RequestBody.create(MultipartBody.FORM, addCar.getChuyenDong());
+    }
+
+    private boolean validateImage() {
+        if (pathTruoc == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh mặt trước của xe");
+            return false;
+        }
+        if (pathTrai == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh mặt trái của xe");
+            return false;
+        }
+        if (pathPhai == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh mặt phải của xe");
+            return false;
+        }
+        if (pathSau == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh mặt sau của xe");
+            return false;
+        }
+        if (pathDangKy == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh giấy đăng ký xe");
+            return false;
+        }
+        if (pathDangkiem == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh giấy đăng kiểm xe");
+            return false;
+        }
+        if (pathBaoHiem == null) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có ảnh bảo hiểm xe");
+            return false;
+        }
+        return true;
     }
 
     public void showImageDialog() {
@@ -219,32 +216,25 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         TextView cameraButton = dialog.findViewById(R.id.btn_open_camera);
         TextView libraryButton = dialog.findViewById(R.id.btn_open_library);
 
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkCameraPermission()) {
-                        openCamera();
-                    }
-                    dialog.dismiss();
+        cameraButton.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkCameraPermission()) {
+                    openCamera();
                 }
+                dialog.dismiss();
             }
         });
 
-
-
-        libraryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkGalleryPermission()) {
-                        openGallery();
-                    }
-                    dialog.dismiss();
+        libraryButton.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkGalleryPermission()) {
+                    openGallery();
                 }
+                dialog.dismiss();
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -256,63 +246,58 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
 //                    img_truoc.setImageURI(selectedImageUri);
 //                }
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, "aaaaaa", Toast.LENGTH_SHORT).show();
+                // xử lý hoạt động bị huỷ bỏ
             }
         } else if (requestCode == REQUEST_GALLERY) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 Uri selectedImageUri = data.getData();
-                if(index ==0){
+                if (index == 0) {
                     if (img_truoc != null) {
                         img_truoc.setImageURI(selectedImageUri);
-
-                        listImage.add(selectedImageUri);
-
+                        pathTruoc = getImagePath(selectedImageUri);
                     }
-                } else if (index==1) {
+                } else if (index == 1) {
                     if (img_sau != null) {
                         img_sau.setImageURI(selectedImageUri);
-                        listImage.add(selectedImageUri);
-
+                        pathSau = getImagePath(selectedImageUri);
                     }
-                } else if (index==2) {
+                } else if (index == 2) {
                     if (img_trai != null) {
                         img_trai.setImageURI(selectedImageUri);
-                        listImage.add(selectedImageUri);
-
+                        pathTrai = getImagePath(selectedImageUri);
                     }
 
-                } else if (index==3) {
+                } else if (index == 3) {
                     if (img_phai != null) {
                         img_phai.setImageURI(selectedImageUri);
-                        listImage.add(selectedImageUri);
-
+                        pathPhai = getImagePath(selectedImageUri);
                     }
-                } else if (index==4) {
+                } else if (index == 4) {
                     if (img_dangkiem != null) {
                         img_dangkiem.setImageURI(selectedImageUri);
                         pathDangkiem = getImagePath(selectedImageUri);
                     }
 
-                } else if (index==5) {
+                } else if (index == 5) {
                     if (img_baohiem != null) {
                         img_baohiem.setImageURI(selectedImageUri);
                         pathBaoHiem = getImagePath(selectedImageUri);
                     }
 
-                } else if (index==6) {
+                } else if (index == 6) {
                     if (img_dangky != null) {
                         img_dangky.setImageURI(selectedImageUri);
                         pathDangKy = getImagePath(selectedImageUri);
-
                     }
 
                 }
             }
 
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // Xử lý khi hoạt động bị hủy bỏ
-            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            // Xử lý khi hoạt động bị hủy bỏ
         }
+    }
+
     private Uri createImageFile() {
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -332,16 +317,23 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         }
     }
 
-    private  List<MultipartBody.Part>  OutImagePats(){
+    private List<MultipartBody.Part> OutImagePaths() {
         List<MultipartBody.Part> imageParts = new ArrayList<>();
-        for (Uri imageuri : listImage){
-            File iamge = new File(getImagePath(imageuri));
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), iamge);
-            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("HinhAnh", iamge.getName(), requestBody);
+        List<String> listPath = new ArrayList<>();
+        listPath.add(pathTruoc);
+        listPath.add(pathSau);
+        listPath.add(pathTrai);
+        listPath.add(pathPhai);
+
+        for (String path : listPath) {
+            File image = new File(path);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), image);
+            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("HinhAnh", image.getName(), requestBody);
             imageParts.add(imagePart);
         }
         return imageParts;
     }
+
     private String getImagePath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
@@ -355,6 +347,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
             return uri.getPath();
         }
     }
+
     private void openCamera() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePicture.resolveActivity(getPackageManager()) != null) {
@@ -370,11 +363,13 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
             }
         }
     }
+
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_GALLERY);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -399,6 +394,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
                 break;
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -417,16 +413,12 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         return true;
     }
 
-    private List<MultipartBody.Part> filePart(String name,String path){
+    private List<MultipartBody.Part> filePart(String name, String path) {
         List<MultipartBody.Part> image = new ArrayList<>();
-        File iamge = new File(path);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), iamge);
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData(name, iamge.getName(), requestBody);
+        File file = new File(path);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData(name, file.getName(), requestBody);
         image.add(imagePart);
-        return  image;
-    }
-    private void load() {
-       ;
-
+        return image;
     }
 }

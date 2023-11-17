@@ -1,17 +1,17 @@
-package com.example.fastcar.Activity;
+package com.example.fastcar.Activity.ChuXe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,32 +21,27 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
-import com.example.fastcar.Model.Car;
-import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
-import com.google.gson.Gson;
+import com.example.fastcar.User_Method;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 public class XeCuaToi_Activity extends AppCompatActivity {
     TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu;
     Calendar calendar;
     EditText edt_soCCCD, edt_noicap;
     TextView edt_ngaycap;
-    String socccd, ngaycap, noicap;
+    String socccd, ngaycap, noicap, emailUser;
     User user;
 
     @Override
@@ -71,7 +66,7 @@ public class XeCuaToi_Activity extends AppCompatActivity {
     }
 
     private void mapping() {
-        tv_soDu = findViewById(R.id.tv_soDu_ofChuXe);
+        tv_soDu = findViewById(R.id.tv_soDu_inXeCuaToi);
         btn_ThemXe = findViewById(R.id.btn_themXe_inXeCuaToi);
         btn_ViChuXe = findViewById(R.id.btn_viChuXe_inXeCuaToi);
         btn_dsXe = findViewById(R.id.btn_dsXe_inXeCuaToi);
@@ -80,15 +75,13 @@ public class XeCuaToi_Activity extends AppCompatActivity {
 
     private void load() {
         calendar = Calendar.getInstance();
-        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
-        String userStr = preferences.getString("user", "");
-        Gson gson = new Gson();
-        user = gson.fromJson(userStr, User.class);
+        Intent intent = getIntent();
+        emailUser = intent.getStringExtra("emailUser");
+        fetchData_UserLogin(emailUser);
     }
 
     public void backFromXeCuaToi_ToCaNhanACT(View view) {
         onBackPressed();
-        finish();
     }
 
     private void showDialog_UpdateTTBS() {
@@ -117,6 +110,10 @@ public class XeCuaToi_Activity extends AppCompatActivity {
         edt_ngaycap = dialog.findViewById(R.id.edt_ngaycap_inTTBS);
         edt_noicap = dialog.findViewById(R.id.edt_noicap_inTTBS);
 
+        edt_soCCCD.setText(user.getSo_CCCD());
+        edt_ngaycap.setText(user.getNgayCap_CCCD());
+        edt_noicap.setText(user.getNoiCap_CCCD());
+
         // back
         btn_back.setOnClickListener(view -> dialog.dismiss());
 
@@ -130,7 +127,27 @@ public class XeCuaToi_Activity extends AppCompatActivity {
             if (validate_FormCCCD()) {
                 // gọi hàm update info user
                 User userModel = new User(socccd, ngaycap, noicap);
-                func_updateUser(user.getEmail(), userModel );
+                User_Method.func_updateUser(this, emailUser, userModel, true);
+                load();
+                Handler handler = new Handler(Looper.getMainLooper());
+                Runnable myRunnable = dialog::dismiss;
+                handler.postDelayed(() -> handler.post(myRunnable), 1000);
+            }
+        });
+    }
+
+    private void fetchData_UserLogin(String emailUser) {
+        RetrofitClient.FC_services().getListUser(emailUser).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
+                List<User> list = response.body();
+                user = list.get(0);
+                tv_soDu.setText(NumberFormatVND.format(user.getSoDu()));
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                System.out.println("Có lỗi khi fetch user có email: " + emailUser + " --- " + t);
             }
         });
     }
@@ -183,25 +200,16 @@ public class XeCuaToi_Activity extends AppCompatActivity {
         }
 
         if (noicap.equals("")) {
-            CustomDialogNotify.showToastCustom(this, "Chưa chọn ngày cấp");
+            CustomDialogNotify.showToastCustom(this, "Chưa nhập nơi cấp");
             edt_noicap.requestFocus();
             return false;
         }
         return true;
     }
 
-    private void func_updateUser(String email, User user) {
-//        RetrofitClient.FC_services().updateUser(email, user).enqueue(new Callback<ResMessage>() {
-//            @Override
-//            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-//                CustomDialogNotify.showToastCustom(XeCuaToi_Activity.this, "Cập nhật thành công");
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResMessage> call, Throwable t) {
-//                System.out.println("Có lỗi khi updateUser() " + t);
-//            }
-//        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchData_UserLogin(emailUser);
     }
-
 }

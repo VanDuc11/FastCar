@@ -49,10 +49,12 @@ import com.example.fastcar.Adapter.KhuyenMaiApdater;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
+import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.User_Method;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -110,10 +112,12 @@ public class KhamPha_Activity extends AppCompatActivity {
         fBaseuser = auth.getCurrentUser();
 
         mapping();
-        Save();
         load();
         build_DatePicker();
         setDefault_SelectionDate();
+        getTokenFCM();
+        Save();
+        loadXeKhamPha();
 
         btnTim.setOnClickListener(view -> {
             String diachiStr = tvDiaDiem.getText().toString();
@@ -131,8 +135,12 @@ public class KhamPha_Activity extends AppCompatActivity {
                     diachi = diachiStr;
                 }
 
+                SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("diachi", diachi);
+                editor.apply();
+
                 Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
-                intent.putExtra("diachi", diachi);
                 startActivity(intent);
             } else {
                 CustomDialogNotify.showToastCustom(KhamPha_Activity.this, "Vui lòng nhập địa chỉ để tìm xe");
@@ -164,7 +172,7 @@ public class KhamPha_Activity extends AppCompatActivity {
 
     void load() {
         recyclerView_khuyenmai.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-
+        tokenFCM = "";
         List<String> itemList = new ArrayList<>();
         itemList.add("aaaaaa");
         itemList.add("aaaaaa");
@@ -176,22 +184,6 @@ public class KhamPha_Activity extends AppCompatActivity {
         snapHelper.attachToRecyclerView(recyclerView_khuyenmai);
 
         img_notify.setOnClickListener(view -> startActivity(new Intent(KhamPha_Activity.this, ThongBao_Activity.class)));
-
-        loadXeKhamPha();
-
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            tokenFCM = task.getResult();
-                            System.out.println("TokenFCM: " + tokenFCM);
-                        } else {
-                            System.out.println("Lỗi lấy token FCM: " + task.getException());
-                        }
-                    }
-                });
-
     }
 
     @Override
@@ -202,20 +194,38 @@ public class KhamPha_Activity extends AppCompatActivity {
         }
     }
 
+    private void getTokenFCM() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            tokenFCM = task.getResult();
+                            System.out.println("TokenFCM: " + tokenFCM);
+                            User user = new User(tokenFCM, null);
+                            User_Method.func_updateUser(KhamPha_Activity.this, fBaseuser.getEmail(), user, false);
+                        } else {
+                            System.out.println("Lỗi lấy token FCM: " + task.getException());
+                        }
+                    }
+                });
+    }
+
     void Save() {
         Intent intent = getIntent();
         String personName = fBaseuser.getDisplayName();
-        String userName = personName == null ? "UserName" : personName;
+        String userName = personName == null ? "Khách hàng" : personName;
         String Email = fBaseuser.getEmail();
         String pass = intent.getStringExtra("pass");
         Uri uri = fBaseuser.getPhotoUrl();
-        tvName.setText(userName);
 
+        if (uri == null) {
+            uri = Uri.parse("https://cdn.landesa.org/wp-content/uploads/default-user-image.png");
+        }
+        tvName.setText(userName);
         if (pass == null) {
             pass = "";
         }
-
-        getUser_fromEmail(Email);
 
         if (uri != null) {
             Glide.with(getBaseContext()).load(uri).into(img_user);
@@ -223,36 +233,12 @@ public class KhamPha_Activity extends AppCompatActivity {
             Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(img_user);
         }
 
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = HostApi.API_URL + "/api/user/create";
         String finalPass = pass;
+        Uri finalUri = uri;
+        Date getTimeNow = new Date();
+        User userNew = new User(fBaseuser.getUid(), userName, Email, finalPass, String.valueOf(finalUri), getTimeNow, tokenFCM);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                System.out.println("Đăng nhập thành công" + response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("error" + error.getMessage());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Date getTimeNow = new Date();
-                Map<String, String> data = new HashMap<>();
-                data.put("UserName", userName);
-                data.put("Email", Email);
-                data.put("UID", fBaseuser.getUid());
-                data.put("MatKhau", finalPass);
-                data.put("NgayThamGia", String.valueOf(getTimeNow));
-                return data;
-            }
-        };
-
-        queue.add(stringRequest);
+        getUser_fromEmail(Email, userNew);
     }
 
     void signOut() {
@@ -262,19 +248,31 @@ public class KhamPha_Activity extends AppCompatActivity {
         finish();
     }
 
-    private void getUser_fromEmail(String email) {
+    private void getUser_fromEmail(String email, User userNew) {
         RetrofitClient.FC_services().getListUser(email).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
                 if (response.isSuccessful()) {
-                    List<User> list = response.body();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(list.get(0));
+                    assert response.body() != null;
+                    if (!response.body().isEmpty()) {
+                        List<User> list = response.body();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(list.get(0));
 
-                    SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("user", json);
-                    editor.apply();
+                        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("user", json);
+                        editor.apply();
+                    } else {
+                        funcAddNewUser(userNew);
+                        Gson gson = new Gson();
+                        String json = gson.toJson(userNew);
+
+                        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("user", json);
+                        editor.apply();
+                    }
                 }
             }
 
@@ -285,10 +283,19 @@ public class KhamPha_Activity extends AppCompatActivity {
         });
     }
 
-    void navigate_() {
-        startActivity(new Intent(getBaseContext(), DanhSachXe_Activity.class));
-    }
+    private void funcAddNewUser(User user) {
+        RetrofitClient.FC_services().addNewUser(user).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, retrofit2.Response<ResMessage> response) {
+                System.out.println("Thêm người dùng mới thành công");
+            }
 
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi khi addNewUser " + t);
+            }
+        });
+    }
 
     public void tab1_to_tab2(View view) {
         startActivity(new Intent(getBaseContext(), ChuyenXe_Activity.class));
@@ -507,9 +514,4 @@ public class KhamPha_Activity extends AppCompatActivity {
         tvDiaDiem.setText(diachi);
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        loadPager();
-//    }
 }

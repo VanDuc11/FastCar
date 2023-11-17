@@ -56,7 +56,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/icon_add" />
+                android:src="@drawable/icon_close_black" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -81,7 +81,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:background="#f8f9fb"
-
                     android:src="@drawable/img_xe_truoc" />
 
                 <LinearLayout
@@ -95,14 +94,12 @@
                         android:layout_height="160dp"
                         android:layout_weight="1"
                         android:background="#f8f9fb"
-                        android:onClick="Select_Image_Add_Xe"
                         android:src="@drawable/img_xe_trai" />
 
                     <ImageView
                         android:id="@+id/img_anhphai_xe"
                         android:layout_width="0dp"
                         android:layout_height="160dp"
-
                         android:layout_weight="1"
                         android:background="#f8f9fb"
                         android:src="@drawable/img_xe_phai" />

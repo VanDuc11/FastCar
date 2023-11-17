@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Activity.act_bottom.ChuyenXe_Activity">
+    android:orientation="vertical">
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

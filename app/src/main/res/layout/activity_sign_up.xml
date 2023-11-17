@@ -108,22 +108,20 @@
             android:id="@+id/SignUp_btn_SigUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
+            android:background="@drawable/custom_btn4"
             android:text="Đăng ký"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16dp" />
     </LinearLayout>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/SignUP_btn_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:background="@color/black"
-        android:backgroundTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/com_facebook_close" />
+        app:srcCompat="@drawable/icon_close_green" />
 </androidx.constraintlayout.widget.ConstraintLayout>

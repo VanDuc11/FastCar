@@ -1,4 +1,4 @@
-package com.example.fastcar.Activity;
+package com.example.fastcar.Activity.KhachHang;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,7 @@ import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -59,8 +58,9 @@ public class HoaDon_Activity extends AppCompatActivity {
     TextView tv_tenChuSH, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_coc;
     HoaDon hoaDon;
-    boolean isPaymentCompleted = false;
     float TrungBinhSao;
+    private int totalChuyen_ofChuSH;
+    private float totalStar_ofChuSH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,9 +133,17 @@ public class HoaDon_Activity extends AppCompatActivity {
             tv_tt70Per.setText(NumberFormatVND.format(hoaDon.getThanhToan()));
 
             // chủ SH
+            if (hoaDon.getXe().getChuSH().getAvatar() != null ) {
+                Glide.with(this)
+                        .load(hoaDon.getXe().getChuSH().getAvatar())
+                        .into(img_chuSH);
+            } else {
+                Glide.with(this)
+                        .load(R.drawable.img_avatar_user_v1)
+                        .into(img_chuSH);
+            }
             tv_tenChuSH.setText(hoaDon.getXe().getChuSH().getUserName());
-            tv_soSao_ofChuSH.setText("5.0");
-            tv_soChuyen_ofChuSH.setText("22 chuyến");
+            getListCar_ofChuSH(hoaDon.getXe().getChuSH().getEmail());
 
             int statusCode = hoaDon.getTrangThaiHD();
             // 0: đã huỷ
@@ -220,7 +228,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         new CountDownTimer(oneHour - System.currentTimeMillis(), 1000) {
             @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
-                if(hoaDon.getTrangThaiHD() == 2) {
+                if (hoaDon.getTrangThaiHD() == 2) {
                     cancel();
                     return;
                 }
@@ -232,7 +240,7 @@ public class HoaDon_Activity extends AppCompatActivity {
 
                 long elapsedSeconds = millisUntilFinished / seconds;
 
-                if(elapsedMinutes < 1) {
+                if (elapsedMinutes < 1) {
                     tv_thoiGianThanhToan.setText("Đang chờ thanh toán trong " + elapsedSeconds + " giây");
                 } else {
                     tv_thoiGianThanhToan.setText("Đang chờ thanh toán trong " + elapsedMinutes + " phút " + elapsedSeconds + " giây");
@@ -241,7 +249,7 @@ public class HoaDon_Activity extends AppCompatActivity {
 
             @SuppressLint("SetTextI18n")
             public void onFinish() {
-                if(hoaDon.getTrangThaiHD() == 1) {
+                if (hoaDon.getTrangThaiHD() == 1) {
                     ic_in_4stt.setImageResource(R.drawable.icon_time_red);
                     tv_thoiGianThanhToan.setText("Đã hết thời gian thanh toán");
                     tv_thoiGianThanhToan.setTextColor(Color.RED);
@@ -256,11 +264,6 @@ public class HoaDon_Activity extends AppCompatActivity {
             }
         }.start();
 
-    }
-
-    private void onPaymentSuccess() {
-        isPaymentCompleted = true;
-        // Cập nhật TrangThai = 2 và thực hiện các hành động liên quan
     }
 
     private void updateTrangThaiHD(HoaDon hoaDon) {
@@ -309,7 +312,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         CompoundButton.OnCheckedChangeListener checker = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     ckbox1.setChecked(compoundButton == ckbox1);
                     ckbox2.setChecked(compoundButton == ckbox2);
                     ckbox3.setChecked(compoundButton == ckbox3);
@@ -329,20 +332,20 @@ public class HoaDon_Activity extends AppCompatActivity {
         ic_close.setOnClickListener(view -> dialog.dismiss());
 
         btn_confirm.setOnClickListener(view -> {
-            if(ckbox1.isChecked() || ckbox2.isChecked() || ckbox3.isChecked() || ckbox4.isChecked() || ckbox5.isChecked()) {
-                if(ckbox1.isChecked()) {
+            if (ckbox1.isChecked() || ckbox2.isChecked() || ckbox3.isChecked() || ckbox4.isChecked() || ckbox5.isChecked()) {
+                if (ckbox1.isChecked()) {
                     hoaDon.setLyDo(ckbox1.getText().toString());
-                } else if(ckbox2.isChecked()) {
+                } else if (ckbox2.isChecked()) {
                     hoaDon.setLyDo(ckbox2.getText().toString());
-                } else if(ckbox3.isChecked()) {
+                } else if (ckbox3.isChecked()) {
                     hoaDon.setLyDo(ckbox3.getText().toString());
-                } else if(ckbox4.isChecked()) {
+                } else if (ckbox4.isChecked()) {
                     hoaDon.setLyDo(ckbox4.getText().toString());
                 } else {
 //                    edt_lydoKhac.setVisibility(View.VISIBLE);
                     String edt = edt_lydoKhac.getText().toString();
                     String str;
-                    if(edt.isEmpty()) {
+                    if (edt.isEmpty()) {
                         str = ckbox5.getText().toString();
                     } else {
                         str = ckbox5.getText().toString() + ": " + edt;
@@ -398,7 +401,7 @@ public class HoaDon_Activity extends AppCompatActivity {
                         }
                         TrungBinhSao = number / feedBackList.size();
                         car.setTrungBinhSao(TrungBinhSao);
-                        updateRateXeAndSoChuyen( car);
+                        updateRateXeAndSoChuyen(car);
                     } else {
                         TrungBinhSao = 0;
                         car.setTrungBinhSao(0);
@@ -422,7 +425,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         RetrofitClient.FC_services().createFeedBack(feedBack).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                if(response.code() == 201) {
+                if (response.code() == 201) {
                     CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Đã đăng nhận xét");
                 } else {
                     System.out.println("Có lỗi khi createFeedback(): " + response.message());
@@ -440,7 +443,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         RetrofitClient.FC_services().updateXe(car.get_id(), car).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     System.out.println("updateRateXe() success");
                 }
             }
@@ -448,6 +451,39 @@ public class HoaDon_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResMessage> call, Throwable t) {
                 System.out.println("Có lỗi khi updateRateXe(): " + t);
+            }
+        });
+    }
+
+    private void getListCar_ofChuSH(String email) {
+        totalChuyen_ofChuSH = 0;
+        totalStar_ofChuSH = 0;
+        RetrofitClient.FC_services().getListCar_ofUser(email, "1").enqueue(new Callback<List<Car>>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+                if(response.code() == 200) {
+                    float numberStar = 0;
+                    int count = 0;
+                    List<Car> listCar_ofChuSH = response.body();
+                    for (Car car: listCar_ofChuSH) {
+                        if(car.getTrungBinhSao() > 0) {
+                            numberStar += car.getTrungBinhSao();
+                            count++;
+                        }
+                        totalChuyen_ofChuSH += car.getSoChuyen();
+                    }
+                    totalStar_ofChuSH = numberStar / count;
+                    DecimalFormat df = new DecimalFormat("0.0");
+                    String formattedNumber = df.format(totalStar_ofChuSH);
+                    tv_soSao_ofChuSH.setText(formattedNumber);
+                    tv_soChuyen_ofChuSH.setText(String.valueOf(totalChuyen_ofChuSH) + " chuyến");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Car>> call, Throwable t) {
+                System.out.println("Có lỗi khi getListCar_ofChuSH: " + t);
             }
         });
     }

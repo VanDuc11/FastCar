@@ -40,135 +40,95 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="20dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edt_hoten_in_ud"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="Họ tên"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:errorEnabled="true"
-                app:helperTextEnabled="false"
-                app:hintTextColor="#1890FF">
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="10dp"
+                android:text="Tên người dùng"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/text_input_background"
-                    android:clipToOutline="true"
-                    android:inputType="text"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <RelativeLayout
+            <EditText
+                android:id="@+id/edt_hoten_in_ud"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="55dp"
+                android:background="@drawable/custom_border_edittext"
+                android:hint="Nguyễn Văn A"
+                android:inputType="text"
+                android:padding="10dp"
+                android:paddingHorizontal="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/edt_ngaysinh_in_ud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="Ngày sinh"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    app:errorEnabled="true"
-                    app:helperTextEnabled="false"
-                    app:hintTextColor="#1890FF">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="10dp"
+                android:text="Ngày sinh"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_input_background"
-                        android:clipToOutline="true"
-                        android:focusable="false"
-                        android:inputType="none"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/edt_ngaysinh_in_ud"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/custom_border_edittext"
+                android:drawableRight="@drawable/icon_date"
+                android:gravity="center_vertical"
+                android:hint="dd/mm/yyyy"
+                android:onClick="showDatePicker_inUpdateInfoUser"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginRight="20dp"
-                    android:onClick="showDatePicker_inUpdateInfoUser"
-                    android:src="@drawable/icon_date" />
-            </RelativeLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
+                android:text="Giới tính"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
 
             <Spinner
                 android:id="@+id/spinner_gioittinh_in_ud"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/text_input_background"
+                android:background="@drawable/custom_border_edittext"
                 android:paddingStart="10dp" />
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edt_sdt_in_ud"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="Số điện thoại"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:errorEnabled="true"
-                app:helperTextEnabled="false"
-                app:hintTextColor="#1890FF">
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="10dp"
+                android:text="Số điện thoại"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/text_input_background"
-                    android:clipToOutline="true"
-                    android:inputType="number"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/edt_sdt_in_ud"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="GPLX: "
-                    android:textColor="@color/black"
-                    android:textSize="16dp" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:onClick="upload_GPLX">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/img_gplx"
-                        android:layout_width="220dp"
-                        android:layout_height="150dp"
-                        android:background="@drawable/border_picture"
-                        app:shapeAppearanceOverlay="@style/img_XekhamPha" />
-
-                    <ImageView
-                        android:id="@+id/icon_add_in_gplx"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/icon_add" />
-                </RelativeLayout>
-
-            </LinearLayout>
+                android:layout_height="55dp"
+                android:background="@drawable/custom_border_edittext"
+                android:hint="0987 654 321"
+                android:inputType="number"
+                android:padding="10dp"
+                android:paddingHorizontal="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_update_infoUser"

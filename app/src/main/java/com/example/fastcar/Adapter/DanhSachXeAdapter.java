@@ -14,24 +14,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 
-import com.example.fastcar.Activity.ChiTietXe_Activity;
+import com.example.fastcar.Activity.ChuXe.ChiTietXeCuaToi_Activity;
+import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
 import com.example.fastcar.FavoriteCar_Method;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.FormatString.NumberFormatK;
 import com.example.fastcar.Model.FavoriteCar;
-import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -54,7 +52,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay;
+        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay, tvMienTheChap, tvTrangThaiXe;
         CardView item;
         ImageView img_favorite;
         RelativeLayout button_favorite;
@@ -66,6 +64,8 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
             tv_soSao = itemView.findViewById(R.id.tv_soSao_inItem);
             tv_soTien1ngay = itemView.findViewById(R.id.tv_soTienThue_1ngay_inDSxe);
             tv_truyenDong = itemView.findViewById(R.id.tv_truyendong_inItem);
+            tvMienTheChap = itemView.findViewById(R.id.tv_mienthechap);
+            tvTrangThaiXe = itemView.findViewById(R.id.tv_trangthaixe);
             viewPager = itemView.findViewById(R.id.viewPager_Photo);
             circleIndicator = itemView.findViewById(R.id.circle_indicator);
             item = itemView.findViewById(R.id.item_inDSxe);
@@ -89,11 +89,30 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
         // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( button yêu thích,... )
         if (isMyCar) {
             holder.button_favorite.setVisibility(View.GONE);
-            if (car.getTrangThai() != 1) {
+            holder.tv_truyenDong.setVisibility(View.GONE);
+            holder.tvMienTheChap.setVisibility(View.GONE);
+
+            int status = car.getTrangThai();
+            //0: chờ duyệt
+            //1: đang hoạt động = duyệt thành công
+            //2: từ chối
+            //3: không hoạt động
+
+            if (status == 0) {
+                holder.tvTrangThaiXe.setText("Chờ duyệt");
                 holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
+            } else if (status == 1) {
+                holder.tvTrangThaiXe.setText("Đang hoạt động");
+            } else if (status == 2) {
+                holder.tvTrangThaiXe.setText("Bị từ chối");
+                holder.tvTrangThaiXe.setTextColor(Color.RED);
+                holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
+            } else {
+                holder.tvTrangThaiXe.setText("Không hoạt động");
             }
         } else {
             holder.button_favorite.setVisibility(View.VISIBLE);
+            holder.tvTrangThaiXe.setVisibility(View.GONE);
         }
 
         holder.tv_tenXe.setText(car.getMauXe());
@@ -110,7 +129,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
             holder.tv_soSao.setVisibility(View.VISIBLE);
         }
 
-        if(trungbinhSao > 0) {
+        if (trungbinhSao > 0) {
             DecimalFormat df = new DecimalFormat("0.0");
             String formattedNumber = df.format(trungbinhSao);
 
@@ -169,9 +188,15 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
         });
 
         holder.item.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ChiTietXe_Activity.class);
-            intent.putExtra("car", car);
-            intent.putExtra("isMyCar", isMyCar);
+            Intent intent;
+            if(isMyCar) {
+                intent = new Intent(context, ChiTietXeCuaToi_Activity.class);
+                intent.putExtra("car", car);
+            } else {
+                intent = new Intent(context, ChiTietXe_Activity.class);
+                intent.putExtra("car", car);
+                intent.putExtra("isMyCar", isMyCar);
+            }
             view.getContext().startActivity(intent);
         });
 

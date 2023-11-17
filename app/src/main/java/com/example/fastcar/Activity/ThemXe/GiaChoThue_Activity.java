@@ -4,12 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
 import com.example.fastcar.Model.AddCar;
 import com.example.fastcar.R;
@@ -25,12 +24,13 @@ public class GiaChoThue_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_gia_cho_thue);
 
         mapping();
-        load();
 
-        btn_tieptuc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCar.setGiaThue1Ngay(Integer.parseInt(ed_giathue.getText().toString())*1000);
+        btn_tieptuc.setOnClickListener(v -> {
+            String giaTien = ed_giathue.getText().toString();
+            if(giaTien.length() == 0) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập giá tiền");
+            } else {
+                addCar.setGiaThue1Ngay(Integer.parseInt(giaTien)*1000);
                 Intent i = new Intent(getBaseContext(),Upload_ImageXe_Activity.class);
                 i.putExtra("addCar2",addCar );
                 startActivity(i);
@@ -46,9 +46,5 @@ public class GiaChoThue_Activity extends AppCompatActivity {
         btn_close = findViewById(R.id.icon_close_in_giaChoThue);
         addCar =  (AddCar) getIntent().getSerializableExtra("addCar1");
         ed_giathue = findViewById(R.id.gia_cho_thue);
-    }
-
-    private void load() {
-
     }
 }

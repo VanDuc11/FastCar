@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ThemXe.ThemXe_Activity">
 
-
     <RelativeLayout
         android:id="@+id/action_bar_listXeCuaToi"
         android:layout_width="match_parent"

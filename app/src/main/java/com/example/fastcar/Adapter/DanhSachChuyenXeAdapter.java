@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.Activity.HoaDon_Activity;
+import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.R;
@@ -82,19 +82,26 @@ public class DanhSachChuyenXeAdapter extends RecyclerView.Adapter<DanhSachChuyen
         holder.tvTime.setText(formattedDate);
 
         int statusCode = hoaDon.getTrangThaiHD();
-        // 0: đã huỷ
-        // 1: chưa cọc
-        // 2: đã cọc = chưa nhận xe
-        // 3: đang vận hành
-        // 4: hoàn thành đơn
+        // 0: bị huỷ
+        // 1: chờ chủ xe duyệt
+        // 2: duyệt thành công, chờ đặt cọc
+        // 3: đặt cọc thành công
+        // 4: chủ xe giao xe thành công
+        // 5: (hết time thuê, khách mang xe trả cho chủ) khách hàng trả xe thành công
+        // 6: chủ xe nhận xe thành công ( đối chiếu nếu cần thiết )
+        // 7: hoàn thành chuyến
+
         if (statusCode == 1) {
-            holder.imgStatus.setImageResource(R.drawable.icon_wait);
-            holder.tvStatus.setText("Chưa đặt cọc");
+            holder.imgStatus.setImageResource(R.drawable.icon_time_green);
+            holder.tvStatus.setText("Chờ chủ xe duyệt");
         } else if (statusCode == 2) {
+            holder.imgStatus.setImageResource(R.drawable.icon_time_green);
+            holder.tvStatus.setText("Chưa đặt cọc");
+        } else if (statusCode == 3) {
             holder.imgStatus.setImageResource(R.drawable.icon_dadatcoc);
             holder.tvStatus.setText("Đã đặt cọc");
         } else {
-            holder.imgStatus.setImageResource(R.drawable.icon_car_v1_black);
+            holder.imgStatus.setImageResource(R.drawable.icon_car_v1_green_25x25);
             holder.tvStatus.setText("Đang vận hành");
         }
     }

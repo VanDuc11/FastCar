@@ -2,12 +2,12 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_inDSxe"
     android:layout_width="match_parent"
-    app:cardCornerRadius="20dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:id="@+id/item_inDSxe"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -70,36 +70,56 @@
         </RelativeLayout>
 
 
-        <TextView
-            android:id="@+id/tv_truyendong_inItem"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ln_tt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
             android:layout_marginTop="15dp"
-            android:background="@drawable/custom_tv"
-            android:enabled="true"
-            android:gravity="center"
-            android:maxLines="2"
-            android:text="Số tự động"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-            android:textColor="@color/black"
-            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gr1" />
+            app:layout_constraintTop_toBottomOf="@+id/gr1"
+            tools:ignore="MissingConstraints">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/custom_tv2"
-            android:gravity="center"
-            android:text="Miễn thế chấp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintStart_toEndOf="@+id/tv_truyendong_inItem"
-            app:layout_constraintTop_toBottomOf="@+id/gr1" />
+            <TextView
+                android:id="@+id/tv_truyendong_inItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_tv"
+                android:enabled="true"
+                android:paddingHorizontal="10dp"
+                android:padding="5dp"
+                android:gravity="center"
+                android:text="Số tự động"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_mienthechap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_tv2"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="Miễn thế chấp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_trangthaixe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_tv"
+                android:gravity="center"
+                android:minWidth="200dp"
+                android:text="Đang chờ duyệt"
+                android:padding="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_tenxe_inItem"
@@ -117,7 +137,7 @@
             android:textSize="19dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_truyendong_inItem" />
+            app:layout_constraintTop_toBottomOf="@+id/ln_tt" />
 
         <View
             android:id="@+id/view"
@@ -173,7 +193,7 @@
                 android:layout_height="35dp"
                 android:text="500K"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="#67CC88"
+                android:textColor="@color/button_green"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 

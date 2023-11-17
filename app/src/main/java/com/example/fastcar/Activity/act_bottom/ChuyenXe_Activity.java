@@ -1,7 +1,6 @@
 package com.example.fastcar.Activity.act_bottom;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.example.fastcar.Activity.ChiTietHoaDon_Activity;
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Adapter.DanhSachChuyenXeAdapter;
 import com.example.fastcar.Model.HoaDon;
@@ -23,7 +21,6 @@ import com.example.fastcar.Retrofit.RetrofitClient;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -88,7 +85,6 @@ public class ChuyenXe_Activity extends AppCompatActivity {
                         refreshLayout.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
                     }
-
                 }
             }
 

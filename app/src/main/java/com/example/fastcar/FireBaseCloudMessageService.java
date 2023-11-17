@@ -48,7 +48,7 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
 
         // Tạo thông báo
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.icon_car_v1_green_25x25)
+                .setSmallIcon(R.drawable.logo_fast_car_30x30)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)

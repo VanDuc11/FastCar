@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="470dp"
+    android:background="@drawable/border_dialog_custom"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp"
+    app:cardCornerRadius="15dp">
+
+    <EditText
+        android:id="@+id/ed_search_list_bank"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/custom_border_edittext"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/baseline_search_24"
+        android:hint="Tìm kiếm ngân hàng"
+        android:textSize="16dp"
+        android:padding="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_nameBank"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="10dp"
+        android:layout_height="400dp" />
+
+    <TextView
+        android:id="@+id/id_noResult_nameBank"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:gravity="center"
+        android:text="Không có dữ liệu"
+        android:textSize="17dp" />
+
+</LinearLayout>

@@ -31,6 +31,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+
 }
 
 dependencies {
@@ -95,5 +96,8 @@ dependencies {
     implementation ('io.socket:socket.io-client:2.0.0') {
         exclude group: 'org.json', module: 'json'
     }
+
+    // swipe
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
 
 }

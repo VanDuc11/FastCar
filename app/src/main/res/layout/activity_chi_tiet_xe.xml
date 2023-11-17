@@ -12,7 +12,7 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/icon_back_in_dsxe"
+            android:id="@+id/icon_back_in_CTX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -273,6 +273,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/icon_huychuyen"
+                        android:drawablePadding="10dp"
                         android:text="Xe đã được thuê từ ngày 8:00 04/10/2023 - 8:00 04/10/2023"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textColor="@color/red"

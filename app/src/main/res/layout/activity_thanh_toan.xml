@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.ThanhToan_Activity">
+    tools:context=".Activity.KhachHang.ThanhToan_Activity">
 
     <RelativeLayout
         android:id="@+id/action_bar_TT"

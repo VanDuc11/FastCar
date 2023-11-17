@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.R;
 
@@ -18,18 +19,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHoder>{
+public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHoder> {
     Context context;
     List<FeedBack> list;
 
-    public NhanXetAdapter(Context context, List<FeedBack> list){
+    public NhanXetAdapter(Context context, List<FeedBack> list) {
         this.context = context;
         this.list = list;
     }
 
-    public  class  ViewHoder extends RecyclerView.ViewHolder{
-        TextView tvTen,tvSao,tvDate, tvContent;
+    public class ViewHoder extends RecyclerView.ViewHolder {
+        TextView tvTen, tvSao, tvDate, tvContent;
         ImageView imgUser;
+
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
             tvTen = itemView.findViewById(R.id.tv_nameUser_feedback);
@@ -39,10 +41,11 @@ public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHode
             tvContent = itemView.findViewById(R.id.tv_feedBack_content);
         }
     }
+
     @NonNull
     @Override
     public ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_nhanxet,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_nhanxet, parent, false);
         return new ViewHoder(view);
     }
 
@@ -54,10 +57,20 @@ public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHode
         String formattedDate = sdf.format(feedBack.getThoiGian());
         holder.tvDate.setText(formattedDate);
         holder.tvSao.setText(String.valueOf(feedBack.getSoSao()));
-        if(feedBack.getNoiDung() != null) {
+        if (feedBack.getNoiDung() != null) {
             holder.tvContent.setText(feedBack.getNoiDung());
         } else {
             holder.tvContent.setVisibility(View.GONE);
+        }
+
+        if (feedBack.getUser().getAvatar() == null || feedBack.getUser().getAvatar().equals("")) {
+            Glide.with(context)
+                    .load(R.drawable.img_avatar_user_v1)
+                    .into(holder.imgUser);
+        } else {
+            Glide.with(context)
+                    .load(feedBack.getUser().getAvatar())
+                    .into(holder.imgUser);
         }
     }
 

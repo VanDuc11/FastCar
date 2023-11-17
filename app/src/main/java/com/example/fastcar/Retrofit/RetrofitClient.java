@@ -13,4 +13,20 @@ public class RetrofitClient {
                 .build();
         return retrofit.create(FastCarServices.class);
     }
+
+    public static FastCarServices FC_services_HangXe() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HostApi.Api_URL_hang + "/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(FastCarServices.class);
+    }
+
+    public static FastCarServices FC_services_Banks() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HostApi.API_BANKS)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(FastCarServices.class);
+    }
 }

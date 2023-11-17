@@ -11,7 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
 import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,6 +26,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.jetbrains.annotations.Nullable;
@@ -67,12 +70,11 @@ public class Login_Activity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(Login_Activity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                CustomDialogNotify.showToastCustom(Login_Activity.this, "Đăng nhập thành công");
                                 navigateToSecondActivity();
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(Login_Activity.this, "Đăng nhập không thành công",
-                                        Toast.LENGTH_SHORT).show();
+                                CustomDialogNotify.showToastCustom(Login_Activity.this, "Tài khoản hoặc mật khẩu không chính xác");
                             }
                         }
                     });
@@ -177,7 +179,6 @@ public class Login_Activity extends AppCompatActivity {
         Intent intent = new Intent(Login_Activity.this, KhamPha_Activity.class);
         startActivity(intent);
     }
-
 
 
 }

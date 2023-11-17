@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ThongTinChiTiet_Activity extends AppCompatActivity {
-    TextView btn_tieptuc, btn_chonDiaChiXe, tv_diachi, tv_tieuHao ;
+    TextView btn_tieptuc, btn_chonDiaChiXe, tv_diachi, tv_tieuHao;
     EditText edt_mota, edt_TieuHao;
     RelativeLayout btn_back, btn_close;
     RecyclerView recyclerView_tinhNangXe;
@@ -53,7 +53,7 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
     private final static int REQUEST_CODE = 100;
     ArrayList<TinhNangXe> listTinhNang;
     AddCar addCar;
-    ArrayList<String> mota ;
+    ArrayList<String> mota;
 
 
     @Override
@@ -65,41 +65,36 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
 
         btn_back.setOnClickListener(view -> onBackPressed());
         btn_close.setOnClickListener(view -> Dialog_Thoat_DangKy.showDialog(this, false));
-        btn_tieptuc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              if(tv_diachi.getText().toString().length()==0){
-                  Toast.makeText(ThongTinChiTiet_Activity.this, "Vui lòng chọn địa chỉ", Toast.LENGTH_SHORT).show();
-              } else if (edt_TieuHao.getText().toString().length()==0) {
-                  edt_TieuHao.setError("Vui lòng nhập số tiêu hao");
+        btn_tieptuc.setOnClickListener(v -> {
+            if (tv_diachi.getText().toString().length() == 0) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa có địa chỉ xe");
+            } else if (edt_TieuHao.getText().toString().length() == 0) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập mức tiêu thụ nhiên liệu");
+                edt_TieuHao.requestFocus();
+            } else {
+                String motaXe = "Các tính năng có trên xe:\n";
+                for (int i = 0; i < mota.size(); i++) {
+                    if (i == 0) {
+                        motaXe = motaXe + mota.get(i);
+                    } else {
+                        motaXe = motaXe + ", " + mota.get(i);
+                    }
 
-              } else {
-                  String motaXe="Các tính năng trên xe :";
-                  for (int i =0 ;i<mota.size();i++){
-                      if(i==0){
-                          motaXe=motaXe+mota.get(i);
-                      }else {
-                          motaXe=motaXe+", "+mota.get(i);
-                      }
-
-                  }
-                  addCar.setDiaChiXe(tv_diachi.getText().toString());
-                  addCar.setMoTa(edt_mota.getText().toString()+"\n"+motaXe);
-                  addCar.setTieuHao(Float.parseFloat(edt_TieuHao.getText().toString()));
-                  Intent i = new Intent(getBaseContext(),GiaChoThue_Activity.class);
-                  i.putExtra("addCar1",addCar );
-                  startActivity(i);
-              }
-
-
+                }
+                addCar.setDiaChiXe(tv_diachi.getText().toString());
+                addCar.setMoTa(edt_mota.getText().toString() + "\n\n" + motaXe);
+                addCar.setTieuHao(Float.parseFloat(edt_TieuHao.getText().toString()));
+                Intent i = new Intent(getBaseContext(), GiaChoThue_Activity.class);
+                i.putExtra("addCar1", addCar);
+                startActivity(i);
             }
-
         });
+
         btn_chonDiaChiXe.setOnClickListener(view -> showDialog_DiaDiem());
-        if(addCar.getLoaiNhienLieu().equals("Điện")){
-            tv_tieuHao.setText("km/ 1 lần sạc đầy");
-        }  else {
-            tv_tieuHao.setText("l/100km");
+        if (addCar.getLoaiNhienLieu().equals("Điện")) {
+            tv_tieuHao.setText(" km/1 lần sạc đầy");
+        } else {
+            tv_tieuHao.setText(" lít/100km");
         }
 
 
@@ -116,14 +111,14 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
         btn_close = findViewById(R.id.icon_close_dangky_inThemXe);
         recyclerView_tinhNangXe = findViewById(R.id.recyclerView_tinhnangXe);
         mota = new ArrayList<>();
-        addCar =  (AddCar) getIntent().getSerializableExtra("addCar");
+        addCar = (AddCar) getIntent().getSerializableExtra("addCar");
     }
 
     private void load() {
         listTinhNang = new ArrayList<>();
         recyclerView_tinhNangXe.setLayoutManager(new GridLayoutManager(this, 3));
         addItemTinhNang();
-        tinhNangXeAdpater = new TinhNangXeAdpater(listTinhNang,this,mota);
+        tinhNangXeAdpater = new TinhNangXeAdpater(listTinhNang, this, mota);
         recyclerView_tinhNangXe.setAdapter(tinhNangXeAdpater);
     }
 

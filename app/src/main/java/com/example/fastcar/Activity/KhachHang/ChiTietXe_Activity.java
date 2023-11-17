@@ -1,4 +1,4 @@
-package com.example.fastcar.Activity;
+package com.example.fastcar.Activity.KhachHang;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.fastcar.Adapter.NhanXetAdapter;
 import com.example.fastcar.Adapter.PhotoChiTietXeAdapter;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
@@ -62,7 +63,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_noResult_inFB, tv_soTien1ngay;
     TextView tv_diaChiXe, tv_diaChiXe2;
     boolean isSeeMore_inDieuKhoan = false;
-    CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi;
+    CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi, cardview_danhgiaXe, cardview_chuxe;
     RadioButton rd_selection1, rd_selection2;
     ConstraintLayout ln_view_buttonThueXe_inCTX;
     LinearLayout btn_showDatePicker;
@@ -79,6 +80,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     MaterialDatePicker<Pair<Long, Long>> datePicker;
     long soNgayThueXe;
     Car car;
+    private int totalChuyen_ofChuSH;
+    private float totalStar_ofChuSH;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -97,6 +100,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             Intent intent = new Intent(this, ThongTinThue_Activity.class);
             intent.putExtra("car", car);
             intent.putExtra("soNgayThueXe", soNgayThueXe);
+            intent.putExtra("stars", totalStar_ofChuSH);
+            intent.putExtra("chuyen", totalChuyen_ofChuSH);
             startActivity(intent);
         });
 
@@ -106,7 +111,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
     void mapping() {
         btnThueXe = findViewById(R.id.btn_thuexe);
-        ic_back = findViewById(R.id.icon_back_in_dsxe);
+        ic_back = findViewById(R.id.icon_back_in_CTX);
         ic_favorite = findViewById(R.id.icon_favorite_car_inCTX);
         reyNhanXet = findViewById(R.id.act_chitietxe_reyNhanXet);
         viewPager = findViewById(R.id.viewPager_Photo_inChiTietXe);
@@ -143,6 +148,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_noResult_inFB = findViewById(R.id.tv_noResult_inFB);
         cardview_DieuKhoan_PhuPhi = findViewById(R.id.cardview_DieuKhoan_PhuPhi);
         cardview_thoigianThueXe = findViewById(R.id.cardview_thoigianThueXe);
+        cardview_chuxe = findViewById(R.id.cardview_chuxe);
+        cardview_danhgiaXe = findViewById(R.id.cardview_danhgiaXe);
         ln_view_buttonThueXe_inCTX = findViewById(R.id.ln_view_buttonThueXe_inCTX);
     }
 
@@ -156,12 +163,12 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( thuê xe, chọn thời gian,... )
         if (isMyCar) {
             cardview_thoigianThueXe.setVisibility(View.GONE);
-            cardview_DieuKhoan_PhuPhi.setVisibility(View.GONE);
+            cardview_chuxe.setVisibility(View.GONE);
             ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
             ic_favorite.setVisibility(View.GONE);
         } else {
             cardview_thoigianThueXe.setVisibility(View.VISIBLE);
-            cardview_DieuKhoan_PhuPhi.setVisibility(View.VISIBLE);
+            cardview_chuxe.setVisibility(View.VISIBLE);
             ln_view_buttonThueXe_inCTX.setVisibility(View.VISIBLE);
             ic_favorite.setVisibility(View.VISIBLE);
         }
@@ -249,7 +256,11 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_truyendong.setText(car.getChuyenDong());
         tv_soGhe.setText(car.getSoGhe() + " chỗ");
         tv_nhienlieu.setText(car.getLoaiNhienLieu());
-        tv_tieuhao.setText(car.getTieuHao() + "l/100km");
+        if (car.getLoaiNhienLieu().equals("Điện")) {
+            tv_tieuhao.setText(car.getTieuHao() + " km/lần sạc");
+        } else {
+            tv_tieuhao.setText(car.getTieuHao() + " lít/100km");
+        }
 
         String diaChiXe = car.getDiaChiXe();
         String[] parts = diaChiXe.split(",");
@@ -265,18 +276,19 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_diaChiXe2.setText(diachi);
 
         // chủ SH
-//        Glide.with(this)
-//                .load(HostApi.URL_Image + photo)
-//                .into(img_chuSH_Xe);
+        String url_image_chuSH = car.getChuSH().getAvatar();
+
+        if (url_image_chuSH != null) {
+            Glide.with(getBaseContext()).load(url_image_chuSH).into(img_chuSH_Xe);
+        } else {
+            Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(img_chuSH_Xe);
+        }
 
         tv_tenChuSH_Xe.setText(car.getChuSH().getUserName());
-        tv_soSao_ofChuSH.setText("5.0");
-        tv_soChuyen_ofChuSH.setText("22 chuyến");
+        getListCar_ofChuSH(car.getChuSH().getEmail());
 
         rd_selection1.setChecked(true);
-
         selection2.setCardBackgroundColor(Color.parseColor("#DCCBCB"));
-
         btn_see_more.setOnClickListener(view -> {
             if (isSeeMore_inDieuKhoan) {
                 tv_dieuKhoan.setMaxLines(5);
@@ -393,17 +405,17 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
     private void getFeedBack(String id_xe) {
         RetrofitClient.FC_services().getListFeedBack(id_xe).enqueue(new Callback<List<FeedBack>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
                 if (response.code() == 200) {
-                    if (response.body() != null) {
+                    if (response.body().size() != 0) {
                         nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, response.body());
                         reyNhanXet.setAdapter(nhanXetAdapter);
                         nhanXetAdapter.notifyDataSetChanged();
                         tv_noResult_inFB.setVisibility(View.GONE);
                     } else {
-                        tv_noResult_inFB.setVisibility(View.VISIBLE);
-                        reyNhanXet.setVisibility(View.GONE);
+                        cardview_danhgiaXe.setVisibility(View.GONE);
                     }
                 } else {
                     System.out.println("Có lỗi khi get feedback id: " + id_xe);
@@ -430,6 +442,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     }
 
     private void getListHoaDon_hasTrangThai2a3(String id_xe) {
+        isNotContinue();
         // convert kiểu dữ liệu của ngày đã chọn từ String sang Date
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         startDate = null;
@@ -442,9 +455,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // lấy list hoá đơn đã đặt cọc và đang vận hành của xe để check
-        // 2,3 = đã cọc, đang vận hành
-        RetrofitClient.FC_services().getListHoaDon(id_xe, "2,3").enqueue(new Callback<List<HoaDon>>() {
+        // lấy list hoá đơn đã đặt, đã đặt cọc và đang vận hành của xe để check
+        // 1, 2,3 = đã đặt và được chủ xe đồng ý cho thuê, đã cọc, đang vận hành
+        RetrofitClient.FC_services().getListHoaDon(id_xe, "1, 2,3").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
@@ -471,7 +484,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                                 // Khoảng ngày đã chọn trùng với khoảng ngày trong HoaDon
                                 tv_xeDaThue.setVisibility(View.VISIBLE);
                                 isNotContinue();
-                                String text = "- Xe đã được thuê từ ngày " + hoaDon.getNgayThue() + " đến hết ngày " + hoaDon.getNgayTra() + "\n";
+                                String text = "Xe đã được thuê từ ngày " + hoaDon.getNgayThue() + " đến hết ngày " + hoaDon.getNgayTra() + "\n";
                                 valid.append(text);
                             } else {
                                 tv_xeDaThue.setVisibility(View.GONE);
@@ -500,5 +513,38 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     private void isNotContinue() {
         btnThueXe.setBackgroundResource(R.drawable.disable_custom_btn3);
         btnThueXe.setEnabled(false);
+    }
+
+    private void getListCar_ofChuSH(String email) {
+        totalChuyen_ofChuSH = 0;
+        totalStar_ofChuSH = 0;
+        RetrofitClient.FC_services().getListCar_ofUser(email, "1").enqueue(new Callback<List<Car>>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+                if (response.code() == 200) {
+                    float numberStar = 0;
+                    int count = 0;
+                    List<Car> listCar_ofChuSH = response.body();
+                    for (Car car : listCar_ofChuSH) {
+                        if (car.getTrungBinhSao() > 0) {
+                            numberStar += car.getTrungBinhSao();
+                            count++;
+                        }
+                        totalChuyen_ofChuSH += car.getSoChuyen();
+                    }
+                    totalStar_ofChuSH = numberStar / count;
+                    DecimalFormat df = new DecimalFormat("0.0");
+                    String formattedNumber = df.format(totalStar_ofChuSH);
+                    tv_soSao_ofChuSH.setText(formattedNumber);
+                    tv_soChuyen_ofChuSH.setText(String.valueOf(totalChuyen_ofChuSH) + " chuyến");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Car>> call, Throwable t) {
+                System.out.println("Có lỗi khi getListCar_ofChuSH: " + t);
+            }
+        });
     }
 }

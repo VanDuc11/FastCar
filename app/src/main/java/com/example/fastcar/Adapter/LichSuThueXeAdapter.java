@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.Activity.HoaDon_Activity;
+import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.R;
@@ -89,10 +89,10 @@ public class LichSuThueXeAdapter extends RecyclerView.Adapter<LichSuThueXeAdapte
         // 4: hoàn thành đơn
         if (statusCode == 0) {
             holder.imgStatus.setImageResource(R.drawable.icon_huychuyen);
-            holder.tvStatus.setText("Đã huỷ");
+            holder.tvStatus.setText("Đã bị huỷ");
         } else {
             holder.imgStatus.setImageResource(R.drawable.icon_hoanthanh);
-            holder.tvStatus.setText("Đã hoàn thành");
+            holder.tvStatus.setText("Đã kết thúc");
         }
     }
 

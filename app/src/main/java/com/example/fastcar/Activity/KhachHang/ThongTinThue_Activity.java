@@ -1,4 +1,4 @@
-package com.example.fastcar.Activity;
+package com.example.fastcar.Activity.KhachHang;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.fastcar.Activity.DanhSachXe_Activity;
+import com.example.fastcar.Activity.MaGiamGia_Activity;
+import com.example.fastcar.Activity.ThongTinGPLX_Activity;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Dialog.Dialog_GoiYLoiNhan;
@@ -71,6 +74,8 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     Car car;
     User user;
     int giaThue1ngay, phiDVFastCar1ngay, tongPhiDV, tongTien, coc30Per, thanhToan70Per, tongTienGiamGia;
+    private int totalChuyen_ofChuSH;
+    private float totalStar_ofChuSH;
 
 
     @Override
@@ -121,6 +126,8 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
         soNgayThueXe = intent.getLongExtra("soNgayThueXe", 0);
+        totalChuyen_ofChuSH = intent.getIntExtra("chuyen", 0);
+        totalStar_ofChuSH = intent.getFloatExtra("stars", 0);
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
 
@@ -180,9 +187,22 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         }
         tv_diaChiNhanXe.setText(diachi);
 
+        // info chủ sở hữu
+        if(car.getChuSH().getAvatar() == null ) {
+            Glide.with(this)
+                    .load(R.drawable.img_avatar_user_v1)
+                    .into(img_chuSH_Xe);
+        } else {
+            Glide.with(this)
+                    .load(car.getChuSH().getAvatar())
+                    .into(img_chuSH_Xe);
+        }
+
         tv_tenChuSH_Xe.setText(car.getChuSH().getUserName());
-        tv_soSao_ofChuSH.setText("5.0");
-        tv_soChuyen_ofChuSH.setText("22 chuyến");
+        DecimalFormat df = new DecimalFormat("0.0");
+        String formattedNumber = df.format(totalStar_ofChuSH);
+        tv_soSao_ofChuSH.setText(formattedNumber);
+        tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
 
         setValue_forDate(startTime, endTime);
 
@@ -267,30 +287,70 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     void createHD_and_showDialog() {
         Date getTimeNow = new Date();
 
-        String ngayNhan = tv_ngayNhanXe.getText().toString().trim();
-        String ngayTra = tv_ngayTraXe.getText().toString().trim();
-        String voucher = tv_tenVoucher.getText().toString().trim();
-        String maHD = "FCAR" + RandomMaHD.random(5);
-        String loiNhan = edt_loiNhan.getText().toString();
+        if(user.getTrangThai_GPLX() == 2) {
+            // đã xác minh gplx
+            String ngayNhan = tv_ngayNhanXe.getText().toString().trim();
+            String ngayTra = tv_ngayTraXe.getText().toString().trim();
+            String voucher = tv_tenVoucher.getText().toString().trim();
+            String maHD = "FCAR" + RandomMaHD.random(5);
+            String loiNhan = edt_loiNhan.getText().toString();
 
-        HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, 1, "");
+            HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
+                    voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, 1, "");
 
-        RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
-            @Override
-            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                if (response.code() == 201) {
-                    showDialog_DatCoc_or_ThueXeKhac(hoaDon);
-                } else {
-                    System.out.println(response.message());
+            RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
+                @Override
+                public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                    if (response.code() == 201) {
+                        showDialog_DatCoc_or_ThueXeKhac(hoaDon);
+                    } else {
+                        System.out.println(response.message());
+                    }
+
                 }
 
-            }
+                @Override
+                public void onFailure(Call<ResMessage> call, Throwable t) {
+                    System.out.println("Có lỗi khi thực hiện createHoaDon: " + t);
+                }
+            });
+        } else {
+            showDialog_VerifyGPLX();
+        }
+    }
 
-            @Override
-            public void onFailure(Call<ResMessage> call, Throwable t) {
-                System.out.println("Có lỗi khi thực hiện createHoaDon: " + t);
-            }
+    private void showDialog_VerifyGPLX() {
+        LayoutInflater inflater = LayoutInflater.from(ThongTinThue_Activity.this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.dialog_verify_gplx, null);
+        Dialog dialog = new Dialog(ThongTinThue_Activity.this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        TextView tvNameUser = dialog.findViewById(R.id.tv_tenUser_inDialogVerifyGPLX);
+        TextView btn_cancel = dialog.findViewById(R.id.btn_cancel_inDialogVerifyGPLX);
+        TextView btn_confirm = dialog.findViewById(R.id.btn_confirm_inDialogVerifyGPLX);
+
+        tvNameUser.setText(user.getUserName());
+
+        btn_cancel.setOnClickListener(view -> dialog.dismiss());
+        btn_confirm.setOnClickListener(view -> {
+            Intent intent = new Intent(ThongTinThue_Activity.this, ThongTinGPLX_Activity.class);
+            intent.putExtra("emailUser", user.getEmail());
+            startActivity(intent);
+            dialog.dismiss();
         });
     }
 
@@ -327,7 +387,9 @@ public class ThongTinThue_Activity extends AppCompatActivity {
 
         btn_thuexekhac.setOnClickListener(view -> {
             dialog.dismiss();
-            startActivity(new Intent(getBaseContext(), DanhSachXe_Activity.class));
+            Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
             finish();
         });
     }

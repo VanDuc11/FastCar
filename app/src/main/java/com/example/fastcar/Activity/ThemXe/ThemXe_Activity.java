@@ -2,6 +2,7 @@ package com.example.fastcar.Activity.ThemXe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,6 +37,7 @@ public class ThemXe_Activity extends AppCompatActivity {
     LinearLayout ln_no_result;
     ShimmerFrameLayout shimmer_view;
     LinearLayout data_view;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,11 @@ public class ThemXe_Activity extends AppCompatActivity {
 
         mapping();
         load();
+
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            refreshLayout.setRefreshing(false);
+        });
 
         img_back.setOnClickListener(view -> {
             onBackPressed();
@@ -61,6 +68,7 @@ public class ThemXe_Activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView_listXeCuaToi);
         data_view = findViewById(R.id.data_view_inXeCuaToi);
         shimmer_view = findViewById(R.id.shimmer_view_inXeCuaToi);
+        refreshLayout = findViewById(R.id.refresh_data_inListXeCuaToi);
     }
 
     private void load() {
@@ -75,7 +83,7 @@ public class ThemXe_Activity extends AppCompatActivity {
         User user = gson.fromJson(userStr, User.class);
 
         // get data
-        RetrofitClient.FC_services().getListCar_ofUser(user.getEmail()).enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_ofUser(user.getEmail(), "0,1,2,3").enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
@@ -89,7 +97,7 @@ public class ThemXe_Activity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     ln_no_result.setVisibility(View.GONE);
                 } else {
-                    recyclerView.setVisibility(View.GONE);
+                    refreshLayout.setVisibility(View.GONE);
                     ln_no_result.setVisibility(View.VISIBLE);
                 }
             }
@@ -103,5 +111,11 @@ public class ThemXe_Activity extends AppCompatActivity {
 
     private void nextToScreen() {
         startActivity(new Intent(getBaseContext(), ThongTinCoBan_Activity.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        load();
     }
 }

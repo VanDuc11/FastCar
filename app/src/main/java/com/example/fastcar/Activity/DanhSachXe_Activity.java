@@ -68,9 +68,9 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     private void getData() {
         ln_noResult.setVisibility(View.GONE);
 
-        // lấy địa chỉ từ intent
-        Intent intent = getIntent();
-        String diachi = intent.getStringExtra("diachi");
+        // lấy địa chỉ từ shared
+        SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
+        String diachi = preferences.getString("diachi", "");
 
         // lấy user login từ sharedpreferences
         SharedPreferences preferences1 = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
@@ -109,9 +109,4 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        getData();
-//    }
 }

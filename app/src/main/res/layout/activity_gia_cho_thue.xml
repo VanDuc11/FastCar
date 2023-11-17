@@ -78,29 +78,30 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginVertical="10dp"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Giá mặc định sẽ được sử dụng cho các ngày không có giá tùy chỉnh"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/gia_cho_thue"
-                    android:layout_width="0dp"
-                    android:layout_weight="1.2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="40dp"
                     android:gravity="right"
+                    android:minWidth="70dp"
                     android:background="@drawable/custom_edittext_no_border_black"
                     android:textColor="#4FB553"
-                    android:text="2760" />
+                    android:text="1950" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text=" K"
@@ -121,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginVertical="20dp"
-                android:text="Giá đề xuất: 2760 nghìn đồng"
+                android:text="Giá đề xuất: 1950 nghìn đồng"
                 android:textSize="16dp"
                 android:textColor="@color/white" />
         </LinearLayout>
