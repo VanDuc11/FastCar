@@ -15,11 +15,11 @@ import java.util.Date;
     int TongSoNgayThue, PhiDV;
     String MaGiamGia;
     int GiamGia, PhuPhi, TongTien, TienCoc, ThanhToan, TrangThaiHD;
-    Date GioTaoHD;
+    Date GioTaoHD, TimeChuXeXN;
     String LyDo;
     String LoiNhan;
 
-    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, String loiNhan, Date gioTaoHD, int trangThaiHD, String lyDo) {
+    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, String loiNhan, Date gioTaoHD, Date timeChuXeXN, int trangThaiHD, String lyDo) {
         MaHD = maHD;
         User = user;
         Xe = xe;
@@ -35,6 +35,7 @@ import java.util.Date;
         ThanhToan = thanhToan;
         LoiNhan = loiNhan;
         GioTaoHD = gioTaoHD;
+        TimeChuXeXN = timeChuXeXN;
         TrangThaiHD = trangThaiHD;
         LyDo = lyDo;
     }
@@ -58,6 +59,7 @@ import java.util.Date;
         ThanhToan = in.readInt();
         LoiNhan = in.readString();
         GioTaoHD = new Date(in.readLong());
+        TimeChuXeXN = new Date(in.readLong());
         TrangThaiHD = in.readInt();
         LyDo = in.readString();
     }
@@ -96,6 +98,7 @@ import java.util.Date;
         parcel.writeInt(ThanhToan);
         parcel.writeString(LoiNhan);
         parcel.writeLong(GioTaoHD.getTime());
+//        parcel.writeLong(TimeChuXeXN.getTime());
         parcel.writeInt(TrangThaiHD);
         parcel.writeString(LyDo);
     }
@@ -212,7 +215,15 @@ import java.util.Date;
         GioTaoHD = gioTaoHD;
     }
 
-    public int getTongSoNgayThue() {
+        public Date getTimeChuXeXN() {
+            return TimeChuXeXN;
+        }
+
+        public void setTimeChuXeXN(Date timeChuXeXN) {
+            TimeChuXeXN = timeChuXeXN;
+        }
+
+        public int getTongSoNgayThue() {
         return TongSoNgayThue;
     }
 

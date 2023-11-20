@@ -59,7 +59,11 @@ public class XeCuaToi_Activity extends AppCompatActivity {
         btn_ThemXe.setOnClickListener(view -> startActivity(new Intent(this, ThemXe_Activity.class)));
 
         // ví chủ xe
-        btn_ViChuXe.setOnClickListener(view -> startActivity(new Intent(this, ViChuXe_Activity.class)));
+        btn_ViChuXe.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ViChuXe_Activity.class);
+            intent.putExtra("emailUser", emailUser);
+            startActivity(intent);
+        });
 
         // bổ sung thông tin
         btnThongTinBoSung.setOnClickListener(view -> showDialog_UpdateTTBS());

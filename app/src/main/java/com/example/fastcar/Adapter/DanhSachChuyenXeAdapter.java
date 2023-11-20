@@ -92,16 +92,16 @@ public class DanhSachChuyenXeAdapter extends RecyclerView.Adapter<DanhSachChuyen
         // 7: hoàn thành chuyến
 
         if (statusCode == 1) {
-            holder.imgStatus.setImageResource(R.drawable.icon_time_green);
+            holder.imgStatus.setImageResource(R.drawable.icon_time_black);
             holder.tvStatus.setText("Chờ chủ xe duyệt");
         } else if (statusCode == 2) {
-            holder.imgStatus.setImageResource(R.drawable.icon_time_green);
+            holder.imgStatus.setImageResource(R.drawable.icon_time_black);
             holder.tvStatus.setText("Chưa đặt cọc");
         } else if (statusCode == 3) {
             holder.imgStatus.setImageResource(R.drawable.icon_dadatcoc);
             holder.tvStatus.setText("Đã đặt cọc");
         } else {
-            holder.imgStatus.setImageResource(R.drawable.icon_car_v1_green_25x25);
+            holder.imgStatus.setImageResource(R.drawable.icon_car_v2_black);
             holder.tvStatus.setText("Đang vận hành");
         }
     }

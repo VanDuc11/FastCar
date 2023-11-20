@@ -71,7 +71,7 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
 
-        RetrofitClient.FC_services().getListHoaDonUser(user.get_id(), "0,4").enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDonUser(user.get_id(), "0,6").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {

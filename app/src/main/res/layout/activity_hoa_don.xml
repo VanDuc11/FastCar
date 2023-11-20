@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.ChuXe.HoaDon_ChuSH_Activity">
+    tools:context=".Activity.KhachHang.HoaDon_Activity">
 
     <RelativeLayout
-        android:id="@+id/action_bar_hoadon_chush"
+        android:id="@+id/action_bar_hoadon"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:gravity="center"
         app:titleTextColor="@color/white">
 
         <ImageView
-            android:id="@+id/btn_back_inHD_ChuSH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:onClick="back_inHoaDon"
             android:src="@drawable/icon_back_black" />
 
         <TextView
@@ -26,27 +26,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Thông tin chuyến xe"
+            android:text="Thông tin xe thuê"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textSize="17dp" />
     </RelativeLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_view_inHoaDon_ChuSH"
+        android:id="@+id/shimmer_view_inHoaDon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/action_bar_hoadon_chush">
+        android:layout_below="@id/action_bar_hoadon">
 
         <include layout="@layout/layout_hoa_don_placeholder" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
-        android:id="@+id/data_view_inHoaDon_ChuSH"
+        android:id="@+id/data_view_inHoaDon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/action_bar_hoadon_chush"
+        android:layout_below="@id/action_bar_hoadon"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_hoa_don_chu_sh" />
+        <include layout="@layout/layout_hoa_don" />
     </LinearLayout>
 </RelativeLayout>

@@ -21,10 +21,11 @@
             android:src="@drawable/ic_baseline_check_circle_outline_24" />
 
         <TextView
+            android:id="@+id/tv_content_dialog_xntx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Yêu cầu thuê xe của quý khách đã tự động duyệt.\nVui lòng đặt cọc ngay để hoàn tất việc đặt xe."
+            android:text="Yêu cầu thuê xe của quý khách đã được gửi đi thành công."
             android:textColor="@color/black"
             android:textSize="16dp" />
 
@@ -52,7 +53,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_btn3"
-                android:text="Đặt cọc ngay"
+                android:text="Thoát"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="16dp"/>

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -30,12 +32,13 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
         RemoteMessage.Notification notification = message.getNotification();
         String title = notification.getTitle();
         String body = notification.getBody();
+        String url = String.valueOf(notification.getImageUrl());
 
-        createNotificationChannel(title, body);
+        createNotificationChannel(title, body, BitmapFactory.decodeFile(url));
     }
 
     @SuppressLint("MissingPermission")
-    private void createNotificationChannel(String title, String message) {
+    private void createNotificationChannel(String title, String message, Bitmap url) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelDescription = "FastCars";
@@ -51,6 +54,8 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.logo_fast_car_30x30)
                 .setContentTitle(title)
                 .setContentText(message)
+//                .setStyle( new NotificationCompat.BigPictureStyle()
+//                        .bigPicture(url).bigLargeIcon(null))
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 

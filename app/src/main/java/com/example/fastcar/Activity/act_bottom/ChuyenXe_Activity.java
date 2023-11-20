@@ -67,7 +67,7 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         data_view.setVisibility(View.GONE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "1,2,3").enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "1,2,3,4,5").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {

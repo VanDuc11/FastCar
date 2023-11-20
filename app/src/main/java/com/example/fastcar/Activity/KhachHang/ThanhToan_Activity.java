@@ -118,7 +118,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
                 ZaloPaySDK.getInstance().payOrder(ThanhToan_Activity.this, token, "demozpdk://app", new PayOrderListener() {
                     @Override
                     public void onPaymentSucceeded(String s, String s1, String s2) {
-                        hoaDon.setTrangThaiHD(2);
+                        hoaDon.setTrangThaiHD(3);
                         updateTrangThaiHD(hoaDon);
                         showDialog(hoaDon);
                     }

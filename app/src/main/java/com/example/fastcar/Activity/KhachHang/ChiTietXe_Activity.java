@@ -160,17 +160,31 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
         isNotContinue();
 
+        String diaChiXe = car.getDiaChiXe();
+        String[] parts = diaChiXe.split(",");
+        int lastIndex = parts.length - 1;
+        String diachi = null;
+        if (lastIndex >= 2) {
+            String quanHuyen = parts[lastIndex - 2].trim();
+            String thanhPhoTinh = parts[lastIndex - 1].trim();
+
+            diachi = quanHuyen + ", " + thanhPhoTinh;
+        }
+
         // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( thuê xe, chọn thời gian,... )
         if (isMyCar) {
             cardview_thoigianThueXe.setVisibility(View.GONE);
             cardview_chuxe.setVisibility(View.GONE);
             ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
             ic_favorite.setVisibility(View.GONE);
+            tv_diaChiXe2.setText(diaChiXe);
         } else {
             cardview_thoigianThueXe.setVisibility(View.VISIBLE);
             cardview_chuxe.setVisibility(View.VISIBLE);
             ln_view_buttonThueXe_inCTX.setVisibility(View.VISIBLE);
             ic_favorite.setVisibility(View.VISIBLE);
+            tv_diaChiXe.setText(diachi);
+            tv_diaChiXe2.setText(diachi);
         }
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
@@ -261,19 +275,6 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         } else {
             tv_tieuhao.setText(car.getTieuHao() + " lít/100km");
         }
-
-        String diaChiXe = car.getDiaChiXe();
-        String[] parts = diaChiXe.split(",");
-        int lastIndex = parts.length - 1;
-        String diachi = null;
-        if (lastIndex >= 2) {
-            String quanHuyen = parts[lastIndex - 2].trim();
-            String thanhPhoTinh = parts[lastIndex - 1].trim();
-
-            diachi = quanHuyen + ", " + thanhPhoTinh;
-        }
-        tv_diaChiXe.setText(diachi);
-        tv_diaChiXe2.setText(diachi);
 
         // chủ SH
         String url_image_chuSH = car.getChuSH().getAvatar();
@@ -457,7 +458,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         // lấy list hoá đơn đã đặt, đã đặt cọc và đang vận hành của xe để check
         // 1, 2,3 = đã đặt và được chủ xe đồng ý cho thuê, đã cọc, đang vận hành
-        RetrofitClient.FC_services().getListHoaDon(id_xe, "1, 2,3").enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDon(id_xe, "2,3,4,5").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {

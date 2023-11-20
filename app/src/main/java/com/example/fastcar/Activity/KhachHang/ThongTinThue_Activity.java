@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.MaGiamGia_Activity;
 import com.example.fastcar.Activity.ThongTinGPLX_Activity;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Dialog.Dialog_GoiYLoiNhan;
@@ -296,7 +297,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             String loiNhan = edt_loiNhan.getText().toString();
 
             HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                    voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, 1, "");
+                    voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, null, 1, "");
 
             RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
                 @Override
@@ -376,11 +377,13 @@ public class ThongTinThue_Activity extends AppCompatActivity {
 
         AppCompatButton btn_datcoc = custom.findViewById(R.id.btn_datcoc_in_dialog);
         AppCompatButton btn_thuexekhac = custom.findViewById(R.id.btn_thuexekhac_in_dialog);
+        TextView tv = dialog.findViewById(R.id.tv_content_dialog_xntx);
+
+        tv.setText("Yêu cầu thuê xe " + hoaDon.getXe().getMauXe() + " của quý khách đã được chấp nhận.\nVui lòng chờ chủ xe xác nhận yêu cầu.");
 
         btn_datcoc.setOnClickListener(view -> {
             dialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), HoaDon_Activity.class);
-            intent.putExtra("hoadon", hoaDon);
+            Intent intent = new Intent(getBaseContext(), KhamPha_Activity.class);
             startActivity(intent);
             finish();
         });

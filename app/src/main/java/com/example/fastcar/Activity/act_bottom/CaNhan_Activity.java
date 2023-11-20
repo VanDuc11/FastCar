@@ -315,9 +315,9 @@ public class CaNhan_Activity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        load();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        load();
+//    }
 }

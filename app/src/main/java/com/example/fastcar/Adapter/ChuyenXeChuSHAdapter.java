@@ -88,26 +88,25 @@ public class ChuyenXeChuSHAdapter extends RecyclerView.Adapter<ChuyenXeChuSHAdap
         // 3: đặt cọc thành công
         // 4: chủ xe giao xe thành công
         // 5: (hết time thuê, khách mang xe trả cho chủ) khách hàng trả xe thành công
-        // 6: chủ xe nhận xe thành công ( đối chiếu nếu cần thiết )
-        // 7: hoàn thành chuyến
+        // 6: chủ xe nhận xe thành công ( đối chiếu nếu cần thiết ) = hoàn thành chuyến
 
         if (statusCode == 0) {
             holder.imgStatus.setImageResource(R.drawable.icon_huychuyen);
             holder.tvStatus.setText("Đã bị huỷ");
         } else if (statusCode == 1) {
-            holder.imgStatus.setImageResource(R.drawable.icon_time_green);
+            holder.imgStatus.setImageResource(R.drawable.icon_time_black);
             holder.tvStatus.setText("Chờ bạn duyệt");
         } else if (statusCode == 2) {
-            holder.imgStatus.setImageResource(R.drawable.icon_time_green);
+            holder.imgStatus.setImageResource(R.drawable.icon_time_black);
             holder.tvStatus.setText("Chờ khách đặt cọc");
         } else if (statusCode == 3) {
             holder.imgStatus.setImageResource(R.drawable.icon_dadatcoc);
             holder.tvStatus.setText("Khách đã đặt cọc");
-        } else if (statusCode == 7){
+        } else if (statusCode == 6){
             holder.imgStatus.setImageResource(R.drawable.icon_hoanthanh);
             holder.tvStatus.setText("Đã kết thúc");
         } else {
-            holder.imgStatus.setImageResource(R.drawable.icon_car_v1_green_25x25);
+            holder.imgStatus.setImageResource(R.drawable.icon_car_v2_black);
             holder.tvStatus.setText("Đang vận hành");
         }
     }

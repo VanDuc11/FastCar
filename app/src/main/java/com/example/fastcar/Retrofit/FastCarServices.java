@@ -121,14 +121,23 @@ public interface FastCarServices {
     @GET("hoadon/list")
     Call<List<HoaDon>> getListHoaDonUser(@Query("User") String id_user, @Query("TrangThaiHD") String TrangThaiHD);
 
+    // lấy hoá đơn theo mahd
+    @GET("hoadon/list")
+    Call<List<HoaDon>> getHoaDonbyMaHD(@Query("MaHD") String maHD);
+
     // tạo hoá đơn
-    @Headers("Content-Type: application/json; charset=utf-8")
+    @Headers("Content-Type: application/json")
     @POST("hoadon/create")
     Call<ResMessage> createHoaDon(@Body HoaDon hoaDon);
 
     // cập nhật trạng thái hoá đơn theo mã HD
+    @Headers("Content-Type: application/json")
     @POST("hoadon/update_trangthaiHD/{maHD}")
     Call<String> updateTrangThaiHD(@Path("maHD") String maHD, @Body HoaDon hoaDon);
+
+    @Headers("Content-Type: application/json")
+    @POST("hoadon/update_timeXNHD/{maHD}")
+    Call<String> updateTimeXNHD(@Path("maHD") String maHD, @Body HoaDon hoaDon);
 
     // Feedback model URL: feedback/
 
