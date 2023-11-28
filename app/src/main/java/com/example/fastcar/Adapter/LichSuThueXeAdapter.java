@@ -26,12 +26,10 @@ import java.util.List;
 public class LichSuThueXeAdapter extends RecyclerView.Adapter<LichSuThueXeAdapter.ViewHolder> {
     List<HoaDon> listHoaDon;
     Context context;
-
     public LichSuThueXeAdapter(Context context, List<HoaDon> listHoaDon) {
         this.listHoaDon = listHoaDon;
         this.context = context;
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView img_xe;
         TextView tv_tenxe, tv_ngayNhan, tv_ngayTra, tvTongTien, tvStatus, tvTime;

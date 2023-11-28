@@ -15,18 +15,17 @@ public class LichSuGiaoDich implements Parcelable {
     String NoiDung;
     int TrangThai;
     HoaDon HoaDon;
+    NganHang NganHang;
+
 
     protected LichSuGiaoDich(Parcel in) {
         _id = in.readString();
-        User = in.readParcelable(User.class.getClassLoader());
+        User = in.readParcelable(com.example.fastcar.Model.User.class.getClassLoader());
         SoTienGD = in.readInt();
-        ThoiGian = new Date(in.readLong());
         NoiDung = in.readString();
         TrangThai = in.readInt();
-        HoaDon = in.readParcelable(HoaDon.class.getClassLoader());
-    }
-
-    public LichSuGiaoDich() {
+        HoaDon = in.readParcelable(com.example.fastcar.Model.HoaDon.class.getClassLoader());
+        NganHang = in.readParcelable(com.example.fastcar.Model.NganHang.class.getClassLoader());
     }
 
     public static final Creator<LichSuGiaoDich> CREATOR = new Creator<LichSuGiaoDich>() {
@@ -47,14 +46,28 @@ public class LichSuGiaoDich implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeString(_id);
-        parcel.writeParcelable(User, i);
-        parcel.writeInt(SoTienGD);
-        parcel.writeLong(ThoiGian.getTime());
-        parcel.writeString(NoiDung);
-        parcel.writeInt(TrangThai);
-        parcel.writeParcelable(HoaDon, i);
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(_id);
+        dest.writeParcelable(User, flags);
+        dest.writeInt(SoTienGD);
+        dest.writeString(NoiDung);
+        dest.writeInt(TrangThai);
+        dest.writeParcelable(HoaDon, flags);
+        dest.writeParcelable(NganHang, flags);
+    }
+
+    public LichSuGiaoDich(String _id, com.example.fastcar.Model.User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, com.example.fastcar.Model.HoaDon hoaDon, com.example.fastcar.Model.NganHang nganHang) {
+        this._id = _id;
+        User = user;
+        SoTienGD = soTienGD;
+        ThoiGian = thoiGian;
+        NoiDung = noiDung;
+        TrangThai = trangThai;
+        HoaDon = hoaDon;
+        NganHang = nganHang;
+    }
+
+    public LichSuGiaoDich() {
     }
 
     public String get_id() {
@@ -65,11 +78,11 @@ public class LichSuGiaoDich implements Parcelable {
         this._id = _id;
     }
 
-    public User getUser() {
+    public com.example.fastcar.Model.User getUser() {
         return User;
     }
 
-    public void setUser(User user) {
+    public void setUser(com.example.fastcar.Model.User user) {
         User = user;
     }
 
@@ -105,11 +118,19 @@ public class LichSuGiaoDich implements Parcelable {
         TrangThai = trangThai;
     }
 
-    public HoaDon getHoaDon() {
+    public com.example.fastcar.Model.HoaDon getHoaDon() {
         return HoaDon;
     }
 
-    public void setHoaDon(HoaDon hoaDon) {
+    public void setHoaDon(com.example.fastcar.Model.HoaDon hoaDon) {
         HoaDon = hoaDon;
+    }
+
+    public com.example.fastcar.Model.NganHang getNganHang() {
+        return NganHang;
+    }
+
+    public void setNganHang(com.example.fastcar.Model.NganHang nganHang) {
+        NganHang = nganHang;
     }
 }

@@ -58,16 +58,17 @@ public class NganHangAdapter extends RecyclerView.Adapter<NganHangAdapter.ViewHo
         return lists.size();
     }
 
-    public StringBuilder formatNumber(String number) {
-        StringBuilder sb = new StringBuilder(number);
-        int count = 0;
-        for (int i = sb.length() - 1; i >= 0; i--) {
-            count++;
-            if (count % 3 == 0 && i != 0) {
-                sb.insert(i, ' ');
+    public String formatNumber(String number) {
+        StringBuilder formatted = new StringBuilder();
+        int length = number.length();
+        for (int i = 0; i < length; i += 4) {
+            int endIndex = Math.min(i + 4, length);
+            formatted.append(number, i, endIndex);
+            if (endIndex < length) {
+                formatted.append(" ");
             }
         }
-        return sb;
+        return formatted.toString();
     }
 
 }

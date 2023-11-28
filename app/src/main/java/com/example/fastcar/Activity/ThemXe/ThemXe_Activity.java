@@ -75,7 +75,6 @@ public class ThemXe_Activity extends AppCompatActivity {
         ln_no_result.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
         shimmer_view.startShimmerAnimation();
-
         // lấy user từ shared
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences.getString("user", "");

@@ -213,6 +213,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
         RecyclerView lv_ten_hang_xe = dialog.findViewById(R.id.lv_ten_hang_xe);
         EditText textFind = dialog.findViewById(R.id.ed_search_list);
         TextView tv_list_null = dialog.findViewById(R.id.id_list_null);
+        tv_list_null.setVisibility(View.GONE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         lv_ten_hang_xe.setLayoutManager(layoutManager);
 
@@ -222,7 +223,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
             public void onResponse(Call<CarApiResponse> call, Response<CarApiResponse> response) {
                 if (response.code() == 200) {
                     ten_mau.setText("Chưa chọn");
-                    tv_list_null.setVisibility(View.GONE);
+
                     list = new ArrayList<>(response.body().getData());
                     listfind = new ArrayList<>(list);
                     adapter = new DanhSachTenHangXeAdapter(listfind, getApplicationContext(), ten_hang, make_id, dialog);

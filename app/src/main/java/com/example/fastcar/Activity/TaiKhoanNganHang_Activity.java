@@ -172,7 +172,6 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<List<NganHang>> call, Throwable t) {
                 System.out.println("Có lỗi khi fetch_ListNH_ofUser(): " + t);
