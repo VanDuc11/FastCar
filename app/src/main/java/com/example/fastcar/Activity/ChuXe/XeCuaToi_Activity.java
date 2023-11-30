@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.fastcar.Activity.ChuXe.QuanLyChuyenXe.QuanLyChuyenXe_ChuSH_Activity;
 import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.FormatString.NumberFormatVND;
@@ -37,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class XeCuaToi_Activity extends AppCompatActivity {
-    TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu;
+    TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu,btn_QuanLiChuyenXe;
     Calendar calendar;
     EditText edt_soCCCD, edt_noicap;
     TextView edt_ngaycap;
@@ -64,7 +65,10 @@ public class XeCuaToi_Activity extends AppCompatActivity {
             intent.putExtra("emailUser", emailUser);
             startActivity(intent);
         });
-
+        btn_QuanLiChuyenXe.setOnClickListener(view -> {
+            Intent intent = new Intent(this, QuanLyChuyenXe_ChuSH_Activity.class);
+            startActivity(intent);
+        });
         // bổ sung thông tin
         btnThongTinBoSung.setOnClickListener(view -> showDialog_UpdateTTBS());
     }
@@ -75,6 +79,7 @@ public class XeCuaToi_Activity extends AppCompatActivity {
         btn_ViChuXe = findViewById(R.id.btn_viChuXe_inXeCuaToi);
         btn_dsXe = findViewById(R.id.btn_dsXe_inXeCuaToi);
         btnThongTinBoSung = findViewById(R.id.btn_thongtinbosung_inXeCuaToi);
+        btn_QuanLiChuyenXe = findViewById(R.id.btn_quanli_chuyenxe);
     }
 
     private void load() {

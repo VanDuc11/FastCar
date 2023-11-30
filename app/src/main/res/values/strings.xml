@@ -34,5 +34,7 @@
 Trân trọng cảm ơn quý khách. Chúc quý khách hàng có những chuyến đi tuyệt vời ! </string>
 
     <string name="goiyloinhan">Chào anh/chị chủ xe!\nTôi cần thuê xe của anh/chị để đi du lịch cùng gia đình với thời gian như trên.\nTôi có đầy đủ giấy tờ thuê xe và tài sản thế chấp nếu anh/chị cần.\nAnh/Chị vui lòng báo giúp tình trạng xe sớm nhé. Cảm ơn anh/chị!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

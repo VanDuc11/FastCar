@@ -29,6 +29,7 @@ import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Adapter.NganHangAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.FormatString.NumberFormatVND;
+import com.example.fastcar.FormatString.RandomMaHD;
 import com.example.fastcar.Model.LichSuGiaoDich;
 import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
@@ -181,7 +182,8 @@ public class ViChuXe_Activity extends AppCompatActivity {
                 if(sotiengd>user.getSoDu()){
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Số dư của bạn không đủ để rút");
                 }else {
-                    lichSuGiaoDich = new LichSuGiaoDich(null,user,sotiengd,date,"Yêu cầu rút tiền",0,null,nganHangList.get(0));
+                    String maLSGD = RandomMaHD.random(8)+"";
+                    lichSuGiaoDich = new LichSuGiaoDich(null,maLSGD,user,sotiengd,date,"Yêu cầu rút tiền",0,null,nganHangList.get(0));
                     RetrofitClient.FC_services().createLSGD(lichSuGiaoDich).enqueue(new Callback<ResMessage>() {
                         @Override
                         public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {

@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class LichSuGiaoDich implements Parcelable {
     String _id;
+    String MaLSGD;
     User User;
     int SoTienGD;
     Date ThoiGian;
@@ -20,6 +21,7 @@ public class LichSuGiaoDich implements Parcelable {
 
     protected LichSuGiaoDich(Parcel in) {
         _id = in.readString();
+        MaLSGD = in.readString();
         User = in.readParcelable(com.example.fastcar.Model.User.class.getClassLoader());
         SoTienGD = in.readInt();
         NoiDung = in.readString();
@@ -48,6 +50,7 @@ public class LichSuGiaoDich implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(_id);
+        dest.writeString(MaLSGD);
         dest.writeParcelable(User, flags);
         dest.writeInt(SoTienGD);
         dest.writeString(NoiDung);
@@ -56,8 +59,12 @@ public class LichSuGiaoDich implements Parcelable {
         dest.writeParcelable(NganHang, flags);
     }
 
-    public LichSuGiaoDich(String _id, com.example.fastcar.Model.User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, com.example.fastcar.Model.HoaDon hoaDon, com.example.fastcar.Model.NganHang nganHang) {
+    public LichSuGiaoDich() {
+    }
+
+    public LichSuGiaoDich(String _id, String maLSGD, com.example.fastcar.Model.User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, com.example.fastcar.Model.HoaDon hoaDon, com.example.fastcar.Model.NganHang nganHang) {
         this._id = _id;
+        MaLSGD = maLSGD;
         User = user;
         SoTienGD = soTienGD;
         ThoiGian = thoiGian;
@@ -67,15 +74,20 @@ public class LichSuGiaoDich implements Parcelable {
         NganHang = nganHang;
     }
 
-    public LichSuGiaoDich() {
-    }
-
     public String get_id() {
         return _id;
     }
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getMaLSGD() {
+        return MaLSGD;
+    }
+
+    public void setMaLSGD(String maLSGD) {
+        MaLSGD = maLSGD;
     }
 
     public com.example.fastcar.Model.User getUser() {

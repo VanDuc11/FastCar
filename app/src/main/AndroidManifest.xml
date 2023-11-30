@@ -35,6 +35,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".Activity.ChuXe.QuanLyChuyenXe.QuanLyChuyenXe_ChuSH_Activity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ChuXe.ChiTietHoaDonActivity"
             android:exported="false" />
         <activity

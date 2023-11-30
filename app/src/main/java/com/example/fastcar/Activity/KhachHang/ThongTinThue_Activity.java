@@ -293,7 +293,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             String ngayNhan = tv_ngayNhanXe.getText().toString().trim();
             String ngayTra = tv_ngayTraXe.getText().toString().trim();
             String voucher = tv_tenVoucher.getText().toString().trim();
-            String maHD = "FCAR" + RandomMaHD.random(5);
+            String maHD = "FCAR" + RandomMaHD.random(8);
             String loiNhan = edt_loiNhan.getText().toString();
 
             HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
