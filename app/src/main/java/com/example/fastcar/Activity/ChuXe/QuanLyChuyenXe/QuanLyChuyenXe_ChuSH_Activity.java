@@ -1,6 +1,7 @@
 package com.example.fastcar.Activity.ChuXe.QuanLyChuyenXe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -30,29 +31,31 @@ public class QuanLyChuyenXe_ChuSH_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quan_ly_chuyen_xe_chu_sh);
-        fect_data();
-
         mapping();
-
+        fect_data();
        loadItemSelected();
        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Đang cuộn giữa các trang
+
             }
             @Override
             public void onPageSelected(int position) {
                 // Trang đã được chọn
                 switch (position) {
                     case 0:
+
                         btn_active.setBackgroundResource(R.drawable.custom_item_selected);
                         btn_active.setTextColor(getResources().getColor(R.color.white));
 
-
                         btn_upcoming.setBackgroundResource(R.drawable.custom_item_non_selected);
                         btn_upcoming.setTextColor(getResources().getColor(R.color.black));
+
                         break;
                     case 1:
+//                        Fragment selectedFragment = adapter.getItem(position);
+//                        ((Upcoming_CarFragment) selectedFragment).reloadData();
+                        viewPager.requestLayout();
                         btn_upcoming.setBackgroundResource(R.drawable.custom_item_selected);
                         btn_upcoming.setTextColor(getResources().getColor(R.color.white));
 
@@ -76,27 +79,20 @@ public class QuanLyChuyenXe_ChuSH_Activity extends AppCompatActivity {
         btn_upcoming.setBackgroundResource(R.drawable.custom_item_non_selected);
         btn_upcoming.setTextColor(getResources().getColor(R.color.black));
         viewPager = findViewById(R.id.viewPager);
-        adapter = new MyPagerAdapter(getSupportFragmentManager(),allCarID+"");
-        viewPager.setAdapter(adapter);
     }
     private void loadItemSelected() {
         btn_active.setOnClickListener(view -> {
             viewPager.setCurrentItem(0);
-            System.out.println(allCarID+"aaaaaaaaaaaaa");
             btn_active.setBackgroundResource(R.drawable.custom_item_selected);
             btn_active.setTextColor(getResources().getColor(R.color.white));
 
             btn_upcoming.setBackgroundResource(R.drawable.custom_item_non_selected);
             btn_upcoming.setTextColor(getResources().getColor(R.color.black));
         });
-
         btn_upcoming.setOnClickListener(view -> {
-
             viewPager.setCurrentItem(1);
-
             btn_upcoming.setBackgroundResource(R.drawable.custom_item_selected);
             btn_upcoming.setTextColor(getResources().getColor(R.color.white));
-
             btn_active.setBackgroundResource(R.drawable.custom_item_non_selected);
             btn_active.setTextColor(getResources().getColor(R.color.black));
         });
@@ -120,6 +116,8 @@ public class QuanLyChuyenXe_ChuSH_Activity extends AppCompatActivity {
                 }else {
                     System.out.println(response.code()+":"+response.message());
                 }
+                adapter = new MyPagerAdapter(getSupportFragmentManager(),allCarID+"");
+                viewPager.setAdapter(adapter);
             }
             @Override
             public void onFailure(Call<List<Car>> call, Throwable t) {
