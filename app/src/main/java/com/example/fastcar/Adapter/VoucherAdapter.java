@@ -149,7 +149,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHode
       }else {
           Glide.with(context)
                   .load(HostApi.URL_Image + voucher.getHinhAnh())
-                  .into(holder.img  );
+                  .into(holder.img  );  
           holder.img.setOnClickListener(view -> showDialog_DetailVoucher(voucher) );
 
       }
