@@ -13,14 +13,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.Voucher;
 import com.example.fastcar.R;
+import com.example.fastcar.Server.HostApi;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -32,56 +35,68 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHode
     Context context;
     List<Voucher> list;
     boolean isIconAddVisible;
+    int layout;
 
-    public VoucherAdapter(Context context, List<Voucher> list, boolean isIconAddVisible) {
+    public VoucherAdapter(Context context, List<Voucher> list, boolean isIconAddVisible,int layout) {
         this.context = context;
         this.list = list;
         this.isIconAddVisible = isIconAddVisible;
+        this.layout = layout;
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder {
         TextView tv_tenVC, tv_giatriVC, tv_checkDate;
         ImageView ic_add;
         CardView item;
+        ImageView img;
 
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
-            tv_tenVC = itemView.findViewById(R.id.tv_ten_voucher_inItem);
-            tv_giatriVC = itemView.findViewById(R.id.tv_giatri_voucher_inItem);
-            tv_checkDate = itemView.findViewById(R.id.tv_checkHSD_voucher);
-            ic_add = itemView.findViewById(R.id.icon_add_inItem_voucher);
-            item = itemView.findViewById(R.id.item_voucher);
+           if(layout==1){
+               tv_tenVC = itemView.findViewById(R.id.tv_ten_voucher_inItem);
+               tv_giatriVC = itemView.findViewById(R.id.tv_giatri_voucher_inItem);
+               tv_checkDate = itemView.findViewById(R.id.tv_checkHSD_voucher);
+               ic_add = itemView.findViewById(R.id.icon_add_inItem_voucher);
+               item = itemView.findViewById(R.id.item_voucher);
 
-            if(isIconAddVisible) {
-                ic_add.setVisibility(View.VISIBLE);
-            } else {
-                ic_add.setVisibility(View.GONE);
-            }
+               if(isIconAddVisible) {
+                   ic_add.setVisibility(View.VISIBLE);
+               } else {
+                   ic_add.setVisibility(View.GONE);
+               }
 
-            ic_add.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Voucher selectedVoucher = list.get(position);
-                    if (selectedVoucher.isSelected()) {
-                        selectedVoucher.setSelected(false);
-                        notifyDataSetChanged();
-                    } else {
-                        // Chỉ cho phép chọn duy nhất một voucher
-                        for (Voucher voucher : list) {
-                            voucher.setSelected(false);
-                        }
-                        selectedVoucher.setSelected(true);
-                        notifyDataSetChanged();
-                    }
-                }
-            });
+               ic_add.setOnClickListener(v -> {
+                   int position = getAdapterPosition();
+                   if (position != RecyclerView.NO_POSITION) {
+                       Voucher selectedVoucher = list.get(position);
+                       if (selectedVoucher.isSelected()) {
+                           selectedVoucher.setSelected(false);
+                           notifyDataSetChanged();
+                       } else {
+                           // Chỉ cho phép chọn duy nhất một voucher
+                           for (Voucher voucher : list) {
+                               voucher.setSelected(false);
+                           }
+                           selectedVoucher.setSelected(true);
+                           notifyDataSetChanged();
+                       }
+                   }
+               });
+           }else {
+               img = itemView.findViewById(R.id.layout_item_khuyenmai);
+           }
         }
     }
 
     @NonNull
     @Override
     public VoucherAdapter.ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_item_voucher, parent, false);
+        View view ;
+      if(layout==1){
+           view = LayoutInflater.from(context).inflate(R.layout.layout_item_voucher, parent, false);
+      }else {
+           view = LayoutInflater.from(context).inflate(R.layout.layout_item_khuyenmai, parent, false);
+      }
         return new ViewHoder(view);
     }
 
@@ -90,46 +105,54 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHode
     public void onBindViewHolder(@NonNull VoucherAdapter.ViewHoder holder, @SuppressLint("RecyclerView") int position) {
         Voucher voucher = list.get(position);
 
-        holder.tv_tenVC.setText(voucher.getMaGiamGia());
+      if(layout==1){
+          holder.tv_tenVC.setText(voucher.getMaGiamGia());
 
-        if (voucher.getGiaTri() == 0) {
-            holder.tv_giatriVC.setText("Giảm " + NumberFormatVND.format(voucher.getGiaTriMax()));
-        } else if (voucher.getGiaTri() != 0 && voucher.getGiaTriMax() == 0) {
-            holder.tv_giatriVC.setText("Giảm " + voucher.getGiaTri() + "%");
-        } else {
-            holder.tv_giatriVC.setText("Giảm " + voucher.getGiaTri() + "% (tối đa " + NumberFormatVND.format(voucher.getGiaTriMax()) + ")");
-        }
+          if (voucher.getGiaTri() == 0) {
+              holder.tv_giatriVC.setText("Giảm " + NumberFormatVND.format(voucher.getGiaTriMax()));
+          } else if (voucher.getGiaTri() != 0 && voucher.getGiaTriMax() == 0) {
+              holder.tv_giatriVC.setText("Giảm " + voucher.getGiaTri() + "%");
+          } else {
+              holder.tv_giatriVC.setText("Giảm " + voucher.getGiaTri() + "% (tối đa " + NumberFormatVND.format(voucher.getGiaTriMax()) + ")");
+          }
 
-        // Lấy ngày hiện tại
-        Date today = new Date();
-        Date hsd = voucher.getHSD();
+          // Lấy ngày hiện tại
+          Date today = new Date();
+          Date hsd = voucher.getHSD();
 
-        // tính toán thời gian còn lại của voucher
-        long diffInMillies = hsd.getTime() - today.getTime();
-        long daysBetween = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+          // tính toán thời gian còn lại của voucher
+          long diffInMillies = hsd.getTime() - today.getTime();
+          long daysBetween = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-        if(daysBetween < 0) {
-            holder.tv_checkDate.setText("Mã khuyến mãi không khả dụng");
-            holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
-            holder.ic_add.setVisibility(View.GONE);
-        } else if(daysBetween == 0) {
-            holder.tv_checkDate.setText("Mã khuyến mãi sẽ hết hạn trong hôm nay");
-        } else {
-            if(daysBetween <= 5) {
-                holder.tv_checkDate.setText("Hết hạn sau " + daysBetween + " ngày");
-            } else {
-                holder.tv_checkDate.setVisibility(View.GONE);
-            }
-        }
+          if(daysBetween < 0) {
+              holder.tv_checkDate.setText("Mã khuyến mãi không khả dụng");
+              holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
+              holder.ic_add.setVisibility(View.GONE);
+          } else if(daysBetween == 0) {
+              holder.tv_checkDate.setText("Mã khuyến mãi sẽ hết hạn trong hôm nay");
+          } else {
+              if(daysBetween <= 5) {
+                  holder.tv_checkDate.setText("Hết hạn sau " + daysBetween + " ngày");
+              } else {
+                  holder.tv_checkDate.setVisibility(View.GONE);
+              }
+          }
 
 
-        if (voucher.isSelected()) {
-            holder.ic_add.setImageResource(R.drawable.icon_tick);
-        } else {
-            holder.ic_add.setImageResource(R.drawable.icon_add);
-        }
+          if (voucher.isSelected()) {
+              holder.ic_add.setImageResource(R.drawable.icon_tick);
+          } else {
+              holder.ic_add.setImageResource(R.drawable.icon_add);
+          }
 
-        holder.item.setOnClickListener(view -> showDialog_DetailVoucher(voucher) );
+          holder.item.setOnClickListener(view -> showDialog_DetailVoucher(voucher) );
+      }else {
+          Glide.with(context)
+                  .load(HostApi.URL_Image + voucher.getHinhAnh())
+                  .into(holder.img  );
+          holder.img.setOnClickListener(view -> showDialog_DetailVoucher(voucher) );
+
+      }
     }
 
     @Override

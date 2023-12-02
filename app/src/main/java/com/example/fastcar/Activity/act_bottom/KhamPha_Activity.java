@@ -37,20 +37,22 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
+import com.example.fastcar.Activity.MaGiamGia_Activity;
 import com.example.fastcar.Activity.ThongBao_Activity;
 import com.example.fastcar.Adapter.KhuyenMaiApdater;
+import com.example.fastcar.Adapter.VoucherAdapter;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
+import com.example.fastcar.Model.Voucher;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
@@ -83,6 +85,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class KhamPha_Activity extends AppCompatActivity {
     TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem;
@@ -101,6 +104,7 @@ public class KhamPha_Activity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
     String tokenFCM;
+    VoucherAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,12 +177,29 @@ public class KhamPha_Activity extends AppCompatActivity {
     void load() {
         recyclerView_khuyenmai.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         tokenFCM = "";
-        List<String> itemList = new ArrayList<>();
-        itemList.add("aaaaaa");
-        itemList.add("aaaaaa");
-        itemList.add("aaaaaa");
-        itemList.add("aaaaaa");// Replace with your data
-        KhuyenMaiApdater adapter = new KhuyenMaiApdater(this, itemList);
+        Intent intent = getIntent();
+        boolean isIcon = intent.getBooleanExtra("SHOW_ICON_ADD", false);
+        RetrofitClient.FC_services().getListVoucher().enqueue(new Callback<List<Voucher>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<List<Voucher>> call, Response<List<Voucher>> response) {
+                if (response.code() == 200) {
+                    if(!response.body().isEmpty()) {
+                        adapter = new VoucherAdapter(KhamPha_Activity.this, response.body(), isIcon,0);
+                        recyclerView_khuyenmai.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                    }
+                } else {
+                    System.out.println("Có lỗi khi get list voucher: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Voucher>> call, Throwable t) {
+                System.out.println("Có lỗi khi get list voucher: " + t);
+            }
+        });
         recyclerView_khuyenmai.setAdapter(adapter);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView_khuyenmai);

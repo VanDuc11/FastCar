@@ -25,12 +25,11 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/icon_green" />
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/icon_notification" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_thongbao"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                     />
             </RelativeLayout>
 
             <LinearLayout

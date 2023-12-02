@@ -10,6 +10,7 @@ import com.example.fastcar.Model.LichSuGiaoDich;
 import com.example.fastcar.Model.MauXe.CarModelApiResponse;
 import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.Model.ThongBao;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
 
@@ -225,4 +226,8 @@ public interface FastCarServices {
     // lấy danh sách tên các ngân hàng ở Việt Nam
     @GET("banks")
     Call<BankNameAPI> getListBankVN();
+
+    //Thông báo
+    @GET("thongbao/list")
+    Call<List<ThongBao>> getThongbao(@Query("user") String id_user,@Query("start_date") String date);
 }
