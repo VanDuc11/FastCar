@@ -107,6 +107,7 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
         email = intent.getStringExtra("emailUser");
         calendar = Calendar.getInstance();
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
         fetchData_UserLogin(email);
     }

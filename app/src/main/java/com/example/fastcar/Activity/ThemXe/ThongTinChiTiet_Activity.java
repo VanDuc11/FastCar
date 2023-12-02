@@ -18,22 +18,31 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.fastcar.Adapter.PlacesAdapter;
 import com.example.fastcar.Adapter.TinhNangXeAdpater;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
 import com.example.fastcar.Model.AddCar;
+import com.example.fastcar.Model.Geolocation.Geolocation;
+import com.example.fastcar.Model.Places.Place;
 import com.example.fastcar.Model.TinhNangXe;
 import com.example.fastcar.R;
+import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.Server.HostApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -41,6 +50,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ThongTinChiTiet_Activity extends AppCompatActivity {
     TextView btn_tieptuc, btn_chonDiaChiXe, tv_diachi, tv_tieuHao;
@@ -54,7 +67,10 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
     ArrayList<TinhNangXe> listTinhNang;
     AddCar addCar;
     ArrayList<String> mota;
-
+    private PlacesAdapter adapter;
+    private ProgressBar progressBar;
+    private EditText edt_diachi;
+    private String place_id, longitude, latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +98,8 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
 
                 }
                 addCar.setDiaChiXe(tv_diachi.getText().toString());
+                addCar.setLatitude(latitude);
+                addCar.setLongitude(longitude);
                 addCar.setMoTa(edt_mota.getText().toString() + "\n\n" + motaXe);
                 addCar.setTieuHao(Float.parseFloat(edt_TieuHao.getText().toString()));
                 Intent i = new Intent(getBaseContext(), GiaChoThue_Activity.class);
@@ -144,8 +162,10 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
 
         ImageView btn_back = dialogDiaChi.findViewById(R.id.icon_back_in_chon_diadiem_thueXe);
         TextView getDiaChiHienTai = dialogDiaChi.findViewById(R.id.btn_getVitri_hientai);
-        TextView confirm = dialogDiaChi.findViewById(R.id.btn_confirm_diadiem_inDialog);
-        EditText edt_diachi = dialogDiaChi.findViewById(R.id.edt_diadiem_inDialog);
+        edt_diachi = dialogDiaChi.findViewById(R.id.edt_diadiem_inDialog);
+        progressBar = dialogDiaChi.findViewById(R.id.progressBar);
+        ListView listPlaces = dialogDiaChi.findViewById(R.id.listPlaces);
+        adapter = new PlacesAdapter(this);
 
         // back
         btn_back.setOnClickListener(view1 -> dialogDiaChi.dismiss());
@@ -154,14 +174,81 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getDiaChiHienTai.setOnClickListener(view1 -> getLocation(dialogDiaChi));
 
-        // confirm
-        confirm.setOnClickListener(view1 -> {
-            String diachi = edt_diachi.getText().toString();
-            if (!diachi.isEmpty()) {
-                callBackDialog(diachi);
-                dialogDiaChi.dismiss();
-            } else {
-                CustomDialogNotify.showToastCustom(this, "Vui lòng nhập địa điểm hoặc chọn vị trí hiện tại");
+        progressBar.setVisibility(View.GONE);
+        adapter = new PlacesAdapter(this);
+        listPlaces.setAdapter(adapter);
+
+        listPlaces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adapter.getCount() > 0) {
+                    Place.Predictions predictions = (Place.Predictions) adapter.getItem(i);
+                    callBackDialog(predictions.getDescription() + ", Việt Nam");
+                    place_id = predictions.getPlace_id();
+                    getGeolocation(place_id);
+                    dialogDiaChi.dismiss();
+                }
+            }
+        });
+
+        edt_diachi.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    if (edt_diachi.length() > 0) {
+                        searchPlaces();
+                    } else {
+                        CustomDialogNotify.showToastCustom(ThongTinChiTiet_Activity.this, "Chưa nhập địa chỉ");
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void searchPlaces(){
+        progressBar.setVisibility(View.VISIBLE);
+        // api key
+        String api_key = "JskSEnlVczU5V8r36Rby9HFx0TOwIqeKlvEyglwb";
+        // vị trí làm tâm để tìm kiếm ( latitude, longitude )
+        String location = "21.013715429594125,%20105.79829597455202";
+        // khoảng cách bán kính tính từ tâm ( phạm vi tìm kiếm ) = 2000 km
+        int radius = 2000;
+        // tự động hoàn thành các trường trả về như xã, huyện, tỉnh ( phường, quận, tp )
+        boolean more_compound = true;
+        // địa chỉ nhập từ bàn phím
+        String input = edt_diachi.getText().toString();
+        RetrofitClient.GoongIO_Services().getDiaDiem(api_key, location, input, radius, more_compound).enqueue(new Callback<Place>() {
+            @Override
+            public void onResponse(Call<Place> call, Response<Place> response) {
+                if(response.code() == 200) {
+                    List<Place.Predictions> predictionsList = response.body().getPredictions();
+                    progressBar.setVisibility(View.GONE);
+                    adapter.setPredictions(predictionsList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Place> call, Throwable t) {
+                System.out.println("Có lỗi khi getDiaDiem: " + t);
+            }
+        });
+    }
+
+    private void getGeolocation(String placeId) {
+        RetrofitClient.GoongIO_Services().getGeolocation(placeId, HostApi.api_key_goong).enqueue(new Callback<Geolocation>() {
+            @Override
+            public void onResponse(Call<Geolocation> call, Response<Geolocation> response) {
+                if(response.code() == 200) {
+                    Geolocation geolocation = response.body();
+                    longitude = String.valueOf(geolocation.getResult().getGeometry().getLocation().getLng());
+                    latitude = String.valueOf(geolocation.getResult().getGeometry().getLocation().getLat());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Geolocation> call, Throwable t) {
+
             }
         });
     }
@@ -176,6 +263,8 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
                             try {
                                 addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                 callBackDialog(addresses.get(0).getAddressLine(0));
+                                latitude = String.valueOf(location.getLatitude());
+                                longitude = String.valueOf(location.getLongitude());
                                 dialog.dismiss();
                             } catch (IOException e) {
                                 throw new RuntimeException(e);

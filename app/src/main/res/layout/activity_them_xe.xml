@@ -65,7 +65,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/action_bar_listXeCuaToi">
 
-        <include layout="@layout/layout_xe_yeu_thich_placeholder" />
+        <include layout="@layout/layout_item_xecuatoi_placeholder" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout

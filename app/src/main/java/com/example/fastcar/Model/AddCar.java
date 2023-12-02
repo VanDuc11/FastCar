@@ -14,12 +14,13 @@ public class AddCar implements Serializable {
     String ChuyenDong, LoaiNhienLieu;
     float TieuHao;
     String MoTa;
-    String DiaChiXe;
+    String DiaChiXe, Longitude, Latitude;
     int GiaThue1Ngay;
-
+    boolean TheChap;
+    String ThoiGianGiaoXe, ThoiGianNhanXe;
     String id_user;
 
-    public AddCar(String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, String diaChiXe, int giaThue1Ngay, String id_user) {
+    public AddCar(String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, String diaChiXe, String longitude, String latitude, int giaThue1Ngay,boolean theChap, String thoiGianGiaoXe, String thoiGianNhanXe, String id_user) {
         this.BKS = BKS;
         HangXe = hangXe;
         MauXe = mauXe;
@@ -30,7 +31,12 @@ public class AddCar implements Serializable {
         TieuHao = tieuHao;
         MoTa = moTa;
         DiaChiXe = diaChiXe;
+        this.Latitude = latitude;
+        this.Longitude = longitude;
         GiaThue1Ngay = giaThue1Ngay;
+        this.TheChap = theChap;
+        this.ThoiGianGiaoXe = thoiGianGiaoXe;
+        this.ThoiGianNhanXe = thoiGianNhanXe;
         this.id_user = id_user;
     }
 
@@ -131,5 +137,45 @@ public class AddCar implements Serializable {
 
     public void setId_user(String id_user) {
         this.id_user = id_user;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
+    public boolean isTheChap() {
+        return TheChap;
+    }
+
+    public void setTheChap(boolean theChap) {
+        TheChap = theChap;
+    }
+
+    public String getThoiGianGiaoXe() {
+        return ThoiGianGiaoXe;
+    }
+
+    public void setThoiGianGiaoXe(String thoiGianGiaoXe) {
+        ThoiGianGiaoXe = thoiGianGiaoXe;
+    }
+
+    public String getThoiGianNhanXe() {
+        return ThoiGianNhanXe;
+    }
+
+    public void setThoiGianNhanXe(String thoiGianNhanXe) {
+        ThoiGianNhanXe = thoiGianNhanXe;
     }
 }

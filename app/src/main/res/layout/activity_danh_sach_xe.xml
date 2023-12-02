@@ -32,11 +32,36 @@
             android:textSize="17dp" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rlt_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rr1">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_filter_inDSXe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/layout_item_filter_indsxe_placeholder" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/data_view_filter_inDSXe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/layout_item_filter_indsxe" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_inDSXe"
         android:layout_width="match_parent"
-        android:layout_below="@id/rr1"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/rlt_filter">
 
         <include layout="@layout/layout_danh_sach_xe_placeholder" />
     </com.facebook.shimmer.ShimmerFrameLayout>
@@ -44,8 +69,8 @@
     <LinearLayout
         android:id="@+id/data_view_inDSXe"
         android:layout_width="match_parent"
-        android:layout_below="@id/rr1"
         android:layout_height="match_parent"
+        android:layout_below="@id/rlt_filter"
         android:orientation="vertical">
 
         <include layout="@layout/layout_danh_sach_xe" />

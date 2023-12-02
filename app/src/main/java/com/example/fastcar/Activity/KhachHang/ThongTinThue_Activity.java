@@ -50,6 +50,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -64,7 +65,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     ImageView ic_back, ic_close_voucher;
     TextView btn_xacnhanThueXe, tv_tenXe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe, tv_diaChiNhanXe, tv_tienThue1ngay;
     TextView tv_tongTienxSoNgay, tv_tenVoucher, tv_giatriVoucher, btn_Select_Voucher, tv_thanhTien, tv_coc30Per, tv_tt70Per;
-    TextView tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_maSoXe, tv_phiDV;
+    TextView tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_maSoXe, tv_phiDV, tv_TheChap;
     EditText edt_loiNhan;
     CircleImageView img_chuSH_Xe;
     CheckBox ckbox_dieuKhoan;
@@ -75,8 +76,6 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     Car car;
     User user;
     int giaThue1ngay, phiDVFastCar1ngay, tongPhiDV, tongTien, coc30Per, thanhToan70Per, tongTienGiamGia;
-    private int totalChuyen_ofChuSH;
-    private float totalStar_ofChuSH;
 
 
     @Override
@@ -110,6 +109,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv_tt70Per = findViewById(R.id.tv_soTien70Per_inThongTinThue);
         tv_thanhTien = findViewById(R.id.tv_thanhTien_inThongTinThue);
         tv_maSoXe = findViewById(R.id.tv_masoXe_inThongTinThue);
+        tv_TheChap = findViewById(R.id.tvv_thechap_inTTT);
         tv_tenVoucher = findViewById(R.id.tv_tenma_voucher);
         tv_giatriVoucher = findViewById(R.id.tv_giatri_voucher);
         btn_Select_Voucher = findViewById(R.id.btn_select_voucher);
@@ -127,8 +127,8 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
         soNgayThueXe = intent.getLongExtra("soNgayThueXe", 0);
-        totalChuyen_ofChuSH = intent.getIntExtra("chuyen", 0);
-        totalStar_ofChuSH = intent.getFloatExtra("stars", 0);
+        int totalChuyen_ofChuSH = intent.getIntExtra("chuyen", 0);
+        float totalStar_ofChuSH = intent.getFloatExtra("stars", 0);
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
 
@@ -165,7 +165,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             tv_soSao.setVisibility(View.VISIBLE);
         }
 
-        if(trungbinhSao > 0) {
+        if (trungbinhSao > 0) {
             DecimalFormat df = new DecimalFormat("0.0");
             String formattedNumber = df.format(trungbinhSao);
 
@@ -189,7 +189,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv_diaChiNhanXe.setText(diachi);
 
         // info chủ sở hữu
-        if(car.getChuSH().getAvatar() == null ) {
+        if (car.getChuSH().getAvatar() == null) {
             Glide.with(this)
                     .load(R.drawable.img_avatar_user_v1)
                     .into(img_chuSH_Xe);
@@ -220,6 +220,21 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             tinhTien(-1, -1);
             ln_view_voucher.setVisibility(View.GONE);
         });
+
+        if (car.getTheChap() == true) {
+            int number = 0;
+            if (car.getGiaThue1Ngay() < 1500000) {
+                number = 20;
+            } else if (car.getGiaThue1Ngay() < 3000000) {
+                number = 30;
+            } else {
+                number = 50;
+            }
+            String text = number + " triệu (tiền mặt/chuyển khoản cho chủ xe khi nhận xe) hoặc Xe máy (kèm giấy tờ gốc) có giá trị tương đương " + number + " triệu.";
+            tv_TheChap.setText(text);
+        } else {
+            tv_TheChap.setText("Miễn thế chấp");
+        }
 
         ckbox_dieuKhoan.setChecked(true);
 
@@ -276,7 +291,6 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             ln_view_voucher.setVisibility(View.GONE);
         }
 
-
         coc30Per = (int) (tongTien * 0.3);
         thanhToan70Per = tongTien - coc30Per;
 
@@ -288,16 +302,24 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     void createHD_and_showDialog() {
         Date getTimeNow = new Date();
 
-        if(user.getTrangThai_GPLX() == 2) {
+        if (user.getTrangThai_GPLX() == 2) {
             // đã xác minh gplx
-            String ngayNhan = tv_ngayNhanXe.getText().toString().trim();
-            String ngayTra = tv_ngayTraXe.getText().toString().trim();
+            String ngayNhanStr = tv_ngayNhanXe.getText().toString().trim();
+            String ngayTraStr = tv_ngayTraXe.getText().toString().trim();
             String voucher = tv_tenVoucher.getText().toString().trim();
-            String maHD = "FCAR" + RandomMaHD.random(8);
+            String maHD = "FCAR" + RandomMaHD.random(5);
             String loiNhan = edt_loiNhan.getText().toString();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date ngayNhan = null, ngayTra = null;
+            try {
+                ngayNhan = sdf.parse(ngayNhanStr);
+                ngayTra = sdf.parse(ngayTraStr);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
 
             HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                    voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, null, 1, "");
+                    voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, null, null, null, 1, "", false);
 
             RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
                 @Override
@@ -382,6 +404,9 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv.setText("Yêu cầu thuê xe " + hoaDon.getXe().getMauXe() + " của quý khách đã được chấp nhận.\nVui lòng chờ chủ xe xác nhận yêu cầu.");
 
         btn_datcoc.setOnClickListener(view -> {
+            SharedPreferences preferences = getSharedPreferences("data_filter_hangxe", Context.MODE_PRIVATE);
+            preferences.edit().clear().apply();
+
             dialog.dismiss();
             Intent intent = new Intent(getBaseContext(), KhamPha_Activity.class);
             startActivity(intent);
@@ -428,7 +453,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     }
 
     public void showDialog_TSTheChap_inTTT(View view) {
-        Dialog_TS_TheChap.showDialog(this);
+        Dialog_TS_TheChap.showDialog(this, car.getTheChap());
     }
 
     public void showDialog_GoiYLoiNhan(View view) {

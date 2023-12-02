@@ -268,6 +268,7 @@ public class CaNhan_Activity extends AppCompatActivity {
 
     private void getCar_ofUserLogin() {
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         // get data

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.fastcar.Adapter.LichSuGiaoDichApdater;
@@ -33,6 +34,8 @@ public class LichSuGD_Activity extends AppCompatActivity {
     SwipeRefreshLayout refreshLayout;
     ShimmerFrameLayout shimmer_view;
     LinearLayout dataView;
+    ImageView btn_back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +46,21 @@ public class LichSuGD_Activity extends AppCompatActivity {
             load();
             refreshLayout.setRefreshing(false);
         });
+
+        btn_back.setOnClickListener(view -> onBackPressed());
     }
+
     private void mapping() {
         recyclerView = findViewById(R.id.recyclerView_lich_su_giao_dich);
         refreshLayout = findViewById(R.id.refresh_data_inListLichSuGiaoDich);
         dataView = findViewById(R.id.data_view_lichSuGiaoDich);
         shimmer_view = findViewById(R.id.shimmer_view_lichSuGiaoDich);
-
+        btn_back = findViewById(R.id.btn_back_lich_su_giao_dich);
     }
+
     private void load() {
         dataView.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences.getString("user", "");
@@ -60,29 +68,30 @@ public class LichSuGD_Activity extends AppCompatActivity {
         User user = gson.fromJson(userStr, User.class);
         fetchData_Lich_Su_Giao_Dich(user.get_id());
     }
+
     private void fetchData_Lich_Su_Giao_Dich(String idUser) {
-    RetrofitClient.FC_services().getLSGD_ofUser(idUser).enqueue(new Callback<List<LichSuGiaoDich>>() {
-        @Override
-        public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
-            dataView.setVisibility(View.VISIBLE);
-            shimmer_view.stopShimmerAnimation();
-            shimmer_view.setVisibility(View.GONE);
-            if(response.code()==200){
-                apdater = new LichSuGiaoDichApdater(response.body(),LichSuGD_Activity.this);
-                recyclerView.setAdapter(apdater);
-                apdater.notifyDataSetChanged();
+        RetrofitClient.FC_services().getLSGD_ofUser(idUser).enqueue(new Callback<List<LichSuGiaoDich>>() {
+            @Override
+            public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
+                dataView.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+                if (response.code() == 200) {
+                    apdater = new LichSuGiaoDichApdater(response.body(), LichSuGD_Activity.this);
+                    recyclerView.setAdapter(apdater);
+                    apdater.notifyDataSetChanged();
 
-            }else {
-                refreshLayout.setVisibility(View.GONE);
-                System.out.println(response.code()+response.message());
+                } else {
+                    refreshLayout.setVisibility(View.GONE);
+                    System.out.println(response.code() + response.message());
+                }
             }
-        }
 
-        @Override
-        public void onFailure(Call<List<LichSuGiaoDich>> call, Throwable t) {
-            System.out.println("Có lỗi xảy ra: " + t);
-        }
-    });
+            @Override
+            public void onFailure(Call<List<LichSuGiaoDich>> call, Throwable t) {
+                System.out.println("Có lỗi xảy ra: " + t);
+            }
+        });
     }
 
     @Override

@@ -17,17 +17,18 @@ public class LichSuGiaoDich implements Parcelable {
     int TrangThai;
     HoaDon HoaDon;
     NganHang NganHang;
-
+    String HinhAnh;
 
     protected LichSuGiaoDich(Parcel in) {
         _id = in.readString();
         MaLSGD = in.readString();
-        User = in.readParcelable(com.example.fastcar.Model.User.class.getClassLoader());
+        User = in.readParcelable(User.class.getClassLoader());
         SoTienGD = in.readInt();
         NoiDung = in.readString();
         TrangThai = in.readInt();
-        HoaDon = in.readParcelable(com.example.fastcar.Model.HoaDon.class.getClassLoader());
-        NganHang = in.readParcelable(com.example.fastcar.Model.NganHang.class.getClassLoader());
+        HoaDon = in.readParcelable(HoaDon.class.getClassLoader());
+        NganHang = in.readParcelable(NganHang.class.getClassLoader());
+        HinhAnh = in.readString();
     }
 
     public static final Creator<LichSuGiaoDich> CREATOR = new Creator<LichSuGiaoDich>() {
@@ -57,12 +58,13 @@ public class LichSuGiaoDich implements Parcelable {
         dest.writeInt(TrangThai);
         dest.writeParcelable(HoaDon, flags);
         dest.writeParcelable(NganHang, flags);
+        dest.writeString(HinhAnh);
     }
 
     public LichSuGiaoDich() {
     }
 
-    public LichSuGiaoDich(String _id, String maLSGD, com.example.fastcar.Model.User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, com.example.fastcar.Model.HoaDon hoaDon, com.example.fastcar.Model.NganHang nganHang) {
+    public LichSuGiaoDich(String _id, String maLSGD, User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, HoaDon hoaDon, NganHang nganHang, String hinhAnh) {
         this._id = _id;
         MaLSGD = maLSGD;
         User = user;
@@ -72,7 +74,9 @@ public class LichSuGiaoDich implements Parcelable {
         TrangThai = trangThai;
         HoaDon = hoaDon;
         NganHang = nganHang;
+        HinhAnh = hinhAnh;
     }
+
 
     public String get_id() {
         return _id;
@@ -144,5 +148,13 @@ public class LichSuGiaoDich implements Parcelable {
 
     public void setNganHang(com.example.fastcar.Model.NganHang nganHang) {
         NganHang = nganHang;
+    }
+
+    public String getHinhAnh() {
+        return HinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        HinhAnh = hinhAnh;
     }
 }

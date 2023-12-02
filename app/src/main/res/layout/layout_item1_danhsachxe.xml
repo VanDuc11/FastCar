@@ -5,8 +5,7 @@
     android:id="@+id/item_inDSxe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
+    android:layout_margin="10dp"
     app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -105,19 +104,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
-
-            <TextView
-                android:id="@+id/tv_trangthaixe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_tv"
-                android:gravity="center"
-                android:minWidth="200dp"
-                android:text="Đang chờ duyệt"
-                android:padding="5dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="@color/black"
-                android:textSize="16dp" />
         </LinearLayout>
 
 
@@ -139,6 +125,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ln_tt" />
 
+        <LinearLayout
+            android:id="@+id/ln_diachixe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inItem"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_diachixe_inItem"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:drawableLeft="@drawable/icon_location_green_v1"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Quận Nam Từ Liêm, Hà Nội"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_khoangcachxe_inItem"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:gravity="right"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginRight="10dp"
+                android:text="~ 20 km"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+
+
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
@@ -147,7 +178,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inItem"
+            app:layout_constraintTop_toBottomOf="@+id/ln_diachixe"
             app:layout_constraintVertical_bias="0.234" />
 
         <TextView

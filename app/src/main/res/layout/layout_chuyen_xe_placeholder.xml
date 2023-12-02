@@ -55,7 +55,6 @@
                             android:layout_height="wrap_content"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
                         <TextView
@@ -64,7 +63,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
 
@@ -74,7 +72,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
 
@@ -84,7 +81,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -138,7 +134,6 @@
                             android:layout_height="wrap_content"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
                         <TextView
@@ -147,7 +142,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
 
@@ -157,7 +151,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
 
@@ -167,7 +160,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -221,7 +213,6 @@
                             android:layout_height="wrap_content"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
                         <TextView
@@ -230,7 +221,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
 
@@ -240,7 +230,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
 
 
@@ -250,7 +239,6 @@
                             android:layout_marginTop="5dp"
                             android:background="@color/loading"
                             android:padding="5dp"
-                            android:textColor="@color/black"
                             android:textSize="17dp" />
                     </LinearLayout>
                 </LinearLayout>

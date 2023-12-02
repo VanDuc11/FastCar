@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:gravity="right|center"
-        >
+        android:gravity="right|center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Yêu cầu rút tiền"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            android:textColor="@color/black"
+            android:textSize="19dp" />
 
         <ImageView
             android:id="@+id/close_dilog"
@@ -19,39 +29,40 @@
             android:src="@drawable/icon_close_black" />
     </RelativeLayout>
 
-
     <EditText
         android:id="@+id/ed_soTien"
-        android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:inputType="number"
+        android:layout_marginHorizontal="20dp"
         android:background="@drawable/custom_border_edittext"
         android:drawableLeft="@drawable/baseline_attach_money_24"
         android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         android:hint="Nhập số tền muốn rút"
+        android:inputType="number"
         android:padding="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
         android:textSize="16dp" />
+
     <TextView
         android:layout_width="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:paddingHorizontal="20dp"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:paddingHorizontal="20dp"
         android:text="Tài khoản nhận tiền"
-        android:textSize="20dp"
-        />
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="17dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="20dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginHorizontal="20dp"
         android:background="@drawable/button_background"
+        android:orientation="vertical"
         android:padding="15dp">
 
         <TextView
-            android:id="@+id/tv_tenNganHang"
+            android:id="@+id/tv_tenNganHang_inDialogRutTien"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -61,7 +72,7 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/tv_tenChuTK_NganHang"
+            android:id="@+id/tv_tenChuTK_NganHang_inDialogRutTien"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -79,7 +90,7 @@
             android:textSize="16dp" />
 
         <TextView
-            android:id="@+id/tv_STK_NganHang"
+            android:id="@+id/tv_STK_NganHang_inDialogRutTien"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="*** *** *** 999"
@@ -93,17 +104,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:paddingHorizontal="20dp"
+        android:layout_height="match_parent"
         android:gravity="bottom"
-        android:layout_height="match_parent">
+        android:paddingHorizontal="20dp">
+
         <TextView
-            android:id="@+id/create"
+            android:id="@+id/btn_ruttien"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/custom_btn4"
             android:gravity="center"
-            android:text="Tiếp tục"
+            android:text="Rút tiền"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textColor="@color/white"
             android:textSize="16dp" />

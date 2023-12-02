@@ -1,9 +1,13 @@
 package com.example.fastcar.Activity.ChuXe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,9 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
@@ -32,7 +39,12 @@ import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
+
+import org.w3c.dom.Text;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +55,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity {
     LinearLayout data_view;
     ImageView btn_back, btn_more;
     ShapeableImageView imgXe;
-    TextView tvTenXe, btnThongTinXe, btnGiayToXe, btnChuyenXe, btnThemLichBan, tvTrangThaiXe;
+    TextView tvTenXe, btnThongTinXe, btnGiayToXe, btnChuyenXe, btnThemLichBan, tvTrangThaiXe, tvBKS, btnTaiSanTheChap, btnSetupTime;
     Car car;
 
     @Override
@@ -68,6 +80,8 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        btnSetupTime.setOnClickListener(view -> showDialogSetupTime());
+        btnTaiSanTheChap.setOnClickListener(view -> showDialogTaiSanTheChap(car));
         btn_back.setOnClickListener(view -> onBackPressed());
         btn_more.setOnClickListener(view -> showDialog_XoaXe_orTatHD(car));
     }
@@ -77,11 +91,14 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity {
         btn_more = findViewById(R.id.icon_more_inCTXCT);
         imgXe = findViewById(R.id.img_xe_inCTXCT);
         tvTenXe = findViewById(R.id.tv_tenxe_inCTXCT);
+        tvBKS = findViewById(R.id.tv_bks_inCTXCT);
         tvTrangThaiXe = findViewById(R.id.tv_trangthaixe_inCTXCT);
         btnThongTinXe = findViewById(R.id.btn_thongtin_xe_inCTXCT);
         btnGiayToXe = findViewById(R.id.btn_giaytoxe_inCTXCT);
         btnChuyenXe = findViewById(R.id.btn_danhsachchuyen_inCTXCT);
         btnThemLichBan = findViewById(R.id.btn_themlichban_inCTXCT);
+        btnTaiSanTheChap = findViewById(R.id.btn_taisanthechap_inCTXCT);
+        btnSetupTime = findViewById(R.id.btn_time_nhanxe_or_giaoxe_inCTXCT);
         data_view = findViewById(R.id.data_view_inChiTietXeCuaToi);
         shimmer_view = findViewById(R.id.shimmer_view_inChiTietXeCuaToi);
     }
@@ -91,6 +108,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity {
         Car carIntent = intent.getParcelableExtra("car");
 
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         fetchData_ofCar(carIntent.get_id());
@@ -242,6 +260,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity {
                         car = response.body();
                         Glide.with(getBaseContext()).load(HostApi.URL_Image + car.getHinhAnh().get(0)).into(imgXe);
                         tvTenXe.setText(car.getMauXe());
+                        tvBKS.setText(car.getBKS());
                         int status = car.getTrangThai();
                         if (status == 0) {
                             tvTrangThaiXe.setText("Chờ duyệt");
@@ -261,5 +280,115 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity {
                 System.out.println("Có lỗi xảy ra: " + t);
             }
         });
+    }
+
+    private void showDialogSetupTime() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_thoigian_giaoxe_and_nhanxe);
+        dialog.show();
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        TextView btnSave = dialog.findViewById(R.id.btnSave_thoigian_giaonhanxe);
+        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_thoigian_giaonhanxe);
+        TextView tvTime_start1 = dialog.findViewById(R.id.tv_startTime_giaoxe);
+        TextView tvTime_end1 = dialog.findViewById(R.id.tv_endTime_giaoxe);
+        TextView tvTime_start2 = dialog.findViewById(R.id.tv_startTime_nhanxe);
+        TextView tvTime_end2 = dialog.findViewById(R.id.tv_endTime_nhanxe);
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+
+        String[] parts1 = car.getThoiGianGiaoXe().split(" - ");
+        String[] parts2 = car.getThoiGianNhanXe().split(" - ");
+        String startTime1 = parts1[0];
+        String endTime1 = parts1[1];
+        String startTime2 = parts2[0];
+        String endTime2 = parts2[1];
+
+        tvTime_start1.setText(startTime1);
+        tvTime_end1.setText(endTime1);
+
+        tvTime_start2.setText(startTime2);
+        tvTime_end2.setText(endTime2);
+
+        tvTime_start1.setOnClickListener(view -> showTimePicker(tvTime_start1));
+        tvTime_end1.setOnClickListener(view -> showTimePicker(tvTime_end1));
+        tvTime_start2.setOnClickListener(view -> showTimePicker(tvTime_start2));
+        tvTime_end2.setOnClickListener(view -> showTimePicker(tvTime_end2));
+
+        btnSave.setOnClickListener(view -> {
+            String time_giaoxe = tvTime_start1.getText().toString() + " - " + tvTime_end1.getText().toString();
+            String time_nhanxe = tvTime_start2.getText().toString() + " - " + tvTime_end2.getText().toString();
+            car.setThoiGianGiaoXe(time_giaoxe);
+            car.setThoiGianNhanXe(time_nhanxe);
+            updateCar(car.get_id(), car);
+        });
+    }
+
+    private void showDialogTaiSanTheChap(Car car) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_taisanthechap);
+        dialog.show();
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        TextView tv_tenxe = dialog.findViewById(R.id.tv_tenxe_inDialog_taisanthechap);
+        TextView btnSave = dialog.findViewById(R.id.btnSave_taisanthechap);
+        SwitchCompat switchTheChap = dialog.findViewById(R.id.switch_tstc);
+        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_taisanthechap);
+        switchTheChap.setChecked(car.getTheChap());
+
+        tv_tenxe.setText(car.getMauXe());
+        btnSave.setOnClickListener(view -> {
+            if (switchTheChap.isChecked()) {
+                car.setTheChap(true);
+            } else {
+                car.setTheChap(false);
+            }
+            updateCar(car.get_id(), car);
+        });
+
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+    }
+
+    private void updateCar(String idCar, Car car) {
+        RetrofitClient.FC_services().updateXe(idCar, car).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if (response.code() == 200) {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Cập nhật thành công");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi xảy ra: " + t);
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
+            }
+        });
+    }
+
+    private void showTimePicker(TextView textView) {
+        final int[] hour = {12};
+        final int[] minute = {0};
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectHour, int selectMinute) {
+                hour[0] = selectHour;
+                minute[0] = selectMinute;
+                textView.setText(String.format(Locale.getDefault(), "%02d:%02d", hour[0], minute[0]));
+            }
+        };
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour[0], minute[0], true);
+        timePickerDialog.setTitle("Chọn thời gian");
+        timePickerDialog.show();
     }
 }

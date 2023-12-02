@@ -29,4 +29,12 @@ public class RetrofitClient {
                 .build();
         return retrofit.create(FastCarServices.class);
     }
+
+    public static FastCarServices GoongIO_Services() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HostApi.API_GOONG)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit.create(FastCarServices.class);
+    }
 }

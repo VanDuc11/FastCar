@@ -74,7 +74,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
     private Uri cameraImageUri;
     int index = 0;
     String pathTruoc, pathSau, pathTrai, pathPhai, pathBaoHiem, pathDangKy, pathDangkiem;
-    RequestBody BKS, HangXe, MauXe, NSX, Soghe, lnl, tieuHao, mota, diachi, giathue, id_user, chuyenDong;
+    MultipartBody.Part BKS, HangXe, MauXe, NSX, Soghe, lnl, tieuHao, mota, diachi, latitude, longitude, giathue, id_user, chuyenDong, thechap, thoigiangiaoxe, thoigiannhanxe;
     AddCar addCar;
 
     @Override
@@ -89,7 +89,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
 
         btn_confirm.setOnClickListener(v -> {
             if (validateImage()) {
-                RetrofitClient.FC_services().addCarUser(OutImagePaths(), filePart("DangKyXe", pathDangKy), filePart("DangKiem", pathDangkiem), filePart("BaoHiem", pathBaoHiem), BKS, HangXe, MauXe, NSX, chuyenDong, Soghe, lnl, tieuHao, mota, diachi, giathue, id_user).enqueue(new Callback<ResMessage>() {
+                RetrofitClient.FC_services().addCarUser(OutImagePaths(), filePart("DangKyXe", pathDangKy), filePart("DangKiem", pathDangkiem), filePart("BaoHiem", pathBaoHiem), BKS, HangXe, MauXe, NSX, chuyenDong, Soghe, lnl, tieuHao, mota, diachi, latitude, longitude, giathue, thechap, thoigiangiaoxe, thoigiannhanxe ,id_user).enqueue(new Callback<ResMessage>() {
                     @Override
                     public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                         if (response.code() == 201) {
@@ -156,18 +156,23 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         img_dangkiem = findViewById(R.id.img_dangkiem_xe);
         addCar = (AddCar) getIntent().getSerializableExtra("addCar2");
 
-        BKS = RequestBody.create(MultipartBody.FORM, addCar.getBKS());
-        HangXe = RequestBody.create(MultipartBody.FORM, addCar.getHangXe());
-        MauXe = RequestBody.create(MultipartBody.FORM, addCar.getMauXe());
-        NSX = RequestBody.create(MultipartBody.FORM, addCar.getNSX());
-        Soghe = RequestBody.create(MultipartBody.FORM, addCar.getSoGhe() + "");
-        lnl = RequestBody.create(MultipartBody.FORM, addCar.getLoaiNhienLieu());
-        tieuHao = RequestBody.create(MultipartBody.FORM, addCar.getTieuHao() + "");
-        mota = RequestBody.create(MultipartBody.FORM, addCar.getMoTa());
-        diachi = RequestBody.create(MultipartBody.FORM, addCar.getDiaChiXe());
-        giathue = RequestBody.create(MultipartBody.FORM, addCar.getGiaThue1Ngay() + "");
-        id_user = RequestBody.create(MultipartBody.FORM, addCar.getId_user());
-        chuyenDong = RequestBody.create(MultipartBody.FORM, addCar.getChuyenDong());
+        BKS = MultipartBody.Part.createFormData("BKS", addCar.getBKS());
+        HangXe = MultipartBody.Part.createFormData("HangXe", addCar.getHangXe());
+        MauXe = MultipartBody.Part.createFormData("MauXe", addCar.getMauXe());
+        NSX = MultipartBody.Part.createFormData("NSX", addCar.getNSX());
+        chuyenDong = MultipartBody.Part.createFormData("ChuyenDong", addCar.getChuyenDong());
+        Soghe = MultipartBody.Part.createFormData("SoGhe", String.valueOf(addCar.getSoGhe()));
+        lnl = MultipartBody.Part.createFormData("LoaiNhienLieu", addCar.getLoaiNhienLieu());
+        tieuHao = MultipartBody.Part.createFormData("TieuHao", String.valueOf(addCar.getTieuHao()));
+        mota = MultipartBody.Part.createFormData("MoTa", addCar.getMoTa());
+        diachi = MultipartBody.Part.createFormData("DiaChiXe", addCar.getDiaChiXe());
+        latitude = MultipartBody.Part.createFormData("Latitude", addCar.getLatitude());
+        longitude = MultipartBody.Part.createFormData("Longitude", addCar.getLongitude());
+        giathue = MultipartBody.Part.createFormData("GiaThue1Ngay", String.valueOf(addCar.getGiaThue1Ngay()));
+        id_user = MultipartBody.Part.createFormData("ChuSH", addCar.getId_user());
+        thechap = MultipartBody.Part.createFormData("TheChap", String.valueOf(false));
+        thoigiangiaoxe = MultipartBody.Part.createFormData("ThoiGianGiaoXe", "07:00 - 22:00");
+        thoigiannhanxe = MultipartBody.Part.createFormData("ThoiGianNhanXe", "07:00 - 22:00");
     }
 
     private boolean validateImage() {
@@ -203,7 +208,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
     }
 
     public void showImageDialog() {
-        Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(Upload_ImageXe_Activity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_select_camera_or_library);
         dialog.show();

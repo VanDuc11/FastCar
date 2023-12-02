@@ -64,11 +64,10 @@ public class ChuyenXe_ChuSH_Activity extends AppCompatActivity {
     private void load() {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
-
         ln_noResult.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
-
         fetchChuyenXe_ofCar(car.get_id());
     }
 

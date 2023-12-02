@@ -1,18 +1,35 @@
 package com.example.fastcar.Activity.ChuXe;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -21,24 +38,42 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
+import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
+import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Adapter.NganHangAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_BangGiaChiTiet;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_TT70Per;
+import com.example.fastcar.Dialog.Dialog_View_Image;
 import com.example.fastcar.FormatString.NumberFormatVND;
+import com.example.fastcar.FormatString.RandomMaHD;
 import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.Model.LichSuGiaoDich;
+import com.example.fastcar.Model.NganHang;
+import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,12 +83,19 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     ImageView img_xe, img_viewXe, ic_in_4stt, btn_back;
     ShimmerFrameLayout shimmer_view;
     LinearLayout data_view;
-    TextView btn_xemChiTietGia;
+    TextView btn_xemChiTietGia, tvXemHinhAnh;
     TextView tv_tenxe, tv_maHD, tv_ngayNhan, tv_ngayTra, tv_diachiXe, tv_tongTien, tv_coc30Per, tv_tt70Per, tvContentInfo, tvSdtKhachHang;
     CircleImageView img_khachhang;
     TextView tv_tenKhachHang, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4, tvGiaoXe, tvGoiChoKhach;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_dongy, ln_sdtKhachHang, ln_giaoxe;
     HoaDon hoaDon;
+    int index = 0;
+    private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_GALLERY = 2;
+    private static final int REQUEST_CALL_PERMISSION = 123;
+    private Uri cameraImageUri;
+    ImageView img1, img2, ic_add1, ic_add2;
+    String pathImage1, pathImage2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +120,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         tv_maHD = findViewById(R.id.tv_maHD_inHD_ChuSH);
         tv_ngayNhan = findViewById(R.id.tv_ngayNhanXe_inHD_ChuSH);
         tv_ngayTra = findViewById(R.id.tv_ngayTraXe_inHD_ChuSH);
+        tvXemHinhAnh = findViewById(R.id.tv_xemhinhanh_inHD_ChuSH);
         tv_diachiXe = findViewById(R.id.tv_diachi_nhanxe_inHD_ChuSH);
         tv_tongTien = findViewById(R.id.tv_thanhTien_inHD_ChuSH);
         tv_coc30Per = findViewById(R.id.tv_soTien30Per_inHD_ChuSH);
@@ -109,6 +152,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         HoaDon hoadon_intent = intent.getParcelableExtra("hoadon");
 
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         fetchHoaDon_byMaHD(hoadon_intent.getMaHD());
@@ -126,9 +170,10 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             intent1.putExtra("isMyCar", true);
             startActivity(intent1);
         });
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         tv_maHD.setText(hoaDon.getMaHD());
-        tv_ngayNhan.setText(hoaDon.getNgayThue());
-        tv_ngayTra.setText(hoaDon.getNgayTra());
+        tv_ngayNhan.setText(sdf.format(hoaDon.getNgayThue()));
+        tv_ngayTra.setText(sdf.format(hoaDon.getNgayTra()));
         tv_tongTien.setText(NumberFormatVND.format(hoaDon.getTongTien()));
         tv_coc30Per.setText(NumberFormatVND.format(hoaDon.getTienCoc()));
         tv_tt70Per.setText(NumberFormatVND.format(hoaDon.getThanhToan()));
@@ -163,6 +208,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             ln_view_huy_or_dongy.setVisibility(View.GONE);
             ln_sdtKhachHang.setVisibility(View.GONE);
             ln_giaoxe.setVisibility(View.GONE);
+            tvXemHinhAnh.setVisibility(View.GONE);
         } else if (statusCode == 1) {
             // chờ chủ xe duyệt
             ic_in_4stt.setImageResource(R.drawable.icon_time_black);
@@ -170,6 +216,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ln_sdtKhachHang.setVisibility(View.GONE);
             ln_giaoxe.setVisibility(View.GONE);
+            tvXemHinhAnh.setVisibility(View.GONE);
         } else if (statusCode == 2) {
             // chờ khách hàng đặt cọc
             ic_in_4stt.setImageResource(R.drawable.icon_time_black);
@@ -180,9 +227,11 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             stt1.setBackgroundResource(R.drawable.custom_btn5);
             ln_sdtKhachHang.setVisibility(View.GONE);
             ln_giaoxe.setVisibility(View.GONE);
+            tvXemHinhAnh.setVisibility(View.GONE);
         } else if (statusCode == 3) {
             // đặt cọc thành công
-            ln_view_huy_or_dongy.setVisibility(View.GONE);
+//            ln_view_huy_or_dongy.setVisibility(View.GONE);
+            btn_dongychothue.setVisibility(View.GONE);
             tv_thoiGianThanhToan.setText("Khách hàng đã thanh toán thành công");
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ic_in_4stt.setImageResource(R.drawable.icon_dadatcoc);
@@ -193,9 +242,11 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             tvContentInfo.setVisibility(View.GONE);
             tvSdtKhachHang.setText(hoaDon.getUser().getSDT());
             tvGiaoXe.setText("Giao xe");
+            tvXemHinhAnh.setVisibility(View.GONE);
         } else if (statusCode == 4) {
             ln_view_huy_or_dongy.setVisibility(View.GONE);
             tv_thoiGianThanhToan.setText("Đã giao xe cho khách hàng");
+            tvXemHinhAnh.setText("Xem hình ảnh");
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ic_in_4stt.setImageResource(R.drawable.icon_car);
             stt1.setTextColor(Color.WHITE);
@@ -210,6 +261,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             tvGiaoXe.setEnabled(false);
         } else if (statusCode == 5) {
             tv_thoiGianThanhToan.setText("Khách hàng đã trả xe cho bạn");
+            tvXemHinhAnh.setText("Xem hình ảnh");
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ic_in_4stt.setImageResource(R.drawable.icon_car);
             ln_view_huy_or_dongy.setVisibility(View.GONE);
@@ -221,12 +273,13 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             stt3.setTextColor(Color.WHITE);
             stt3.setBackgroundResource(R.drawable.custom_btn5);
             tvGiaoXe.setText("Đã nhận được xe?");
-        }  else {
+        } else {
             // hoàn thành chuyến xe
             ln_view_huy_or_dongy.setVisibility(View.GONE);
             tv_thoiGianThanhToan.setText("Đã kết thúc");
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ic_in_4stt.setImageResource(R.drawable.icon_hoanthanh);
+            tvXemHinhAnh.setVisibility(View.GONE);
             stt1.setTextColor(Color.WHITE);
             stt1.setBackgroundResource(R.drawable.custom_btn5);
             stt2.setTextColor(Color.WHITE);
@@ -241,15 +294,30 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         }
 
         tvGiaoXe.setOnClickListener(view -> {
-            if(statusCode == 3) {
-                hoaDon.setTrangThaiHD(4);
-                updateTrangThaiHD(hoaDon);
+            if (statusCode == 3) {
+                showDialog_UploadImage_TraXe();
             } else if (statusCode == 5) {
                 // nếu khách trả xe thành công -> done
                 hoaDon.setTrangThaiHD(6);
                 updateTrangThaiHD(hoaDon);
             }
         });
+
+        tvXemHinhAnh.setOnClickListener(view -> {
+            List<String> listURL = new ArrayList<>();
+            if (statusCode == 4) {
+                for (String item : hoaDon.getHinhAnhChuXeGiaoXe()) {
+                    listURL.add(HostApi.URL_Image + item);
+                }
+            } else if (statusCode == 5) {
+                for (String item : hoaDon.getHinhAnhKhachHangTraXe()) {
+                    listURL.add(HostApi.URL_Image + item);
+                }
+            }
+            Dialog_View_Image.showDialog(this, listURL);
+        });
+
+        tvGoiChoKhach.setOnClickListener(view -> showDialogCallPhoneNumber(hoaDon.getUser().getSDT()));
 
         btn_xemChiTietGia.setOnClickListener(view -> Dialog_BangGiaChiTiet.showDialog(this, hoaDon));
     }
@@ -296,9 +364,9 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     }
 
     private void update_TimeXacNhanHoaDon(HoaDon hoaDon) {
-        RetrofitClient.FC_services().updateTimeXNHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<String>() {
+        RetrofitClient.FC_services().updateTimeXNHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<ResMessage>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                 if (response.code() == 200) {
                     System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
@@ -307,7 +375,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResMessage> call, Throwable t) {
                 System.out.println("Có lỗi khi cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + "  " + t);
                 CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
             }
@@ -376,7 +444,6 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
                 } else if (ckbox4.isChecked()) {
                     hoaDon.setLyDo(lydoStr + "Lý do: " + ckbox4.getText().toString());
                 } else {
-//                    edt_lydoKhac.setVisibility(View.VISIBLE);
                     String edt = edt_lydoKhac.getText().toString();
                     String str;
                     if (edt.isEmpty()) {
@@ -386,9 +453,17 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
                     }
                     hoaDon.setLyDo(lydoStr + str);
                 }
-                hoaDon.setTrangThaiHD(0);
-                updateTrangThaiHD(hoaDon);
-                dialog.dismiss();
+                if (hoaDon.getTrangThaiHD() == 3) {
+                    // đã cọc => huỷ
+                    HoaDon hoadonNewModel = hoaDon;
+                    hoadonNewModel.setTrangThaiHD(0);
+                    showDialog_HuyChuyen_MatCoc(hoadonNewModel, dialog);
+                } else {
+                    hoaDon.setTrangThaiHD(0);
+                    updateTrangThaiHD(hoaDon);
+                    dialog.dismiss();
+//                    finish();
+                }
             } else {
                 CustomDialogNotify.showToastCustom(HoaDon_ChuSH_Activity.this, "Vui lòng chọn lý do");
             }
@@ -471,5 +546,370 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
 
     public void showDialog_ThanhToan70Per_inHD_ChuSH(View view) {
         Dialog_TT70Per.showDialog(this);
+    }
+
+    private void showDialog_UploadImage_TraXe() {
+        Dialog dialog = new Dialog(HoaDon_ChuSH_Activity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_upload_image_giaoxe);
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_image_giaoxe);
+        img1 = dialog.findViewById(R.id.img1_giaoxe_thanhcong);
+        img2 = dialog.findViewById(R.id.img2_giaoxe_thanhcong);
+        ic_add1 = dialog.findViewById(R.id.ic_add_img1_giaoxe_thanhcong);
+        ic_add2 = dialog.findViewById(R.id.ic_add_img2_giaoxe_thanhcong);
+        TextView btnSave = dialog.findViewById(R.id.btnSave_Image_GiaoXe);
+
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+        btnSave.setOnClickListener(view -> {
+            if (pathImage1 == null && pathImage2 == null) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Vui lòng đăng ít nhất 1 ảnh");
+            } else {
+                uploadImage_GiaoXeThanhCong(dialog);
+            }
+        });
+
+        img1.setOnClickListener(view -> {
+            index = 0;
+            showImageDialog();
+        });
+
+        img2.setOnClickListener(view -> {
+            index = 1;
+            showImageDialog();
+        });
+    }
+
+    private void uploadImage_GiaoXeThanhCong(Dialog dialog) {
+        RetrofitClient.FC_services().updateHinhAnh_ChuXeGiaoXe(hoaDon.getMaHD(), OutImagePaths()).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if (response.code() == 200) {
+                    CustomDialogNotify.showToastCustom(HoaDon_ChuSH_Activity.this, "Thành công");
+                    dialog.dismiss();
+                    load();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi khi uploadImage_GiaoXeThanhCong" + t);
+            }
+        });
+    }
+
+    private List<MultipartBody.Part> OutImagePaths() {
+        List<MultipartBody.Part> imageParts = new ArrayList<>();
+        List<String> listPath = new ArrayList<>();
+
+        if (pathImage1 == null) {
+            listPath.add(pathImage2);
+        } else if (pathImage2 == null) {
+            listPath.add(pathImage1);
+        } else {
+            listPath.add(pathImage1);
+            listPath.add(pathImage2);
+        }
+
+        for (String path : listPath) {
+            File image = new File(path);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), image);
+            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("HinhAnhChuXeGiaoXe", image.getName(), requestBody);
+            imageParts.add(imagePart);
+        }
+        return imageParts;
+    }
+
+    private void showImageDialog() {
+        Dialog dialog = new Dialog(HoaDon_ChuSH_Activity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_select_camera_or_library);
+        dialog.show();
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        TextView cameraButton = dialog.findViewById(R.id.btn_open_camera);
+        TextView libraryButton = dialog.findViewById(R.id.btn_open_library);
+
+        cameraButton.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkCameraPermission()) {
+                    openCamera();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        libraryButton.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkGalleryPermission()) {
+                    openGallery();
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CAMERA) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Uri selectedImageUri = cameraImageUri;
+                // Xử lý ảnh được chọn từ thư viện
+                if (index == 0) {
+                    if (img1 != null) {
+                        img1.setImageURI(selectedImageUri);
+                        ic_add1.setVisibility(View.GONE);
+                        pathImage1 = getImagePath(selectedImageUri);
+                    }
+                } else {
+                    if (img2 != null) {
+                        img2.setImageURI(selectedImageUri);
+                        ic_add2.setVisibility(View.GONE);
+                        pathImage2 = getImagePath(selectedImageUri);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // xử lý hoạt động bị huỷ bỏ
+            }
+        } else if (requestCode == REQUEST_GALLERY) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Uri selectedImageUri = data.getData();
+                if (index == 0) {
+                    if (img1 != null) {
+                        img1.setImageURI(selectedImageUri);
+                        ic_add1.setVisibility(View.GONE);
+                        pathImage1 = getImagePath(selectedImageUri);
+                    }
+                } else {
+                    if (img2 != null) {
+                        img2.setImageURI(selectedImageUri);
+                        ic_add2.setVisibility(View.GONE);
+                        pathImage2 = getImagePath(selectedImageUri);
+                    }
+                }
+            }
+
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            // Xử lý khi hoạt động bị hủy bỏ
+        }
+    }
+
+    private Uri createImageFile() {
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File imageFile = null;
+        try {
+            imageFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (imageFile != null) {
+            return FileProvider.getUriForFile(this, getPackageName() + ".provider", imageFile);
+        } else {
+            return null;
+        }
+    }
+
+    private String getImagePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String imagePath = cursor.getString(columnIndex);
+            cursor.close();
+            return imagePath;
+        } else {
+            return uri.getPath();
+        }
+    }
+
+    private void openCamera() {
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePicture.resolveActivity(getPackageManager()) != null) {
+            cameraImageUri = createImageFile();
+            if (cameraImageUri != null) {
+                List<ResolveInfo> resolvedIntentActivities = getPackageManager().queryIntentActivities(takePicture, PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo resolvedIntentInfo : resolvedIntentActivities) {
+                    String packageName = resolvedIntentInfo.activityInfo.packageName;
+                    grantUriPermission(packageName, cameraImageUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
+                startActivityForResult(takePicture, REQUEST_CAMERA);
+            }
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_GALLERY);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CAMERA:
+                // Kiểm tra quyền camera
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
+                } else {
+                    CustomDialogNotify.showToastCustom(HoaDon_ChuSH_Activity.this, "Vui lòng cấp quyền cho ứng dụng");
+                }
+                break;
+
+            case REQUEST_GALLERY:
+                // Kiểm tra quyền đọc bộ nhớ ngoại
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openGallery();
+                } else {
+                    CustomDialogNotify.showToastCustom(HoaDon_ChuSH_Activity.this, "Vui lòng cấp quyền cho ứng dụng");
+                }
+                break;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+            return false;
+        }
+        return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean checkGalleryPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_GALLERY);
+            return false;
+        }
+        return true;
+    }
+
+    private void showDialogCallPhoneNumber(String phone_number) {
+        Dialog dialog = new Dialog(HoaDon_ChuSH_Activity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_call_phonenumber);
+        dialog.show();
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        TextView tvCall = dialog.findViewById(R.id.btn_call_in_dialog);
+        TextView btnback = dialog.findViewById(R.id.btn_close_dialog_call);
+        btnback.setOnClickListener(view -> dialog.dismiss());
+
+        tvCall.setText("Gọi " + phone_number);
+        tvCall.setOnClickListener(view -> {
+            if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                requestCall(phone_number);
+            } else {
+                // chưa có quyền, yêu cầu quyền CALL_PHONE từ người dùng
+                ActivityCompat.requestPermissions(HoaDon_ChuSH_Activity.this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
+            }
+        });
+    }
+
+    private void requestCall(String phone_number) {
+        String phoneNumberWithDialer = "tel:" + phone_number;
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse(phoneNumberWithDialer));
+
+        if (intent.resolveActivity(HoaDon_ChuSH_Activity.this.getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(HoaDon_ChuSH_Activity.this, "Không có ứng dụng gọi điện thoại", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showDialog_HuyChuyen_MatCoc(HoaDon hoaDon, Dialog dialogOld) {
+        LayoutInflater inflater = LayoutInflater.from(HoaDon_ChuSH_Activity.this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.dialog_huychuyen_khidacoc, null);
+        Dialog dialog = new Dialog(HoaDon_ChuSH_Activity.this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        TextView tv_nd = dialog.findViewById(R.id.tv_nd_inDialog_HuyChuyenMatCoc);
+        TextView btn_cancel = dialog.findViewById(R.id.btn_cancel_closeDialog_HuyChuyenMatCoc);
+        TextView btn_confirm = dialog.findViewById(R.id.btn_confirm_closeDialog_HuyChuyenMatCoc);
+
+        tv_nd.setText("Vì khách hàng đã đặt cọc thành công, nên nếu bạn huỷ chuyến (đồng thời tạo yêu cầu hoàn tiền), khách hàng sẽ được hoàn lại toàn bộ số tiền đã thanh toán");
+        btn_cancel.setOnClickListener(view -> dialog.dismiss());
+        btn_confirm.setOnClickListener(view -> {
+            fetch_ListNH_ofUser(hoaDon);
+            dialogOld.dismiss();
+//            dialog.dismiss();
+//            finish();
+        });
+    }
+
+    private void create_GiaoDichHoanTien_forUser(LichSuGiaoDich lichSuGiaoDich, HoaDon hoaDon) {
+        RetrofitClient.FC_services().createLSGD(lichSuGiaoDich).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if (response.code() == 201) {
+                    updateTrangThaiHD(hoaDon);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void fetch_ListNH_ofUser(HoaDon hoaDon) {
+        RetrofitClient.FC_services().getListNH_ofUser(hoaDon.getUser().getEmail()).enqueue(new Callback<List<NganHang>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<List<NganHang>> call, Response<List<NganHang>> response) {
+                if (response.code() == 200) {
+                    if (!response.body().isEmpty()) {
+                        String maLSGD = String.valueOf(RandomMaHD.random(8));
+                        String noidung = "Yêu cầu hoàn tiền cọc cho chuyến xe " + hoaDon.getMaHD();
+                        Date getTimeNow = new Date();
+                        LichSuGiaoDich lichSuGiaoDich = new LichSuGiaoDich(null, maLSGD, hoaDon.getUser(), hoaDon.getTienCoc(), getTimeNow,
+                                noidung, 0, hoaDon, response.body().get(0), "");
+                        create_GiaoDichHoanTien_forUser(lichSuGiaoDich, hoaDon);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NganHang>> call, Throwable t) {
+                System.out.println("Có lỗi khi fetch_ListNH_ofUser(): " + t);
+            }
+        });
     }
 }

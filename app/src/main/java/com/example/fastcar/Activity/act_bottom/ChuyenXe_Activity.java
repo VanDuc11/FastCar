@@ -65,6 +65,7 @@ public class ChuyenXe_Activity extends AppCompatActivity {
 
         ln_noResult.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "1,2,3,4,5").enqueue(new Callback<List<HoaDon>>() {

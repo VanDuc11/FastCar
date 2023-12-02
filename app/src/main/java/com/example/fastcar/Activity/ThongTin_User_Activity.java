@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +41,19 @@ import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.User_Method;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +74,8 @@ public class ThongTin_User_Activity extends AppCompatActivity {
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
     User user;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +116,7 @@ public class ThongTin_User_Activity extends AppCompatActivity {
 
     void load() {
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         Intent intent = getIntent();
@@ -281,7 +292,7 @@ public class ThongTin_User_Activity extends AppCompatActivity {
 
 
     private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_GALLERY);
     }
@@ -327,15 +338,39 @@ public class ThongTin_User_Activity extends AppCompatActivity {
                 .setPhotoUri(Uri.parse(selectedImageUri.toString()))
                 .build();
 
+        String imageName = getFileName(selectedImageUri);
+        StorageReference imageRef = storageRef.child("images/" + imageName);
+
         // Cập nhật hồ sơ người dùng
         user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                User userModel = new User(null, String.valueOf(user.getPhotoUrl()));
-                User_Method.func_updateUser(ThongTin_User_Activity.this, email, userModel, true);
-                load();
             }
         });
+
+        try {
+            InputStream stream = getContentResolver().openInputStream(selectedImageUri);
+            UploadTask uploadTask = imageRef.putStream(stream);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Lấy URL công khai của ảnh sau khi tải lên thành công
+                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri downloadUri) {
+                            String photoUrlString = downloadUri.toString();
+                            User userModel = new User(null, photoUrlString);
+                            User_Method.func_updateUser(ThongTin_User_Activity.this, email, userModel, true);
+                            load();
+                        }
+                    });
+                }
+            });
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -367,5 +402,28 @@ public class ThongTin_User_Activity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         load();
+    }
+
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (displayNameIndex != -1) {
+                        result = cursor.getString(displayNameIndex);
+                    }
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
     }
 }

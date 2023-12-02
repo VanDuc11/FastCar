@@ -159,17 +159,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#E1D7D7" />
+
                     <TextView
                         android:id="@+id/btn_quanli_chuyenxe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/icon_car_tick"
+                        android:drawableLeft="@drawable/icon_car_v2_black"
                         android:drawableRight="@drawable/icon_next_v1"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
-                        android:text="Quản lí chuyến xe"
+                        android:text="Quản lý chuyến xe"
                         android:textColor="@color/black"
                         android:textSize="16dp" />
 
@@ -188,7 +189,7 @@
                         android:gravity="center_vertical"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
-                        android:text="Đăng kí cho thuê xe"
+                        android:text="Đăng ký cho thuê xe"
                         android:textColor="@color/black"
                         android:textSize="16dp" />
 

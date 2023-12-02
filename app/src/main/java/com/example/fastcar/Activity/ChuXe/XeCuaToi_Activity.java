@@ -38,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class XeCuaToi_Activity extends AppCompatActivity {
-    TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu,btn_QuanLiChuyenXe;
+    TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu, btn_QuanLiChuyenXe;
     Calendar calendar;
     EditText edt_soCCCD, edt_noicap;
     TextView edt_ngaycap;
@@ -65,10 +65,13 @@ public class XeCuaToi_Activity extends AppCompatActivity {
             intent.putExtra("emailUser", emailUser);
             startActivity(intent);
         });
+        // quản lý chuyến xe
         btn_QuanLiChuyenXe.setOnClickListener(view -> {
             Intent intent = new Intent(this, QuanLyChuyenXe_ChuSH_Activity.class);
+            intent.putExtra("emailUser", emailUser);
             startActivity(intent);
         });
+
         // bổ sung thông tin
         btnThongTinBoSung.setOnClickListener(view -> showDialog_UpdateTTBS());
     }

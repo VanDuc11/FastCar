@@ -1,25 +1,29 @@
 package com.example.fastcar.Model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
 import java.util.Date;
+import java.util.List;
 
-    public class HoaDon implements Parcelable {
+public class HoaDon implements Parcelable {
     String MaHD;
     User User;
     Car Xe;
-    String NgayThue, NgayTra;
+    Date NgayThue, NgayTra;
     int TongSoNgayThue, PhiDV;
     String MaGiamGia;
     int GiamGia, PhuPhi, TongTien, TienCoc, ThanhToan, TrangThaiHD;
     Date GioTaoHD, TimeChuXeXN;
+    List<String> HinhAnhChuXeGiaoXe, HinhAnhKhachHangTraXe;
     String LyDo;
     String LoiNhan;
+    boolean HaveFeedback;
 
-    public HoaDon(String maHD, User user, Car xe, String ngayThue, String ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, String loiNhan, Date gioTaoHD, Date timeChuXeXN, int trangThaiHD, String lyDo) {
+    public HoaDon(String maHD, User user, Car xe, Date ngayThue, Date ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, String loiNhan, Date gioTaoHD, Date timeChuXeXN, List<String> hinhAnhChuXeGiaoXe, List<String> hinhAnhKhachHangTraXe, int trangThaiHD, String lyDo, boolean haveFeedback) {
         MaHD = maHD;
         User = user;
         Xe = xe;
@@ -36,19 +40,23 @@ import java.util.Date;
         LoiNhan = loiNhan;
         GioTaoHD = gioTaoHD;
         TimeChuXeXN = timeChuXeXN;
+        HinhAnhChuXeGiaoXe = hinhAnhChuXeGiaoXe;
+        HinhAnhKhachHangTraXe = hinhAnhKhachHangTraXe;
         TrangThaiHD = trangThaiHD;
         LyDo = lyDo;
+        HaveFeedback = haveFeedback;
     }
 
     public HoaDon() {
     }
 
+    @SuppressLint("NewApi")
     protected HoaDon(Parcel in) {
         MaHD = in.readString();
         User = in.readParcelable(User.class.getClassLoader());
         Xe = in.readParcelable(Car.class.getClassLoader());
-        NgayThue = in.readString();
-        NgayTra = in.readString();
+        NgayThue = new Date(in.readLong());
+        NgayTra = new Date(in.readLong());
         TongSoNgayThue = in.readInt();
         PhiDV = in.readInt();
         MaGiamGia = in.readString();
@@ -59,9 +67,11 @@ import java.util.Date;
         ThanhToan = in.readInt();
         LoiNhan = in.readString();
         GioTaoHD = new Date(in.readLong());
-        TimeChuXeXN = new Date(in.readLong());
+        HinhAnhChuXeGiaoXe = in.createStringArrayList();
+        HinhAnhKhachHangTraXe = in.createStringArrayList();
         TrangThaiHD = in.readInt();
         LyDo = in.readString();
+        HaveFeedback = in.readBoolean();
     }
 
     public static final Creator<HoaDon> CREATOR = new Creator<HoaDon>() {
@@ -81,13 +91,14 @@ import java.util.Date;
         return 0;
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(MaHD);
         parcel.writeParcelable(User, i);
         parcel.writeParcelable(Xe, i);
-        parcel.writeString(NgayThue);
-        parcel.writeString(NgayTra);
+        parcel.writeLong(NgayThue.getTime());
+        parcel.writeLong(NgayTra.getTime());
         parcel.writeInt(TongSoNgayThue);
         parcel.writeInt(PhiDV);
         parcel.writeString(MaGiamGia);
@@ -98,9 +109,11 @@ import java.util.Date;
         parcel.writeInt(ThanhToan);
         parcel.writeString(LoiNhan);
         parcel.writeLong(GioTaoHD.getTime());
-//        parcel.writeLong(TimeChuXeXN.getTime());
+        parcel.writeStringList(HinhAnhChuXeGiaoXe);
+        parcel.writeStringList(HinhAnhKhachHangTraXe);
         parcel.writeInt(TrangThaiHD);
         parcel.writeString(LyDo);
+        parcel.writeBoolean(HaveFeedback);
     }
 
     public String getMaHD() {
@@ -127,19 +140,19 @@ import java.util.Date;
         Xe = xe;
     }
 
-    public String getNgayThue() {
+    public Date getNgayThue() {
         return NgayThue;
     }
 
-    public void setNgayThue(String ngayThue) {
+    public void setNgayThue(Date ngayThue) {
         NgayThue = ngayThue;
     }
 
-    public String getNgayTra() {
+    public Date getNgayTra() {
         return NgayTra;
     }
 
-    public void setNgayTra(String ngayTra) {
+    public void setNgayTra(Date ngayTra) {
         NgayTra = ngayTra;
     }
 
@@ -215,15 +228,15 @@ import java.util.Date;
         GioTaoHD = gioTaoHD;
     }
 
-        public Date getTimeChuXeXN() {
-            return TimeChuXeXN;
-        }
+    public Date getTimeChuXeXN() {
+        return TimeChuXeXN;
+    }
 
-        public void setTimeChuXeXN(Date timeChuXeXN) {
-            TimeChuXeXN = timeChuXeXN;
-        }
+    public void setTimeChuXeXN(Date timeChuXeXN) {
+        TimeChuXeXN = timeChuXeXN;
+    }
 
-        public int getTongSoNgayThue() {
+    public int getTongSoNgayThue() {
         return TongSoNgayThue;
     }
 
@@ -245,5 +258,29 @@ import java.util.Date;
 
     public void setLoiNhan(String loiNhan) {
         LoiNhan = loiNhan;
+    }
+
+    public boolean isHaveFeedback() {
+        return HaveFeedback;
+    }
+
+    public void setHaveFeedback(boolean haveFeedback) {
+        HaveFeedback = haveFeedback;
+    }
+
+    public List<String> getHinhAnhChuXeGiaoXe() {
+        return HinhAnhChuXeGiaoXe;
+    }
+
+    public void setHinhAnhChuXeGiaoXe(List<String> hinhAnhChuXeGiaoXe) {
+        HinhAnhChuXeGiaoXe = hinhAnhChuXeGiaoXe;
+    }
+
+    public List<String> getHinhAnhKhachHangTraXe() {
+        return HinhAnhKhachHangTraXe;
+    }
+
+    public void setHinhAnhKhachHangTraXe(List<String> hinhAnhKhachHangTraXe) {
+        HinhAnhKhachHangTraXe = hinhAnhKhachHangTraXe;
     }
 }

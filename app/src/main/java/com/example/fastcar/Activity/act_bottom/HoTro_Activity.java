@@ -7,17 +7,24 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.R;
 
@@ -39,17 +46,7 @@ public class HoTro_Activity extends AppCompatActivity {
         tv_hotline_html.setText(Html.fromHtml(tv_format, Html.FROM_HTML_MODE_LEGACY));
 
         // gọi điện
-        btn_call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    requestCall();
-                } else {
-                    // chưa có quyền, yêu cầu quyền CALL_PHONE từ người dùng
-                    ActivityCompat.requestPermissions(HoTro_Activity.this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
-                }
-            }
-        });
+        btn_call.setOnClickListener(view -> showDialog());
 
         // gửi tin nhắn
         btn_send_message.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +111,32 @@ public class HoTro_Activity extends AppCompatActivity {
 
     public void tab3_to_tab4(View view) {
         startActivity(new Intent(getBaseContext(), CaNhan_Activity.class));
+    }
+
+    private void showDialog() {
+        Dialog dialog = new Dialog(HoTro_Activity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_call_phonenumber);
+        dialog.show();
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        TextView tvCall = dialog.findViewById(R.id.btn_call_in_dialog);
+        TextView btnback = dialog.findViewById(R.id.btn_close_dialog_call);
+        btnback.setOnClickListener(view -> dialog.dismiss());
+
+        tvCall.setText("Gọi " + phone_number);
+        tvCall.setOnClickListener(view -> {
+            if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                requestCall();
+            } else {
+                // chưa có quyền, yêu cầu quyền CALL_PHONE từ người dùng
+                ActivityCompat.requestPermissions(HoTro_Activity.this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
+            }
+        });
     }
 
     @Override

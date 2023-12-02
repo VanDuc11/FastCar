@@ -64,6 +64,7 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
     private void load() {
         ln_noResult.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);

@@ -64,6 +64,7 @@ public class XeYeuThich_Activity extends AppCompatActivity {
 
         ln_no_result.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         RetrofitClient.FC_services().getListFavoriteCar(user.get_id()).enqueue(new Callback<List<Car>>() {
@@ -76,7 +77,7 @@ public class XeYeuThich_Activity extends AppCompatActivity {
 
                 if (response.code() == 200) {
                     if (!response.body().isEmpty()) {
-                        adapter = new DanhSachXeAdapter(XeYeuThich_Activity.this, response.body(), false);
+                        adapter = new DanhSachXeAdapter(XeYeuThich_Activity.this, response.body(), null);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         ln_no_result.setVisibility(View.GONE);

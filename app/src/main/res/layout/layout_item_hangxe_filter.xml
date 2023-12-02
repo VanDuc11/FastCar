@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <CheckBox
+        android:id="@+id/ckbox_inItem_hangxe_filter"
+        android:layout_width="28dp"
+        android:layout_height="25dp"
+        android:button="@drawable/custom_checkbox"
+        android:clickable="false" />
+
+    <TextView
+        android:id="@+id/tv_tenhangxe_inItem_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:gravity="center"
+        android:text="Toyota"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/tv_slxe_inItem_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        android:paddingEnd="40dp"
+        android:text="(10 xe)"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="16dp" />
+</LinearLayout>
