@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/icon_location_green_v1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtShortAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="289 Xuân Phương"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/txtLongAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="P. Xuân Phương, Q. Nam Từ Liêm, Hà Nội"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textSize="16dp" />
+
+
+    </LinearLayout>
+</LinearLayout>

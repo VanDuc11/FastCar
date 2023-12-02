@@ -23,6 +23,7 @@ import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
 import com.example.fastcar.FavoriteCar_Method;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.FormatString.NumberFormatK;
+import com.example.fastcar.Model.Distance.DistanceMatrix;
 import com.example.fastcar.Model.FavoriteCar;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -30,6 +31,7 @@ import com.example.fastcar.Retrofit.RetrofitClient;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -39,23 +41,22 @@ import retrofit2.Response;
 
 public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.ViewHolder> {
     private List<Car> listXe;
+    private List<DistanceMatrix.Element> listElements;
     private Context context;
-    ViewPager viewPager;
-    CircleIndicator circleIndicator;
-    PhotoAdapter photoAdapter;
-    boolean isMyCar;
 
-    public DanhSachXeAdapter(Context context, List<Car> listXe, boolean isMyCar) {
+    public DanhSachXeAdapter(Context context, List<Car> listXe, List<DistanceMatrix.Element> listElements) {
         this.listXe = listXe;
+        this.listElements = listElements;
         this.context = context;
-        this.isMyCar = isMyCar;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay, tvMienTheChap, tvTrangThaiXe;
+        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay, tvMienTheChap, tvTrangThaiXe, tvDiaChiXe, tvKhoangCach;
         CardView item;
         ImageView img_favorite;
         RelativeLayout button_favorite;
+        ViewPager viewPager;
+        CircleIndicator circleIndicator;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,12 +66,13 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
             tv_soTien1ngay = itemView.findViewById(R.id.tv_soTienThue_1ngay_inDSxe);
             tv_truyenDong = itemView.findViewById(R.id.tv_truyendong_inItem);
             tvMienTheChap = itemView.findViewById(R.id.tv_mienthechap);
-            tvTrangThaiXe = itemView.findViewById(R.id.tv_trangthaixe);
             viewPager = itemView.findViewById(R.id.viewPager_Photo);
             circleIndicator = itemView.findViewById(R.id.circle_indicator);
             item = itemView.findViewById(R.id.item_inDSxe);
             img_favorite = itemView.findViewById(R.id.icon_favorite_car_inListXe);
             button_favorite = itemView.findViewById(R.id.button_favorite_car_inListXe);
+            tvDiaChiXe = itemView.findViewById(R.id.tv_diachixe_inItem);
+            tvKhoangCach = itemView.findViewById(R.id.tv_khoangcachxe_inItem);
         }
     }
 
@@ -83,40 +85,38 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull DanhSachXeAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Car car = listXe.get(position);
-        final boolean[] isFavorite = {false};
-        // check điều kiện, nếu xe của user đang login thì disable 1 số chức năng ( button yêu thích,... )
-        if (isMyCar) {
-            holder.button_favorite.setVisibility(View.GONE);
-            holder.tv_truyenDong.setVisibility(View.GONE);
-            holder.tvMienTheChap.setVisibility(View.GONE);
 
-            int status = car.getTrangThai();
-            //0: chờ duyệt
-            //1: đang hoạt động = duyệt thành công
-            //2: từ chối
-            //3: không hoạt động
-
-            if (status == 0) {
-                holder.tvTrangThaiXe.setText("Chờ duyệt");
-                holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
-            } else if (status == 1) {
-                holder.tvTrangThaiXe.setText("Đang hoạt động");
-            } else if (status == 2) {
-                holder.tvTrangThaiXe.setText("Bị từ chối");
-                holder.tvTrangThaiXe.setTextColor(Color.RED);
-                holder.item.setCardBackgroundColor(Color.parseColor("#EDE4E4"));
-            } else {
-                holder.tvTrangThaiXe.setText("Không hoạt động");
-            }
+        if (listElements == null) {
+            holder.tvKhoangCach.setVisibility(View.GONE);
         } else {
-            holder.button_favorite.setVisibility(View.VISIBLE);
-            holder.tvTrangThaiXe.setVisibility(View.GONE);
+            DistanceMatrix.Element element = listElements.get(position);
+            holder.tvKhoangCach.setText("~ " + element.getDistance().getText());
         }
+
+        boolean[] isFavorite = {false};
 
         holder.tv_tenXe.setText(car.getMauXe());
         holder.tv_truyenDong.setText(car.getChuyenDong());
+        if (car.getTheChap() == true) {
+            holder.tvMienTheChap.setVisibility(View.GONE);
+        } else {
+            holder.tvMienTheChap.setVisibility(View.VISIBLE);
+            holder.tvMienTheChap.setText("Miễn thế chấp");
+        }
+
+        String diaChiXe = car.getDiaChiXe();
+        String[] parts = diaChiXe.split(",");
+        int lastIndex = parts.length - 1;
+        String diachi = null;
+        if (lastIndex >= 2) {
+            String quanHuyen = parts[lastIndex - 2].trim();
+            String thanhPhoTinh = parts[lastIndex - 1].trim();
+
+            diachi = quanHuyen + ", " + thanhPhoTinh;
+        }
+        holder.tvDiaChiXe.setText(diachi);
 
         int soChuyen = car.getSoChuyen();
         float trungbinhSao = car.getTrungBinhSao();
@@ -141,11 +141,11 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
 
         holder.tv_soTien1ngay.setText(NumberFormatK.format(car.getGiaThue1Ngay()));
 
-        photoAdapter = new PhotoAdapter(context, car.getHinhAnh());
-        viewPager.setAdapter(photoAdapter);
+        PhotoAdapter photoAdapter = new PhotoAdapter(context, car.getHinhAnh());
+        holder.viewPager.setAdapter(photoAdapter);
 
-        circleIndicator.setViewPager(viewPager);
-        photoAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+        holder.circleIndicator.setViewPager(holder.viewPager);
+        photoAdapter.registerDataSetObserver(holder.circleIndicator.getDataSetObserver());
 
         SharedPreferences preferences = context.getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences.getString("user", "");
@@ -188,24 +188,44 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
         });
 
         holder.item.setOnClickListener(view -> {
-            Intent intent;
-            if(isMyCar) {
-                intent = new Intent(context, ChiTietXeCuaToi_Activity.class);
-                intent.putExtra("car", car);
-            } else {
-                intent = new Intent(context, ChiTietXe_Activity.class);
-                intent.putExtra("car", car);
-                intent.putExtra("isMyCar", isMyCar);
-            }
+            Intent intent = new Intent(context, ChiTietXe_Activity.class);
+            intent.putExtra("car", car);
             view.getContext().startActivity(intent);
         });
-
     }
 
 
     @Override
     public int getItemCount() {
         return listXe.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public boolean filterByDistance(int distanceMeters) {
+        // distanceMeters: tham số có dạng mét (mét).
+        List<Car> filteredList = new ArrayList<>();
+        List<DistanceMatrix.Element> filteredListElement = new ArrayList<>();
+
+        for (int i = 0; i < getItemCount(); i++) {
+            double distanceValue = listElements.get(i).getDistance().getValue();
+            if (distanceMeters < 50000) {
+                if (distanceValue < distanceMeters) {
+                    filteredList.add(listXe.get(i));
+                    filteredListElement.add(listElements.get(i));
+                }
+            } else {
+                filteredList.add(listXe.get(i));
+                filteredListElement.add(listElements.get(i));
+            }
+        }
+        listXe = filteredList;
+        listElements = filteredListElement;
+        notifyDataSetChanged();
+        if (listXe.size() != 0 && listElements.size() != 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -103,7 +103,7 @@
                             android:layout_height="50dp"
                             android:background="@color/blue_app"
                             android:gravity="center"
-                            android:text="Thông tin thuê"
+                            android:text="Thời gian &amp; địa điểm"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                             android:textColor="@color/white"
                             android:textSize="18dp"
@@ -191,7 +191,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_margin="10dp"
-                            android:background="@drawable/custom_btn"
+                            android:background="@drawable/custom_btn4"
                             android:gravity="center"
                             android:text="Tìm xe"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
@@ -240,7 +240,7 @@
                 <RelativeLayout
                     android:id="@+id/ln_xeKhamPha"
                     android:layout_width="match_parent"
-                    android:layout_height="360dp"
+                    android:layout_height="430dp"
                     android:layout_marginTop="20dp"
                     android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/textView5">

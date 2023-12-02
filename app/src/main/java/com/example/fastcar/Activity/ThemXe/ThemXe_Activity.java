@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.fastcar.Activity.act_bottom.CaNhan_Activity;
 import com.example.fastcar.Adapter.DanhSachXeAdapter;
+import com.example.fastcar.Adapter.DanhSachXeCuaToiAdapter;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -33,7 +34,7 @@ public class ThemXe_Activity extends AppCompatActivity {
     RelativeLayout img_back,img_add;
     TextView btn_add;
     RecyclerView recyclerView;
-    DanhSachXeAdapter adapter;
+    DanhSachXeCuaToiAdapter adapter;
     LinearLayout ln_no_result;
     ShimmerFrameLayout shimmer_view;
     LinearLayout data_view;
@@ -74,6 +75,7 @@ public class ThemXe_Activity extends AppCompatActivity {
     private void load() {
         ln_no_result.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
         // lấy user từ shared
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
@@ -91,7 +93,7 @@ public class ThemXe_Activity extends AppCompatActivity {
                 shimmer_view.setVisibility(View.GONE);
 
                 if(response.code() == 200) {
-                    adapter = new DanhSachXeAdapter(ThemXe_Activity.this, response.body(), true);
+                    adapter = new DanhSachXeCuaToiAdapter(ThemXe_Activity.this, response.body());
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     ln_no_result.setVisibility(View.GONE);

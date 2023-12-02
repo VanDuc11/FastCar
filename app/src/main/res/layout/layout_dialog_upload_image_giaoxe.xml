@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Activity.ChuXe.HoaDon_ChuSH_Activity">
+
+    <ImageView
+        android:id="@+id/btn_close_dialog_image_giaoxe"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/icon_close_black" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:background="#F6F1EA"
+                android:textSize="15dp"
+                android:text="Quý khách vui lòng tải lên ít nhất 1 hình ảnh để làm bằng chứng xác thực nếu như có tranh chấp xảy ra."
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
+
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/img1_giaoxe_thanhcong"
+                    android:layout_width="250dp"
+                    android:layout_height="300dp"
+                    android:background="@drawable/custom_border_item_tinhnangxe_selected" />
+
+                <ImageView
+                    android:id="@+id/ic_add_img1_giaoxe_thanhcong"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_add_picture" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/img2_giaoxe_thanhcong"
+                    android:layout_width="250dp"
+                    android:layout_height="300dp"
+                    android:background="@drawable/custom_border_item_tinhnangxe_selected" />
+
+                <ImageView
+                    android:id="@+id/ic_add_img2_giaoxe_thanhcong"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_add_picture" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/btnSave_Image_GiaoXe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_btn4"
+                android:text="Cập nhật"
+                android:layout_margin="20dp"
+                android:textColor="@color/white"
+                android:textSize="17dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

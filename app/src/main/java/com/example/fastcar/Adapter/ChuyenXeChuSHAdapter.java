@@ -23,6 +23,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ChuyenXeChuSHAdapter extends RecyclerView.Adapter<ChuyenXeChuSHAdapter.ViewHolder>  {
     List<HoaDon> listHoaDon;
@@ -72,9 +73,10 @@ public class ChuyenXeChuSHAdapter extends RecyclerView.Adapter<ChuyenXeChuSHAdap
                 .load(HostApi.URL_Image + hoaDon.getXe().getHinhAnh().get(0))
                 .into(holder.img_xe);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.tv_tenxe.setText(hoaDon.getXe().getMauXe());
-        holder.tv_ngayNhan.setText("Bắt đầu: " + hoaDon.getNgayThue());
-        holder.tv_ngayTra.setText("Kết thúc: " + hoaDon.getNgayTra());
+        holder.tv_ngayNhan.setText("Bắt đầu: " + sdf.format(hoaDon.getNgayThue()));
+        holder.tv_ngayTra.setText("Kết thúc: " + sdf.format(hoaDon.getNgayTra()));
         holder.tvTongTien.setText(NumberFormatVND.format(hoaDon.getTongTien()));
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");

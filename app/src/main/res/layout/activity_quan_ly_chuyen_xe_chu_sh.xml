@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activity.ChuXe.QuanLyChuyenXe.QuanLyChuyenXe_ChuSH_Activity">
+
     <RelativeLayout
         android:id="@+id/action_bar_quanli"
         android:layout_width="match_parent"
@@ -17,12 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Quản lí chuyến xe "
+            android:text="Quản lý chuyến xe "
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textSize="18dp" />
 
         <RelativeLayout
-            android:id="@+id/icon_back_in_vichuxe"
+            android:id="@+id/icon_back_in_QLCX"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
@@ -40,56 +41,82 @@
                 android:src="@drawable/baseline_keyboard_arrow_left_24" />
         </RelativeLayout>
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_btn4"
-        android:backgroundTint="#E4E1E1"
-        android:orientation="horizontal"
-        android:layout_below="@id/action_bar_quanli"
-        android:padding="5dp">
-        <TextView
-            android:id="@+id/layout_acitve"
-            android:layout_width="1dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="Đang hoạt động"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/layout_upcoming"
-            android:layout_width="1dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="Sắp hoạt động"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-            android:textColor="@color/button_default_text"
-            android:textSize="16dp" />
-    </LinearLayout>
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:id="@+id/tabLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:tabMode="fixed"-->
-<!--        app:tabGravity="fill"-->
-<!--        app:tabIndicatorHeight="4dp"-->
-<!--        app:tabSelectedTextColor="@android:color/white"-->
-<!--        app:tabTextColor="@android:color/darker_gray"/>-->
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_inQLCX"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabLayout"
-        android:layout_marginTop="10dp" />
+        android:layout_below="@id/action_bar_quanli">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/custom_btn4"
+                android:backgroundTint="@color/loading"
+                android:orientation="horizontal"/>
+
+            <include layout="@layout/layout_chuyen_xe_placeholder" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <LinearLayout
+        android:id="@+id/data_view_inQLCX"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/action_bar_quanli"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/action_bar_quanli"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/custom_btn4"
+            android:backgroundTint="#E4E1E1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/layout_acitve"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Hoạt động"
+                android:layout_marginStart="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/layout_upcoming"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginEnd="5dp"
+                android:text="Sắp tới"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:textColor="@color/button_default_text"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp" />
+    </LinearLayout>
 
 </RelativeLayout>

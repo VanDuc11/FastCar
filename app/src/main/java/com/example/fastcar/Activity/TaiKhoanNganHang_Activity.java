@@ -95,6 +95,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
 
     private void load() {
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
         ln_noResult.setVisibility(View.GONE);
 
@@ -106,44 +107,48 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void showDialog_ThemNganHang() {
-        LayoutInflater inflater = LayoutInflater.from(TaiKhoanNganHang_Activity.this);
-        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_them_tknh, null);
-        Dialog dialog = new Dialog(TaiKhoanNganHang_Activity.this);
-        dialog.setContentView(custom);
-        dialog.setCanceledOnTouchOutside(false);
+        if(nganHangList.size() == 1) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chỉ thêm tối đa 1 tài khoản");
+        } else {
+            LayoutInflater inflater = LayoutInflater.from(TaiKhoanNganHang_Activity.this);
+            @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_them_tknh, null);
+            Dialog dialog = new Dialog(TaiKhoanNganHang_Activity.this);
+            dialog.setContentView(custom);
+            dialog.setCanceledOnTouchOutside(false);
 
-        Window window = dialog.getWindow();
-        if (window == null) {
-            return;
-        }
-        // set kích thước dialog
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set vị trí dialog
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAttributes);
-        dialog.show();
-
-        ImageView ic_back = dialog.findViewById(R.id.icon_back_inThemNganHang);
-        TextView btnConfirm = dialog.findViewById(R.id.btn_confirm_inThemNganHang);
-        edtTenNH = dialog.findViewById(R.id.edt_tenNH_inThemNganHang);
-        edtChuNH = dialog.findViewById(R.id.edt_tenChuTK_inThemNganHang);
-        edtSTK = dialog.findViewById(R.id.edt_soTK_inThemNganHang);
-
-        edtTenNH.setText("Chưa chọn");
-        edtTenNH.setOnClickListener(view -> showDialogListBank());
-
-        ic_back.setOnClickListener(view -> dialog.dismiss());
-        btnConfirm.setOnClickListener(view -> {
-            tenNH = edtTenNH.getText().toString();
-            tenChuTK = edtChuNH.getText().toString();
-            stk = edtSTK.getText().toString();
-            if (validateForm()) {
-                NganHang nganHang = new NganHang(tenNH, tenChuTK, stk, user);
-                createNewModel(nganHang, dialog);
+            Window window = dialog.getWindow();
+            if (window == null) {
+                return;
             }
-        });
+            // set kích thước dialog
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            // set vị trí dialog
+            WindowManager.LayoutParams windowAttributes = window.getAttributes();
+            windowAttributes.gravity = Gravity.CENTER;
+            window.setAttributes(windowAttributes);
+            dialog.show();
+
+            ImageView ic_back = dialog.findViewById(R.id.icon_back_inThemNganHang);
+            TextView btnConfirm = dialog.findViewById(R.id.btn_confirm_inThemNganHang);
+            edtTenNH = dialog.findViewById(R.id.edt_tenNH_inThemNganHang);
+            edtChuNH = dialog.findViewById(R.id.edt_tenChuTK_inThemNganHang);
+            edtSTK = dialog.findViewById(R.id.edt_soTK_inThemNganHang);
+
+            edtTenNH.setText("Chưa chọn");
+            edtTenNH.setOnClickListener(view -> showDialogListBank());
+
+            ic_back.setOnClickListener(view -> dialog.dismiss());
+            btnConfirm.setOnClickListener(view -> {
+                tenNH = edtTenNH.getText().toString();
+                tenChuTK = edtChuNH.getText().toString();
+                stk = edtSTK.getText().toString();
+                if (validateForm()) {
+                    NganHang nganHang = new NganHang(tenNH, tenChuTK, stk, user);
+                    createNewModel(nganHang, dialog);
+                }
+            });
+        }
     }
 
     private void fetch_ListNH_ofUser(String email) {

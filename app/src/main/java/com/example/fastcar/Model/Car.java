@@ -1,9 +1,11 @@
 package com.example.fastcar.Model;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
@@ -15,13 +17,16 @@ public class Car implements Parcelable {
     String MoTa;
     ArrayList<String> HinhAnh;
     String DangKyXe, DangKiem, BaoHiem;
-    String DiaChiXe;
+    String DiaChiXe, Longitude, Latitude;
     int GiaThue1Ngay;
+    boolean TheChap;
+    String ThoiGianGiaoXe, ThoiGianNhanXe;
     User ChuSH;
     int TrangThai, SoChuyen;
     float TrungBinhSao;
+    private double distance;
 
-    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, int giaThue1Ngay, User chuSH, int trangThai, int soChuyen, float trungBinhSao) {
+    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, String longitude, String latitude, int giaThue1Ngay, boolean theChap, String thoiGianGiaoXe, String thoiGianNhanXe, User chuSH, int trangThai, int soChuyen, float trungBinhSao) {
         this._id = _id;
         this.BKS = BKS;
         this.HangXe = hangXe;
@@ -37,7 +42,12 @@ public class Car implements Parcelable {
         this.DangKiem = dangKiem;
         this.BaoHiem = baoHiem;
         this.DiaChiXe = diaChiXe;
+        this.Latitude = latitude;
+        this.Longitude = longitude;
         this.GiaThue1Ngay = giaThue1Ngay;
+        this.TheChap = theChap;
+        this.ThoiGianGiaoXe = thoiGianGiaoXe;
+        this.ThoiGianNhanXe = thoiGianNhanXe;
         this.ChuSH = chuSH;
         this.TrangThai = trangThai;
         this.SoChuyen = soChuyen;
@@ -64,7 +74,14 @@ public class Car implements Parcelable {
         DangKiem = in.readString();
         BaoHiem = in.readString();
         DiaChiXe = in.readString();
+        Latitude = in.readString();
+        Longitude = in.readString();
         GiaThue1Ngay = in.readInt();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TheChap = in.readBoolean();
+        }
+        ThoiGianGiaoXe = in.readString();
+        ThoiGianNhanXe= in.readString();
         ChuSH = in.readParcelable(User.class.getClassLoader());
         TrangThai = in.readInt();
         SoChuyen = in.readInt();
@@ -204,12 +221,52 @@ public class Car implements Parcelable {
         DiaChiXe = diaChiXe;
     }
 
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
     public int getGiaThue1Ngay() {
         return GiaThue1Ngay;
     }
 
     public void setGiaThue1Ngay(int giaThue1Ngay) {
         GiaThue1Ngay = giaThue1Ngay;
+    }
+
+    public boolean getTheChap() {
+        return TheChap;
+    }
+
+    public void setTheChap(boolean theChap) {
+        TheChap = theChap;
+    }
+
+    public String getThoiGianGiaoXe() {
+        return ThoiGianGiaoXe;
+    }
+
+    public void setThoiGianGiaoXe(String thoiGianGiaoXe) {
+        ThoiGianGiaoXe = thoiGianGiaoXe;
+    }
+
+    public String getThoiGianNhanXe() {
+        return ThoiGianNhanXe;
+    }
+
+    public void setThoiGianNhanXe(String thoiGianNhanXe) {
+        ThoiGianNhanXe = thoiGianNhanXe;
     }
 
     public float getTrungBinhSao() {
@@ -249,6 +306,15 @@ public class Car implements Parcelable {
         return 0;
     }
 
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(_id);
@@ -266,7 +332,12 @@ public class Car implements Parcelable {
         parcel.writeString(DangKiem);
         parcel.writeString(BaoHiem);
         parcel.writeString(DiaChiXe);
+        parcel.writeString(Latitude);
+        parcel.writeString(Longitude);
         parcel.writeInt(GiaThue1Ngay);
+        parcel.writeBoolean(TheChap);
+        parcel.writeString(ThoiGianGiaoXe);
+        parcel.writeString(ThoiGianNhanXe);
         parcel.writeParcelable(ChuSH, i);
         parcel.writeInt(TrangThai);
         parcel.writeInt(SoChuyen);

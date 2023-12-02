@@ -1,7 +1,6 @@
 package com.example.fastcar.Activity.ChuXe;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -10,23 +9,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
-import com.example.fastcar.Adapter.NganHangAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.FormatString.RandomMaHD;
@@ -52,7 +45,8 @@ public class ViChuXe_Activity extends AppCompatActivity {
     User user;
     TextView tvSoDu, btnRutTien, btnLSGD;
     List<NganHang> nganHangList = new ArrayList<>();
-    LichSuGiaoDich lichSuGiaoDich ;
+    LichSuGiaoDich lichSuGiaoDich;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,29 +56,22 @@ public class ViChuXe_Activity extends AppCompatActivity {
         load();
 
         btnBack.setOnClickListener(view -> onBackPressed());
-        btnRutTien.setOnClickListener(view -> {});
-        btnLSGD.setOnClickListener(view -> {});
 
-        Intent intent = getIntent();
-        fetch_ListNH_ofUser(intent.getStringExtra("emailUser"));
-
-        btnRutTien.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             if (user.getSoDu()>10000){
-                 showImageDialog();
-             }else {
-                 CustomDialogNotify.showToastCustom(getBaseContext(), "Số dư của bạn không đủ để rút");
-             }
+        btnRutTien.setOnClickListener(v -> {
+            if(nganHangList.size() == 0) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Bạn chưa có tài khoản ngân hàng");
+            } else {
+                if (user.getSoDu() >= 10000) {
+                    showImageDialog();
+                } else {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Số dư của bạn không đủ");
+                }
             }
         });
 
-        btnLSGD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(),LichSuGD_Activity.class);
-                startActivity(i);
-            }
+        btnLSGD.setOnClickListener(v -> {
+            Intent i = new Intent(getBaseContext(), LichSuGD_Activity.class);
+            startActivity(i);
         });
     }
 
@@ -101,18 +88,27 @@ public class ViChuXe_Activity extends AppCompatActivity {
         fetchData_UserLogin(emailUser);
 
     }
+
     private void fetchData_UserLogin(String emailUser) {
+        btnRutTien.setEnabled(false);
+        btnRutTien.setBackgroundResource(R.drawable.disable_custom_btn4);
+
         RetrofitClient.FC_services().getListUser(emailUser).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
-                List<User> list = response.body();
-                user = list.get(0);
-                tvSoDu.setText(NumberFormatVND.format(user.getSoDu()));
-                if(user.getSoDu() == 0) {
-                    btnRutTien.setEnabled(false);
-                    btnRutTien.setBackgroundResource(R.drawable.disable_custom_btn4);
+                if (response.code() == 200) {
+                    user = response.body().get(0);
+                    tvSoDu.setText(NumberFormatVND.format(user.getSoDu()));
+                    if (user.getSoDu() > 0) {
+                        btnRutTien.setEnabled(false);
+                        btnRutTien.setBackgroundResource(R.drawable.custom_btn4);
+                    }
+                    fetch_ListNH_ofUser(emailUser);
+                } else {
+                    System.out.println("Có lỗi: " + response.message());
                 }
             }
+
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
                 System.out.println("Có lỗi khi fetch user có email: " + emailUser + " --- " + t);
@@ -120,7 +116,7 @@ public class ViChuXe_Activity extends AppCompatActivity {
         });
     }
 
-    public void showImageDialog() {
+    private void showImageDialog() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_yeu_cau_rut);
@@ -133,27 +129,23 @@ public class ViChuXe_Activity extends AppCompatActivity {
 
         EditText ed_sotien = dialog.findViewById(R.id.ed_soTien);
 
-        TextView tenNH = dialog.findViewById(R.id.tv_tenNganHang);
-        TextView tenChu = dialog.findViewById(R.id.tv_tenChuTK_NganHang);
-        TextView stk = dialog.findViewById(R.id.tv_STK_NganHang);
-        TextView btn_creat = dialog.findViewById(R.id.create);
+        TextView tenNH = dialog.findViewById(R.id.tv_tenNganHang_inDialogRutTien);
+        TextView tenChu = dialog.findViewById(R.id.tv_tenChuTK_NganHang_inDialogRutTien);
+        TextView stk = dialog.findViewById(R.id.tv_STK_NganHang_inDialogRutTien);
+        TextView btn_create = dialog.findViewById(R.id.btn_ruttien);
+        ImageView close = dialog.findViewById(R.id.close_dilog);
 
         tenNH.setText(nganHangList.get(0).getTenNH());
         tenChu.setText(nganHangList.get(0).getTenChuTK());
-        stk.setText(formatString(nganHangList.get(0).getSoTK()+""));
+        stk.setText(formatString(nganHangList.get(0).getSoTK() + ""));
 
-        ImageView close = dialog.findViewById(R.id.close_dilog);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        close.setOnClickListener(v -> dialog.dismiss());
 
         ed_sotien.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -169,37 +161,46 @@ public class ViChuXe_Activity extends AppCompatActivity {
                 ed_sotien.addTextChangedListener(this);
             }
         });
+
         SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         String userStr = preferences.getString("user", "");
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
         Date date = new Date();
-        btn_creat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String cleanString = ed_sotien.getText().toString().replaceAll("\\.", "");
-                int sotiengd = Integer.parseInt(cleanString);
-                if(sotiengd>user.getSoDu()){
-                    CustomDialogNotify.showToastCustom(getBaseContext(), "Số dư của bạn không đủ để rút");
-                }else {
-                    String maLSGD = RandomMaHD.random(8)+"";
-                    lichSuGiaoDich = new LichSuGiaoDich(null,maLSGD,user,sotiengd,date,"Yêu cầu rút tiền",0,null,nganHangList.get(0));
-                    RetrofitClient.FC_services().createLSGD(lichSuGiaoDich).enqueue(new Callback<ResMessage>() {
-                        @Override
-                        public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                            if(response.code()==201){
-                                CustomDialogNotify.showToastCustom(getBaseContext(), "Tạo Yêu cầu thành công");
-                            }else {
-                                System.out.println(response.message());
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<ResMessage> call, Throwable t) {
-                            System.out.println("Có lỗi khi fetch user có email: "+ t);
-                        }
-                    });
-                }
 
+        btn_create.setOnClickListener(v -> {
+            String cleanString = ed_sotien.getText().toString().replaceAll("\\.", "");
+            int sotiengd = Integer.parseInt(cleanString);
+            if (cleanString.length() == 0) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập số tiền");
+            } else {
+                if (sotiengd < 10000) {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Rút tối thiểu 10.000 VNĐ");
+                } else {
+                    if (sotiengd > user.getSoDu()) {
+                        CustomDialogNotify.showToastCustom(getBaseContext(), "Số dư của bạn không đủ");
+                    } else {
+                        String maLSGD = RandomMaHD.random(8) + "";
+                        lichSuGiaoDich = new LichSuGiaoDich(null, maLSGD, user, sotiengd, date, "Yêu cầu rút tiền", 0, null, nganHangList.get(0), "");
+                        RetrofitClient.FC_services().createLSGD(lichSuGiaoDich).enqueue(new Callback<ResMessage>() {
+                            @Override
+                            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                                if (response.code() == 201) {
+                                    CustomDialogNotify.showToastCustom(getBaseContext(), "Tạo yêu cầu rút tiền thành công");
+                                    user.setSoDu(user.getSoDu() - sotiengd);
+                                    updateSoDu(user, dialog);
+                                } else {
+                                    System.out.println(response.message());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResMessage> call, Throwable t) {
+                                System.out.println("Có lỗi khi createLSGD: " + t);
+                            }
+                        });
+                    }
+                }
             }
         });
     }
@@ -210,20 +211,20 @@ public class ViChuXe_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<NganHang>> call, Response<List<NganHang>> response) {
                 if (response.code() == 200) {
-                    if (!response.body().isEmpty()) {
-                        nganHangList = response.body();
-                    } else {
-
-                    }
+                    nganHangList = response.body();
+                    btnRutTien.setEnabled(true);
+                    btnRutTien.setBackgroundResource(R.drawable.custom_btn4);
                 }
             }
+
             @Override
             public void onFailure(Call<List<NganHang>> call, Throwable t) {
                 System.out.println("Có lỗi khi fetch_ListNH_ofUser(): " + t);
-
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
             }
         });
     }
+
     private String formatText(String originalText) {
         StringBuilder formattedText = new StringBuilder();
         for (int i = 0; i < originalText.length(); i++) {
@@ -234,6 +235,7 @@ public class ViChuXe_Activity extends AppCompatActivity {
         }
         return formattedText.toString();
     }
+
     private static String formatString(String input) {
         StringBuilder formatted = new StringBuilder();
         int length = input.length();
@@ -245,5 +247,20 @@ public class ViChuXe_Activity extends AppCompatActivity {
             }
         }
         return formatted.toString();
+    }
+
+    private void updateSoDu(User user, Dialog dialog) {
+        RetrofitClient.FC_services().updateSoDu(emailUser, user).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                dialog.dismiss();
+                fetchData_UserLogin(emailUser);
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi khi updateSoDu: " + t);
+            }
+        });
     }
 }

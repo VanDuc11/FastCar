@@ -2,13 +2,16 @@ package com.example.fastcar.Retrofit;
 
 import com.example.fastcar.Model.Bank.BankNameAPI;
 import com.example.fastcar.Model.Car;
+import com.example.fastcar.Model.Distance.DistanceMatrix;
 import com.example.fastcar.Model.FavoriteCar;
 import com.example.fastcar.Model.FeedBack;
+import com.example.fastcar.Model.Geolocation.Geolocation;
 import com.example.fastcar.Model.HangXe.CarApiResponse;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.LichSuGiaoDich;
 import com.example.fastcar.Model.MauXe.CarModelApiResponse;
 import com.example.fastcar.Model.NganHang;
+import com.example.fastcar.Model.Places.Place;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
@@ -44,10 +47,21 @@ public interface FastCarServices {
     Call<List<Car>> getListCar_ofUser(@Path("email") String email_user, @Query("TrangThai") String TrangThai);
 
     // danh sách xe không phải của user đang login
+    @Headers("Content-Type: application/json; charset=utf-8")
     @GET("xe/listXe_NotUser/{email}")
     Call<List<Car>> getListCar_NotUser(@Path("email") String email_user,
                                        @Query("TrangThai") int TrangThai,
-                                       @Query("DiaChiXe") String diachixe);
+                                       @Query("HangXe") String HangXe,
+                                       @Query("ChuyenDong") String ChuyenDong,
+                                       @Query("LoaiNhienLieu") String LoaiNhienLieu,
+                                       @Query("TrungBinhSao") String TrungBinhSao,
+                                       @Query("priceFrom") String priceFrom,
+                                       @Query("priceTo") String priceTo,
+                                       @Query("soGheFrom") String soGheFrom,
+                                       @Query("soGheTo") String soGheTo,
+                                       @Query("yearFrom") String yearFrom,
+                                       @Query("yearTo") String yearTo
+    );
 
     // top 5 xe có số chuyến nhiều nhất
     @GET("xe/top5xe/{email}")
@@ -95,7 +109,7 @@ public interface FastCarServices {
                                 @Part MultipartBody.Part So_GPLX,
                                 @Part MultipartBody.Part HoTen_GPLX,
                                 @Part MultipartBody.Part NgayCap_GPLX,
-                                @Part MultipartBody.Part DiaChi_GPLX );
+                                @Part MultipartBody.Part DiaChi_GPLX);
 
     // đăng xuất
     @Headers("Content-Type: application/json")
@@ -115,7 +129,10 @@ public interface FastCarServices {
 
     // lấy danh sách hoá đơn theo xe + trạng thái hoá đơn để check có bị trùng lịch hay không
     @GET("hoadon/list")
-    Call<List<HoaDon>> getListHoaDon(@Query("Xe") String id_xe, @Query("TrangThaiHD") String TrangThaiHD);
+    Call<List<HoaDon>> getListHoaDon(@Query("Xe") String id_xe,
+                                     @Query("TrangThaiHD") String TrangThaiHD,
+                                     @Query("startDate") String NgayThue,
+                                     @Query("endDate") String NgayTra);
 
     // lấy danh sách hoá đơn theo user
     @GET("hoadon/list")
@@ -135,9 +152,24 @@ public interface FastCarServices {
     @POST("hoadon/update_trangthaiHD/{maHD}")
     Call<String> updateTrangThaiHD(@Path("maHD") String maHD, @Body HoaDon hoaDon);
 
+    // update thời gian chủ xe xác nhận đồng ý cho thuê
     @Headers("Content-Type: application/json")
     @POST("hoadon/update_timeXNHD/{maHD}")
-    Call<String> updateTimeXNHD(@Path("maHD") String maHD, @Body HoaDon hoaDon);
+    Call<ResMessage> updateTimeXNHD(@Path("maHD") String maHD, @Body HoaDon hoaDon);
+
+    // update ảnh chủ xe giao xe thành công
+
+    @Multipart
+    @POST("hoadon/update_hinhAnhGiaoXe/{maHD}")
+    Call<ResMessage> updateHinhAnh_ChuXeGiaoXe(@Path("maHD") String maHD,
+                                               @Part List<MultipartBody.Part> HinhAnhChuXeGiaoXe);
+
+    // update ảnh khách hàng trả xe thành công
+    @Multipart
+    @POST("hoadon/update_hinhAnhTraXe/{maHD}")
+    Call<ResMessage> updateHinhAnh_KhachHangTraXe(@Path("maHD") String maHD,
+                                                  @Part List<MultipartBody.Part> HinhAnhKhachHangTraXe);
+
 
     // Feedback model URL: feedback/
 
@@ -190,22 +222,28 @@ public interface FastCarServices {
     // thêm xe mới theo user
     @Multipart
     @POST("xe/create")
-    Call<ResMessage>addCarUser(@Part  List<MultipartBody.Part> HinhAnh,
-                               @Part List<MultipartBody.Part> DangKy,
-                               @Part List<MultipartBody.Part> DangKiem,
-                               @Part List<MultipartBody.Part>  BaoHiem,
-                               @Part("BKS") RequestBody BKS,
-                               @Part("HangXe")RequestBody  hangxe,
-                               @Part("MauXe")RequestBody  mauxe,
-                               @Part("NSX") RequestBody  nxs,
-                               @Part("ChuyenDong") RequestBody  ChuyenDong,
-                               @Part("SoGhe")RequestBody  soghe,
-                               @Part("LoaiNhienLieu") RequestBody  LNL,
-                               @Part("TieuHao") RequestBody  TH,
-                               @Part("MoTa") RequestBody  MOTA,
-                               @Part("DiaChiXe")RequestBody  diachi,
-                               @Part("GiaThue1Ngay") RequestBody  giathue,
-                               @Part("ChuSH")RequestBody  id_user);
+    Call<ResMessage> addCarUser(@Part List<MultipartBody.Part> HinhAnh,
+                                @Part List<MultipartBody.Part> DangKy,
+                                @Part List<MultipartBody.Part> DangKiem,
+                                @Part List<MultipartBody.Part> BaoHiem,
+                                @Part MultipartBody.Part BKS,
+                                @Part MultipartBody.Part HangXe,
+                                @Part MultipartBody.Part MauXe,
+                                @Part MultipartBody.Part NSX,
+                                @Part MultipartBody.Part ChuyenDong,
+                                @Part MultipartBody.Part SoGhe,
+                                @Part MultipartBody.Part LoaiNhienLieu,
+                                @Part MultipartBody.Part TieuHao,
+                                @Part MultipartBody.Part MoTa,
+                                @Part MultipartBody.Part DiaChiXe,
+                                @Part MultipartBody.Part Latitude,
+                                @Part MultipartBody.Part Longitude,
+                                @Part MultipartBody.Part GiaThue1Ngay,
+                                @Part MultipartBody.Part TheChap,
+                                @Part MultipartBody.Part ThoiGianGiaoXe,
+                                @Part MultipartBody.Part ThoiGianNhanXe,
+                                @Part MultipartBody.Part ChuSH
+    );
 
     // NganHang Model
     // danh sách tài khoản ngân hàng của 1 user
@@ -225,4 +263,25 @@ public interface FastCarServices {
     // lấy danh sách tên các ngân hàng ở Việt Nam
     @GET("banks")
     Call<BankNameAPI> getListBankVN();
+
+
+    // autocomplete location
+    @GET("Place/AutoComplete")
+    Call<Place> getDiaDiem(@Query("api_key") String api_key,
+                           @Query("location") String location,
+                           @Query("input") String input,
+                           @Query("radius") int radius,
+                           @Query("more_compound") boolean more_compound);
+
+    // detail location, get geolocation (longitude, latitude)
+    @GET("Place/Detail")
+    Call<Geolocation> getGeolocation(@Query("place_id") String place_id,
+                                     @Query("api_key") String api_key);
+
+    // get the distance between 2 cars using geolocation (longitude, latitude)
+    @GET("DistanceMatrix")
+    Call<DistanceMatrix> getDistance(@Query("origins") String origins,
+                                     @Query("destinations") String destinations,
+                                     @Query("vehicle") String vehicle,
+                                     @Query("api_key") String api_key);
 }

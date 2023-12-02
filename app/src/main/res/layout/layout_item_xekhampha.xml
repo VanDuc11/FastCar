@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_xeKhamPha"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="390dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/bo_goc_xekhampha"
         android:padding="10dp"
@@ -75,6 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/rl_fr" />
 
         <TextView
+            android:id="@+id/tv_mienthechap_inKhamPha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -105,15 +106,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_truyendong_inKhamPha" />
 
+        <TextView
+            android:id="@+id/tv_diachixe_inKhamPha"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:drawableLeft="@drawable/icon_location_green_v1"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:layout_marginTop="7dp"
+            android:ellipsize="end"
+            android:text="Quận Nam Từ Liêm, Hà Nội"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inKhamPha"/>
+
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/grey"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inKhamPha"
+            app:layout_constraintTop_toBottomOf="@+id/tv_diachixe_inKhamPha"
             app:layout_constraintVertical_bias="0.234" />
 
         <TextView

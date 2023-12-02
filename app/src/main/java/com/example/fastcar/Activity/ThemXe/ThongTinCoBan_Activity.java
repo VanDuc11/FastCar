@@ -103,7 +103,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
             String tenMau = ten_mau.getText().toString();
             String tenMauFull = tenHang + " " + tenMau + " " + NSX;
             if (validateForm(bksStr, tenHang, tenMau)) {
-                AddCar list = new AddCar(bksStr, tenHang, tenMauFull, NSX, soGhe, truyenDong, loaiNhienLieu, 0, "", "", 200, user.get_id());
+                AddCar list = new AddCar(bksStr, tenHang, tenMauFull, NSX, soGhe, truyenDong, loaiNhienLieu, 0, "", "", "", "", 200, false, "", "", user.get_id());
                 Intent i = new Intent(getBaseContext(), ThongTinChiTiet_Activity.class);
                 i.putExtra("addCar", list);
                 startActivity(i);

@@ -46,7 +46,7 @@ public class XeKhamPhaAdapter extends RecyclerView.Adapter<XeKhamPhaAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay;
+        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay, tvDiachiXe, tvTheChap;
         ShapeableImageView img;
         ImageView img_favorite;
         RelativeLayout button_favorite;
@@ -61,6 +61,8 @@ public class XeKhamPhaAdapter extends RecyclerView.Adapter<XeKhamPhaAdapter.View
             tv_soTien1ngay = view.findViewById(R.id.tv_soTienThue_1ngay_inXeKhamPha);
             img_favorite = view.findViewById(R.id.icon_favorite_car_inXeKhamPha);
             button_favorite = view.findViewById(R.id.button_favorite_car_inXeKhamPha);
+            tvDiachiXe = view.findViewById(R.id.tv_diachixe_inKhamPha);
+            tvTheChap = view.findViewById(R.id.tv_mienthechap_inKhamPha);
         }
     }
 
@@ -89,6 +91,26 @@ public class XeKhamPhaAdapter extends RecyclerView.Adapter<XeKhamPhaAdapter.View
 
         holder.tv_tenXe.setText(car.getMauXe());
         holder.tv_truyenDong.setText(car.getChuyenDong());
+
+        holder.tv_truyenDong.setText(car.getChuyenDong());
+        if(car.getTheChap() == true) {
+            holder.tvTheChap.setVisibility(View.GONE);
+        } else {
+            holder.tvTheChap.setText("Miễn thế chấp");
+        }
+
+        String diaChiXe = car.getDiaChiXe();
+        String[] parts = diaChiXe.split(",");
+        int lastIndex = parts.length - 1;
+        String diachi = null;
+        if (lastIndex >= 2) {
+            String quanHuyen = parts[lastIndex - 2].trim();
+            String thanhPhoTinh = parts[lastIndex - 1].trim();
+
+            diachi = quanHuyen + ", " + thanhPhoTinh;
+        }
+        holder.tvDiachiXe.setText(diachi);
+
         int soChuyen = car.getSoChuyen();
         float trungbinhSao = car.getTrungBinhSao();
 

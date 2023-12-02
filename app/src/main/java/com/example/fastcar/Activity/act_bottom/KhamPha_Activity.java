@@ -1,7 +1,6 @@
 package com.example.fastcar.Activity.act_bottom;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -26,29 +25,31 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongBao_Activity;
 import com.example.fastcar.Adapter.KhuyenMaiApdater;
+import com.example.fastcar.Adapter.PlacesAdapter;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
+import com.example.fastcar.Model.Geolocation.Geolocation;
+import com.example.fastcar.Model.Places.Place;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -75,14 +76,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class KhamPha_Activity extends AppCompatActivity {
     TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem;
@@ -101,6 +101,10 @@ public class KhamPha_Activity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
     String tokenFCM;
+    private PlacesAdapter adapter;
+    private ProgressBar progressBar;
+    private EditText edt_diachi;
+    private String place_id, longitude, latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,8 @@ public class KhamPha_Activity extends AppCompatActivity {
                 SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("diachi", diachi);
+                editor.putString("lat", latitude);
+                editor.putString("long", longitude);
                 editor.apply();
 
                 Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
@@ -399,6 +405,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         String Email = fBaseuser.getEmail();
 
         data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
         recyclerView_xeKhamPha.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -447,11 +454,15 @@ public class KhamPha_Activity extends AppCompatActivity {
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
         dialogDiaChi.show();
+        btnTim.setEnabled(false);
+        btnTim.setBackgroundResource(R.drawable.disable_custom_btn4);
 
         ImageView btn_back = dialogDiaChi.findViewById(R.id.icon_back_in_chon_diadiem_thueXe);
         TextView getDiaChiHienTai = dialogDiaChi.findViewById(R.id.btn_getVitri_hientai);
-        TextView confirm = dialogDiaChi.findViewById(R.id.btn_confirm_diadiem_inDialog);
-        EditText edt_diachi = dialogDiaChi.findViewById(R.id.edt_diadiem_inDialog);
+        edt_diachi = dialogDiaChi.findViewById(R.id.edt_diadiem_inDialog);
+        progressBar = dialogDiaChi.findViewById(R.id.progressBar);
+        ListView listPlaces = dialogDiaChi.findViewById(R.id.listPlaces);
+        adapter = new PlacesAdapter(this);
 
         // back
         btn_back.setOnClickListener(view1 -> dialogDiaChi.dismiss());
@@ -460,14 +471,83 @@ public class KhamPha_Activity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getDiaChiHienTai.setOnClickListener(view1 -> getLocation(dialogDiaChi));
 
-        // confirm
-        confirm.setOnClickListener(view1 -> {
-            String diachi = edt_diachi.getText().toString();
-            if (!diachi.isEmpty()) {
-                callBackDialog(diachi);
-                dialogDiaChi.dismiss();
-            } else {
-                CustomDialogNotify.showToastCustom(this, "Vui lòng nhập địa điểm hoặc chọn vị trí hiện tại");
+        progressBar.setVisibility(View.GONE);
+        adapter = new PlacesAdapter(this);
+        listPlaces.setAdapter(adapter);
+
+
+        listPlaces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adapter.getCount() > 0) {
+                    Place.Predictions predictions = (Place.Predictions) adapter.getItem(i);
+                    callBackDialog(predictions.getDescription());
+                    place_id = predictions.getPlace_id();
+                    getGeolocation(place_id);
+                    dialogDiaChi.dismiss();
+                }
+            }
+        });
+
+        edt_diachi.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    if (edt_diachi.length() > 0) {
+                        searchPlaces();
+                    } else {
+                        CustomDialogNotify.showToastCustom(KhamPha_Activity.this, "Chưa nhập địa chỉ");
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void searchPlaces(){
+        progressBar.setVisibility(View.VISIBLE);
+        // vị trí làm tâm để tìm kiếm ( latitude, longitude )
+        String location = "21.013715429594125,%20105.79829597455202";
+        // khoảng cách bán kính tính từ tâm ( phạm vi tìm kiếm ) = 2000 km
+        int radius = 2000;
+        // tự động hoàn thành các trường trả về như xã, huyện, tỉnh ( phường, quận, tp )
+        boolean more_compound = true;
+        // địa chỉ nhập từ bàn phím
+        String input = edt_diachi.getText().toString();
+        RetrofitClient.GoongIO_Services().getDiaDiem(HostApi.api_key_goong, location, input, radius, more_compound).enqueue(new Callback<Place>() {
+            @Override
+            public void onResponse(Call<Place> call, Response<Place> response) {
+                if(response.code() == 200) {
+                    List<Place.Predictions> predictionsList = response.body().getPredictions();
+                    progressBar.setVisibility(View.GONE);
+                    adapter.setPredictions(predictionsList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Place> call, Throwable t) {
+                System.out.println("Có lỗi khi getDiaDiem: " + t);
+            }
+        });
+    }
+
+    private void getGeolocation(String placeId) {
+        RetrofitClient.GoongIO_Services().getGeolocation(placeId, HostApi.api_key_goong).enqueue(new Callback<Geolocation>() {
+            @Override
+            public void onResponse(Call<Geolocation> call, Response<Geolocation> response) {
+                if(response.code() == 200) {
+                    Geolocation geolocation = response.body();
+                    longitude = String.valueOf(geolocation.getResult().getGeometry().getLocation().getLng());
+                    latitude = String.valueOf(geolocation.getResult().getGeometry().getLocation().getLat());
+
+                    btnTim.setEnabled(true);
+                    btnTim.setBackgroundResource(R.drawable.custom_btn4);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Geolocation> call, Throwable t) {
+
             }
         });
     }
@@ -483,6 +563,12 @@ public class KhamPha_Activity extends AppCompatActivity {
                                 addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                 callBackDialog(addresses.get(0).getAddressLine(0));
                                 dialog.dismiss();
+
+                                latitude = String.valueOf(location.getLatitude());
+                                longitude = String.valueOf(location.getLongitude());
+
+                                btnTim.setEnabled(true);
+                                btnTim.setBackgroundResource(R.drawable.custom_btn4);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }

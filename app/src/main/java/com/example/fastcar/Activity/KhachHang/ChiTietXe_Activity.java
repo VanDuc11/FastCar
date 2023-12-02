@@ -17,6 +17,9 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.text.Html;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -37,6 +40,7 @@ import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.Server.HostApi;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -53,7 +57,6 @@ import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
-import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -61,13 +64,13 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     TextView btnThueXe, tv_tenxe_actionbar, tv_tenxe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe;
     TextView tv_truyendong, tv_soGhe, tv_nhienlieu, tv_tieuhao, tv_mota, tv_soNgayThueXe, tv_tongTien, tv_xeDaThue;
     TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_noResult_inFB, tv_soTien1ngay;
-    TextView tv_diaChiXe, tv_diaChiXe2;
+    TextView tv_diaChiXe, tv_diaChiXe2, tv_thechap;
     boolean isSeeMore_inDieuKhoan = false;
     CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi, cardview_danhgiaXe, cardview_chuxe;
     RadioButton rd_selection1, rd_selection2;
     ConstraintLayout ln_view_buttonThueXe_inCTX;
     LinearLayout btn_showDatePicker;
-    ImageView ic_back, ic_favorite;
+    ImageView ic_back, ic_favorite, icon_redflag_xedathue;
     boolean isFavorite;
     RecyclerView reyNhanXet;
     ViewPager viewPager;
@@ -76,10 +79,10 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     PhotoChiTietXeAdapter photoAdapter;
     NhanXetAdapter nhanXetAdapter;
     Long startTimeLong, endTimeLong;
-    Date startDate, endDate;
     MaterialDatePicker<Pair<Long, Long>> datePicker;
     long soNgayThueXe;
     Car car;
+    WebView webView_loadMap;
     private int totalChuyen_ofChuSH;
     private float totalStar_ofChuSH;
 
@@ -109,10 +112,11 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
     }
 
-    void mapping() {
+    private void mapping() {
         btnThueXe = findViewById(R.id.btn_thuexe);
         ic_back = findViewById(R.id.icon_back_in_CTX);
         ic_favorite = findViewById(R.id.icon_favorite_car_inCTX);
+        icon_redflag_xedathue = findViewById(R.id.icon_redflag_xedathue);
         reyNhanXet = findViewById(R.id.act_chitietxe_reyNhanXet);
         viewPager = findViewById(R.id.viewPager_Photo_inChiTietXe);
         circleIndicator = findViewById(R.id.circle_indicator_inChiTietXe);
@@ -133,6 +137,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_tongTien = findViewById(R.id.tv_tongTien_inChiTietXe);
         tv_xeDaThue = findViewById(R.id.tv_xedaThue_inChiTietXe);
         tv_soTien1ngay = findViewById(R.id.tv_soTienThue_1ngay_inChiTietXe);
+        tv_thechap = findViewById(R.id.tv_thechap_inCTX);
         selection1 = findViewById(R.id.card_selection_1);
         selection2 = findViewById(R.id.card_selection_2);
         rd_selection1 = findViewById(R.id.rd_selection1);
@@ -151,10 +156,11 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         cardview_chuxe = findViewById(R.id.cardview_chuxe);
         cardview_danhgiaXe = findViewById(R.id.cardview_danhgiaXe);
         ln_view_buttonThueXe_inCTX = findViewById(R.id.ln_view_buttonThueXe_inCTX);
+        webView_loadMap = findViewById(R.id.webView_loadMap);
     }
 
-    @SuppressLint("SetTextI18n")
-    void load() {
+    @SuppressLint({"SetTextI18n", "SetJavaScriptEnabled"})
+    private void load() {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
         boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
@@ -199,6 +205,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             endTimeLong = preferences.getLong("endTime1", 0);
         }
         tv_xeDaThue.setVisibility(View.GONE);
+        icon_redflag_xedathue.setVisibility(View.GONE);
         build_DatePicker();
 
         SharedPreferences preferences1 = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
@@ -208,7 +215,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         RetrofitClient.FC_services().findFavoriteCar(user.get_id(), car.get_id()).enqueue(new Callback<List<Car>>() {
             @Override
-            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+            public void onResponse(retrofit2.Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.body().isEmpty()) {
                     ic_favorite.setImageResource(R.drawable.icon_nolove);
                     isFavorite = false;
@@ -219,7 +226,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Car>> call, Throwable t) {
+            public void onFailure(retrofit2.Call<List<Car>> call, Throwable t) {
                 System.out.println("Có lỗi khi find xe yêu thích: " + t);
             }
         });
@@ -276,6 +283,20 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             tv_tieuhao.setText(car.getTieuHao() + " lít/100km");
         }
 
+        WebSettings webSettings = webView_loadMap.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        // bo tròn WebView = css
+        String css = "body {" +
+                "   border-radius: 20px;" +
+                "}";
+        String js = "var style = document.createElement('style');" +
+                "style.innerHTML = '" + css + "';" +
+                "document.head.appendChild(style);";
+        webView_loadMap.evaluateJavascript(js, null);
+        webView_loadMap.setWebViewClient(new WebViewClient());
+        loadMap_fromHTML(car.getLongitude(), car.getLatitude());
+
         // chủ SH
         String url_image_chuSH = car.getChuSH().getAvatar();
 
@@ -290,6 +311,21 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         rd_selection1.setChecked(true);
         selection2.setCardBackgroundColor(Color.parseColor("#DCCBCB"));
+        if (car.getTheChap() == true) {
+            int number = 0;
+            if (car.getGiaThue1Ngay() < 1500000) {
+                number = 20;
+            } else if (car.getGiaThue1Ngay() < 3000000) {
+                number = 30;
+            } else {
+                number = 50;
+            }
+            String text = number + " triệu (tiền mặt/chuyển khoản cho chủ xe khi nhận xe) hoặc Xe máy (kèm giấy tờ gốc) có giá trị tương đương " + number + " triệu.";
+            tv_thechap.setText(text);
+        } else {
+            tv_thechap.setText("Miễn thế chấp");
+        }
+
         btn_see_more.setOnClickListener(view -> {
             if (isSeeMore_inDieuKhoan) {
                 tv_dieuKhoan.setMaxLines(5);
@@ -322,7 +358,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         datePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(Pair.create(startTimeLong, endTimeLong)).setCalendarConstraints(buildCalendarConstraints()).build();
 
         setValue_forDate(startTimeLong, endTimeLong);
-        getListHoaDon_hasTrangThai2a3(car.get_id());
+        getListHoaDon_hasTrangThai_2345(car.get_id());
     }
 
 
@@ -345,7 +381,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
                 setValue_forDate(startDate, endDate);
                 func_TinhTongTien(startDate, endDate);
-                getListHoaDon_hasTrangThai2a3(car.get_id());
+                getListHoaDon_hasTrangThai_2345(car.get_id());
             }
         });
     }
@@ -408,7 +444,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         RetrofitClient.FC_services().getListFeedBack(id_xe).enqueue(new Callback<List<FeedBack>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
+            public void onResponse(retrofit2.Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
                 if (response.code() == 200) {
                     if (response.body().size() != 0) {
                         nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, response.body());
@@ -424,7 +460,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<FeedBack>> call, Throwable t) {
+            public void onFailure(retrofit2.Call<List<FeedBack>> call, Throwable t) {
                 System.out.println("Có lỗi khi get feedback id: " + id_xe + " --- " + t);
             }
         });
@@ -435,72 +471,67 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     }
 
     public void showDialog_TSTheChap_inCTX(View view) {
-        Dialog_TS_TheChap.showDialog(this);
+        Dialog_TS_TheChap.showDialog(this, car.getTheChap());
     }
 
     public void showDialog_PhuPhiPhatSinh_inCTX(View view) {
         Dialog_PhuPhi_PhatSinh.showDialog(this);
     }
 
-    private void getListHoaDon_hasTrangThai2a3(String id_xe) {
+    private void getListHoaDon_hasTrangThai_2345(String id_xe) {
         isNotContinue();
-        // convert kiểu dữ liệu của ngày đã chọn từ String sang Date
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        startDate = null;
-        endDate = null;
 
+        String startDateStr = tv_ngayNhanXe.getText().toString();
+        String endDateStr = tv_ngayTraXe.getText().toString();
+
+        Date startDate, endDate;
+        SimpleDateFormat sdf_dmy = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
-            startDate = sdf.parse(tv_ngayNhanXe.getText().toString());
-            endDate = sdf.parse(tv_ngayTraXe.getText().toString());
+            startDate = sdf_dmy.parse(startDateStr);
+            endDate = sdf_dmy.parse(endDateStr);
+            startDateStr = sdf_ymd.format(startDate);
+            endDateStr = sdf_ymd.format(endDate);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
         // lấy list hoá đơn đã đặt, đã đặt cọc và đang vận hành của xe để check
-        // 1, 2,3 = đã đặt và được chủ xe đồng ý cho thuê, đã cọc, đang vận hành
-        RetrofitClient.FC_services().getListHoaDon(id_xe, "2,3,4,5").enqueue(new Callback<List<HoaDon>>() {
+        // 2: duyệt thành công, chờ đặt cọc
+        // 3: đặt cọc thành công
+        // 4: chủ xe giao xe thành công
+        // 5: (hết time thuê, khách mang xe trả cho chủ) khách hàng trả xe thành công
+
+        RetrofitClient.FC_services().getListHoaDon(id_xe, "2,3,4,5", startDateStr, endDateStr).enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+            public void onResponse(retrofit2.Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
                 isContinue();
-
-                List<HoaDon> hoaDonList = response.body();
                 if (response.code() == 200) {
-                    if (hoaDonList != null) {
+                    List<HoaDon> hoaDonList = response.body();
+                    if (hoaDonList.size() != 0) {
+                        // bị trùng lịch
                         StringBuilder valid = new StringBuilder();
                         for (HoaDon hoaDon : hoaDonList) {
-                            // convert kiểu dữ liệu của ngày bd, kt trong HĐ từ String sang Date
-                            Date ngayBD = null;
-                            Date ngayKT = null;
-                            try {
-                                ngayBD = sdf.parse(hoaDon.getNgayThue());
-                                ngayKT = sdf.parse(hoaDon.getNgayTra());
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            if ((startDate.equals(ngayBD) || startDate.equals(ngayKT) ||
-                                    endDate.equals(ngayBD) || endDate.equals(ngayKT)) ||
-                                    (startDate.before(ngayKT) && endDate.after(ngayBD))) {
-                                // Khoảng ngày đã chọn trùng với khoảng ngày trong HoaDon
-                                tv_xeDaThue.setVisibility(View.VISIBLE);
-                                isNotContinue();
-                                String text = "Xe đã được thuê từ ngày " + hoaDon.getNgayThue() + " đến hết ngày " + hoaDon.getNgayTra() + "\n";
-                                valid.append(text);
-                            } else {
-                                tv_xeDaThue.setVisibility(View.GONE);
-                                isContinue();
-                            }
+                            String text = "+ Xe đã được thuê từ ngày " + sdf_dmy.format(hoaDon.getNgayThue()) + " đến hết ngày " + sdf_dmy.format(hoaDon.getNgayTra()) + "\n";
+                            valid.append(text);
                         }
+                        tv_xeDaThue.setVisibility(View.VISIBLE);
+                        isNotContinue();
+                        icon_redflag_xedathue.setVisibility(View.VISIBLE);
                         tv_xeDaThue.setText(valid);
+                    } else {
+                        tv_xeDaThue.setVisibility(View.GONE);
+                        icon_redflag_xedathue.setVisibility(View.GONE);
+                        isContinue();
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<List<HoaDon>> call, Throwable t) {
+            public void onFailure(retrofit2.Call<List<HoaDon>> call, Throwable t) {
                 System.out.println("Có lỗi xảy ra: " + t);
                 tv_xeDaThue.setVisibility(View.GONE);
+                icon_redflag_xedathue.setVisibility(View.GONE);
                 btnThueXe.setEnabled(false);
             }
         });
@@ -522,7 +553,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         RetrofitClient.FC_services().getListCar_ofUser(email, "1").enqueue(new Callback<List<Car>>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+            public void onResponse(retrofit2.Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.code() == 200) {
                     float numberStar = 0;
                     int count = 0;
@@ -543,9 +574,89 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Car>> call, Throwable t) {
+            public void onFailure(retrofit2.Call<List<Car>> call, Throwable t) {
                 System.out.println("Có lỗi khi getListCar_ofChuSH: " + t);
             }
         });
+    }
+
+    private void loadMap_fromHTML(String longitude, String latitude) {
+        String html =
+                "<html lang=\"en\" style=\"height: 100%;\">\n" +
+                        "<head>\n" +
+                        "    <meta charset=\"UTF-8\">\n" +
+                        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                        "    <title>Map</title>\n" +
+                        "    <style>\n" +
+                        "        html,\n" +
+                        "        body {\n" +
+                        "            height: 100%;\n" +
+                        "            margin: 0;\n" +
+                        "            padding: 0;\n" +
+                        "        }\n" +
+                        "\n" +
+                        "        #map {\n" +
+                        "            width: 100%;\n" +
+                        "            height: 100%;\n" +
+                        "        }\n" +
+                        "    </style>\n" +
+                        "    <script src='https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js'></script>\n" +
+                        "    <link href='https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css' rel='stylesheet' />\n" +
+                        "</head>\n" +
+                        "\n" +
+                        "<body style=\"height: 100%; margin: 0;\">\n" +
+                        "\n" +
+                        "    <div id='map'></div>\n" +
+                        "    <script>\n" +
+                        "        goongjs.accessToken = '" + HostApi.api_key_load_map + "';\n" +
+                        "        var map = new goongjs.Map({\n" +
+                        "            container: 'map',\n" +
+                        "            style: 'https://tiles.goong.io/assets/goong_light_v2.json', // stylesheet location\n" +
+                        "            center: [" + longitude + "," + latitude + "], // starting position [lng, lat]\n" +
+                        "            zoom: 12, // starting zoom\n" +
+                        "            maxZoom: 12,\n" +
+                        "            minZoom: 12,\n" +
+                        "            dragRotate: false,\n" +
+                        "            dragPan: false\n" +
+                        "        });\n" +
+                        "\n" +
+                        "        map.on('load', function () {\n" +
+                        "            map.addLayer({\n" +
+                        "                'id': 'circle-layer',\n" +
+                        "                'type': 'circle',\n" +
+                        "                'source': {\n" +
+                        "                    'type': 'geojson',\n" +
+                        "                    'data': {\n" +
+                        "                        'type': 'Feature',\n" +
+                        "                        'properties': {},\n" +
+                        "                        'geometry': {\n" +
+                        "                            'type': 'Point',\n" +
+                        "                            'coordinates': [" + longitude + "," + latitude + "]\n" +
+                        "                        }\n" +
+                        "                    }\n" +
+                        "                },\n" +
+                        "                'paint': {\n" +
+                        "                    'circle-radius': 70, // Bán kính của vòng tròn (meters)\n" +
+                        "                    'circle-color': '#808080',\n" +
+                        "                    'circle-opacity': 0.35,\n" +
+                        "                    'circle-stroke-width': 2,\n" +
+                        "                    'circle-stroke-color': '#808080'\n" +
+                        "                }\n" +
+                        "            });\n" +
+                        "        });\n" +
+                        "    </script>\n" +
+                        "</body>\n" +
+                        "</html>";
+
+        webView_loadMap.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView_loadMap != null && webView_loadMap.canGoBack()) {
+            webView_loadMap.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

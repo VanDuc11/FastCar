@@ -286,10 +286,22 @@
 
                         <TextView
                             android:id="@+id/tv_thoiGian_thanhtoan_conlai_inHD"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
                             android:layout_height="wrap_content"
                             android:lineHeight="22dp"
                             android:text="Đang chờ khách hàng thanh toán trong 59 phút 33 giây"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/tv_xemhinhanh_inHD"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_height="wrap_content"
+                            android:text="Xem hình ảnh"
+                            android:textColor="#0B0FDC"
+                            android:textStyle="italic"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                             android:textSize="15dp" />
                     </LinearLayout>
@@ -758,6 +770,7 @@
                         android:textSize="17dp" />
 
                     <TextView
+                        android:id="@+id/tv_thechap_inHD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Miễn thế chấp"

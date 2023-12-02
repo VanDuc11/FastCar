@@ -17,7 +17,7 @@ import com.example.fastcar.R;
 
 import java.util.List;
 
-public class DanhSachTenModelXeAdapter extends RecyclerView.Adapter<DanhSachTenModelXeAdapter.ViewHolder>{
+public class  DanhSachTenModelXeAdapter extends RecyclerView.Adapter<DanhSachTenModelXeAdapter.ViewHolder>{
     private List<MauXe> mauXeList;
     private Context context;
     private TextView setText;

@@ -63,8 +63,6 @@ public class DanhSachTenHangXeAdapter extends RecyclerView.Adapter<DanhSachTenHa
             super(itemView);
            tv_ten_hang_xe=itemView.findViewById(R.id.tv_ten_hang_xe);
            item = itemView.findViewById(R.id.item_ten_hang);
-
         }
-
     }
 }

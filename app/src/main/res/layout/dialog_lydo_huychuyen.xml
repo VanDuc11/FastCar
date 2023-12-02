@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
     app:cardElevation="15dp"
-    app:cardUseCompatPadding="true"
-    android:layout_height="wrap_content">
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,8 +27,8 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:gravity="center"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Lý do huỷ chuyến"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                 android:textSize="18dp" />
@@ -38,64 +38,69 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
+                android:button="@drawable/custom_checkbox"
                 android:paddingStart="10dp"
-                android:textSize="15dp"
-                android:text="Thay đổi lịch trình" />
+                android:text="Thay đổi lịch trình"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/ckbox2"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:button="@drawable/custom_checkbox"
                 android:paddingStart="10dp"
-                android:textSize="15dp"
-                android:text="Muốn thuê xe khác" />
+                android:text="Muốn thuê xe khác"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/ckbox3"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:button="@drawable/custom_checkbox"
                 android:paddingStart="10dp"
-                android:textSize="15dp"
-                android:text="Không còn nhu cầu" />
+                android:text="Không còn nhu cầu"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/ckbox4"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:button="@drawable/custom_checkbox"
                 android:paddingStart="10dp"
-                android:textSize="15dp"
-                android:text="Chủ xe không thực hiện đúng quy định" />
+                android:text="Chủ xe không thực hiện đúng quy định"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/ckbox5"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:button="@drawable/custom_checkbox"
                 android:paddingStart="10dp"
-                android:textSize="15dp"
-                android:text="Lý do khác" />
+                android:text="Lý do khác"
+                android:textSize="16dp" />
 
             <EditText
                 android:id="@+id/edt_lydoKhac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/custom_border_edittext"
+                android:gravity="start"
                 android:hint="(không bắt buộc)"
                 android:inputType="textMultiLine"
-                android:background="@drawable/custom_border_edittext"
-                android:textSize="15dp"
+                android:lines="3"
                 android:padding="10dp"
-                android:gravity="start"
-                android:layout_margin="8dp"
-                android:lines="3" />
+                android:textSize="16dp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/btn_confirm_huyChuyen"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:background="@color/blue_app"
             android:gravity="center"
             android:text="Đồng ý"
-            android:layout_marginTop="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textColor="@color/white"
             android:textSize="17dp"

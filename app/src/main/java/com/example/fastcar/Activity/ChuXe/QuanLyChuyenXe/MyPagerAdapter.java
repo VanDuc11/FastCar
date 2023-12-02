@@ -16,6 +16,7 @@ import com.example.fastcar.Activity.ThongBao_Activity;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private String id_xe;
+    private boolean isLoaded;
     public MyPagerAdapter(FragmentManager fm,String id_xe) {
         super(fm);
         this.id_xe = id_xe;
@@ -30,13 +31,12 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new Upcoming_CarFragment().newInstance(id_xe);
             default:
-                return new Upcoming_CarFragment().newInstance(id_xe);
+                return new VehicleWorksFragment().newInstance(id_xe);
         }
     }
 
     @Override
     public int getCount() {
-        // Số lượng tab
         return 2;
     }
 }
