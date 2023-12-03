@@ -21,6 +21,7 @@ import com.example.fastcar.Server.HostApi;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,9 +78,7 @@ public class LichSuThueXeAdapter extends RecyclerView.Adapter<LichSuThueXeAdapte
         holder.tv_ngayTra.setText("Kết thúc: " + sdf.format(hoaDon.getNgayTra()));
         holder.tvTongTien.setText(NumberFormatVND.format(hoaDon.getTongTien()));
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-        String formattedDate = dateFormat.format(hoaDon.getGioTaoHD());
-        holder.tvTime.setText(formattedDate);
+        holder.tvTime.setText(getTimeDifference(hoaDon.getGioTaoHD()));
 
         int statusCode = hoaDon.getTrangThaiHD();
         // 0: đã huỷ
@@ -99,6 +98,36 @@ public class LichSuThueXeAdapter extends RecyclerView.Adapter<LichSuThueXeAdapte
     @Override
     public int getItemCount() {
         return listHoaDon.size();
+    }
+
+    private static String getTimeDifference(Date endDate) {
+        Date startDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+        long duration = Math.abs(startDate.getTime() - endDate.getTime());
+        long minutes = duration / (60 * 1000);
+        long hours = 0;
+        if (minutes > 60) {
+            hours = minutes / 60;
+            minutes = minutes % 60;
+        }
+
+        int day = (int) (hours / 24);
+        int week = (int) (day / 7);
+
+        if (hours <= 1) {
+            if (minutes < 1) {
+                return duration / 1000 + " giây trước";
+            } else {
+                return minutes + " phút trước";
+            }
+        }
+        if (hours < 24) {
+            return hours + " giờ trước";
+        } else if (day <= 7) {
+            return (hours >= 48) ? day + " ngày trước" : "hôm qua";
+        } else {
+            return (week <= 4) ? week + " tuần trước" : sdf.format(endDate);
+        }
     }
 
 }

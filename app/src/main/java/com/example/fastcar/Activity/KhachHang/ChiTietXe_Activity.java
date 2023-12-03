@@ -64,12 +64,12 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     TextView btnThueXe, tv_tenxe_actionbar, tv_tenxe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe;
     TextView tv_truyendong, tv_soGhe, tv_nhienlieu, tv_tieuhao, tv_mota, tv_soNgayThueXe, tv_tongTien, tv_xeDaThue;
     TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_noResult_inFB, tv_soTien1ngay;
-    TextView tv_diaChiXe, tv_diaChiXe2, tv_thechap;
+    TextView tv_diaChiXe, tv_diaChiXe2, tv_thechap, tvTimeGiaoXe, tvTimeNhanXe;
     boolean isSeeMore_inDieuKhoan = false;
     CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi, cardview_danhgiaXe, cardview_chuxe;
     RadioButton rd_selection1, rd_selection2;
     ConstraintLayout ln_view_buttonThueXe_inCTX;
-    LinearLayout btn_showDatePicker;
+    LinearLayout btn_showDatePicker, ln_giaonhanxe;
     ImageView ic_back, ic_favorite, icon_redflag_xedathue;
     boolean isFavorite;
     RecyclerView reyNhanXet;
@@ -154,6 +154,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         cardview_DieuKhoan_PhuPhi = findViewById(R.id.cardview_DieuKhoan_PhuPhi);
         cardview_thoigianThueXe = findViewById(R.id.cardview_thoigianThueXe);
         cardview_chuxe = findViewById(R.id.cardview_chuxe);
+        tvTimeGiaoXe = findViewById(R.id.tv_thoigian_giaoxe_inChiTietXe);
+        tvTimeNhanXe = tv_diaChiXe.findViewById(R.id.tv_thoigian_nhanxe_inChiTietXe);
+        ln_giaonhanxe = findViewById(R.id.ln_thoigian_giaonhanxe_inCTX);
         cardview_danhgiaXe = findViewById(R.id.cardview_danhgiaXe);
         ln_view_buttonThueXe_inCTX = findViewById(R.id.ln_view_buttonThueXe_inCTX);
         webView_loadMap = findViewById(R.id.webView_loadMap);
@@ -184,6 +187,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
             ic_favorite.setVisibility(View.GONE);
             tv_diaChiXe2.setText(diaChiXe);
+            ln_giaonhanxe.setVisibility(View.GONE);
         } else {
             cardview_thoigianThueXe.setVisibility(View.VISIBLE);
             cardview_chuxe.setVisibility(View.VISIBLE);
@@ -191,6 +195,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             ic_favorite.setVisibility(View.VISIBLE);
             tv_diaChiXe.setText(diachi);
             tv_diaChiXe2.setText(diachi);
+            tvTimeGiaoXe.setText("Thời gian giao xe: " + car.getThoiGianGiaoXe());
+            tvTimeNhanXe.setText("Thời gian nhận xe: " + car.getThoiGianNhanXe());
         }
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);

@@ -828,4 +828,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar_inThongTinThue"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#474A34"
+        android:layout_gravity="center" />
+
 </RelativeLayout>

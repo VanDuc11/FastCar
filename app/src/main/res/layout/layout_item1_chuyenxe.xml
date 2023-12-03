@@ -31,14 +31,14 @@
                     android:id="@+id/icon_status_inChuyenXe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="20dp"
                     android:src="@drawable/icon_wait" />
 
                 <TextView
                     android:id="@+id/tv_status_inChuyenXe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:gravity="center"
                     android:text="Chưa đặt cọc"
                     android:layout_gravity="center"

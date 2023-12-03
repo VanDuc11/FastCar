@@ -37,6 +37,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +97,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     private Uri cameraImageUri;
     ImageView img1, img2, ic_add1, ic_add2;
     String pathImage1, pathImage2;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,12 +147,14 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         tvGiaoXe = findViewById(R.id.btn_giaoxe_chokhach_inHD_ChuSH);
         tvGoiChoKhach = findViewById(R.id.btn_goi_cho_khachhang_inHD_ChuSH);
         ln_giaoxe = findViewById(R.id.ln_giaoxe_inHD_ChuSH);
+        progressBar = findViewById(R.id.progressBar_inHoaDon_chuSH);
     }
 
     private void load() {
         Intent intent = getIntent();
         HoaDon hoadon_intent = intent.getParcelableExtra("hoadon");
 
+        progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
@@ -232,6 +236,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             // đặt cọc thành công
 //            ln_view_huy_or_dongy.setVisibility(View.GONE);
             btn_dongychothue.setVisibility(View.GONE);
+            btn_huychuyen.setBackgroundResource(R.drawable.custom_btn7_v1);
             tv_thoiGianThanhToan.setText("Khách hàng đã thanh toán thành công");
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ic_in_4stt.setImageResource(R.drawable.icon_dadatcoc);
@@ -346,11 +351,14 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     }
 
     private void updateTrangThaiHD(HoaDon hoaDon) {
+        progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.FC_services().updateTrangThaiHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
                     System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
                     load();
                 }
             }
@@ -364,10 +372,12 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     }
 
     private void update_TimeXacNhanHoaDon(HoaDon hoaDon) {
+        progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.FC_services().updateTimeXNHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                 if (response.code() == 200) {
+                    progressBar.setVisibility(View.GONE);
                     System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
                     load();
@@ -455,9 +465,8 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
                 }
                 if (hoaDon.getTrangThaiHD() == 3) {
                     // đã cọc => huỷ
-                    HoaDon hoadonNewModel = hoaDon;
-                    hoadonNewModel.setTrangThaiHD(0);
-                    showDialog_HuyChuyen_MatCoc(hoadonNewModel, dialog);
+                    hoaDon.setTrangThaiHD(0);
+                    showDialog_HuyChuyen_MatCoc(hoaDon, dialog);
                 } else {
                     hoaDon.setTrangThaiHD(0);
                     updateTrangThaiHD(hoaDon);
@@ -586,9 +595,11 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     }
 
     private void uploadImage_GiaoXeThanhCong(Dialog dialog) {
+        progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.FC_services().updateHinhAnh_ChuXeGiaoXe(hoaDon.getMaHD(), OutImagePaths()).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
                     CustomDialogNotify.showToastCustom(HoaDon_ChuSH_Activity.this, "Thành công");
                     dialog.dismiss();
@@ -866,50 +877,11 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         tv_nd.setText("Vì khách hàng đã đặt cọc thành công, nên nếu bạn huỷ chuyến (đồng thời tạo yêu cầu hoàn tiền), khách hàng sẽ được hoàn lại toàn bộ số tiền đã thanh toán");
         btn_cancel.setOnClickListener(view -> dialog.dismiss());
         btn_confirm.setOnClickListener(view -> {
-            fetch_ListNH_ofUser(hoaDon);
+            updateTrangThaiHD(hoaDon);
             dialogOld.dismiss();
-//            dialog.dismiss();
+            dialog.dismiss();
 //            finish();
         });
     }
 
-    private void create_GiaoDichHoanTien_forUser(LichSuGiaoDich lichSuGiaoDich, HoaDon hoaDon) {
-        RetrofitClient.FC_services().createLSGD(lichSuGiaoDich).enqueue(new Callback<ResMessage>() {
-            @Override
-            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                if (response.code() == 201) {
-                    updateTrangThaiHD(hoaDon);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResMessage> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void fetch_ListNH_ofUser(HoaDon hoaDon) {
-        RetrofitClient.FC_services().getListNH_ofUser(hoaDon.getUser().getEmail()).enqueue(new Callback<List<NganHang>>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onResponse(Call<List<NganHang>> call, Response<List<NganHang>> response) {
-                if (response.code() == 200) {
-                    if (!response.body().isEmpty()) {
-                        String maLSGD = String.valueOf(RandomMaHD.random(8));
-                        String noidung = "Yêu cầu hoàn tiền cọc cho chuyến xe " + hoaDon.getMaHD();
-                        Date getTimeNow = new Date();
-                        LichSuGiaoDich lichSuGiaoDich = new LichSuGiaoDich(null, maLSGD, hoaDon.getUser(), hoaDon.getTienCoc(), getTimeNow,
-                                noidung, 0, hoaDon, response.body().get(0), "");
-                        create_GiaoDichHoanTien_forUser(lichSuGiaoDich, hoaDon);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<NganHang>> call, Throwable t) {
-                System.out.println("Có lỗi khi fetch_ListNH_ofUser(): " + t);
-            }
-        });
-    }
 }

@@ -71,10 +71,10 @@ public class DanhSachXeCuaToiAdapter extends RecyclerView.Adapter<DanhSachXeCuaT
             holder.tvTrangThaiXe.setText("Đang hoạt động");
         } else if (status == 2) {
             holder.tvTrangThaiXe.setText("Bị từ chối");
-            holder.tvTrangThaiXe.setTextColor(Color.RED);
         } else {
             holder.tvTrangThaiXe.setText("Không hoạt động");
         }
+
 
         Glide.with(context).load(HostApi.URL_Image + car.getHinhAnh().get(0)).into(holder.imgXe);
 

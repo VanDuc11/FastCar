@@ -10,13 +10,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,8 +34,16 @@ import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.Server.HostApi;
 import com.example.fastcar.User_Method;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 
@@ -38,7 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class XeCuaToi_Activity extends AppCompatActivity {
-    TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu, btn_QuanLiChuyenXe;
+    TextView btn_dsXe, btn_ThemXe, btnThongTinBoSung, btn_ViChuXe, tv_soDu, btn_QuanLiChuyenXe, btnHopdongmau;
     Calendar calendar;
     EditText edt_soCCCD, edt_noicap;
     TextView edt_ngaycap;
@@ -72,6 +85,7 @@ public class XeCuaToi_Activity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        btnHopdongmau.setOnClickListener(view -> showDialogHopDongMau());
         // bổ sung thông tin
         btnThongTinBoSung.setOnClickListener(view -> showDialog_UpdateTTBS());
     }
@@ -83,6 +97,7 @@ public class XeCuaToi_Activity extends AppCompatActivity {
         btn_dsXe = findViewById(R.id.btn_dsXe_inXeCuaToi);
         btnThongTinBoSung = findViewById(R.id.btn_thongtinbosung_inXeCuaToi);
         btn_QuanLiChuyenXe = findViewById(R.id.btn_quanli_chuyenxe);
+        btnHopdongmau = findViewById(R.id.btn_hopdong_chuyenxe);
     }
 
     private void load() {
@@ -218,6 +233,75 @@ public class XeCuaToi_Activity extends AppCompatActivity {
         }
         return true;
     }
+
+    private void showDialogHopDongMau() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_hopdongmau, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        ImageView btnBack = dialog.findViewById(R.id.icon_back_in_hopdongmau);
+        TextView tv1 = dialog.findViewById(R.id.btn_hopdong_indialog);
+        TextView tv2 = dialog.findViewById(R.id.btn_bienban_indialog);
+
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+        tv1.setOnClickListener(view -> showDialogWebView(0));
+
+        tv2.setOnClickListener(view -> showDialogWebView(1));
+    }
+
+    private void showDialogWebView(int index) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_webview, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        ImageView btnBack = dialog.findViewById(R.id.icon_back_in_dialogWebView);
+        WebView webView = dialog.findViewById(R.id.webView_inDialog);
+        TextView tv = dialog.findViewById(R.id.tv_webView);
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+
+        webView.setWebViewClient(new WebViewClient());
+        if (index == 0) {
+            tv.setText("Hợp đồng cho thuê");
+            webView.loadUrl(HostApi.API_URL + "/public/docx/index1.html");
+        } else {
+            tv.setText("Biên bản bàn giao");
+            webView.loadUrl(HostApi.API_URL + "/public/docx/index2.html");
+        }
+    }
+
 
     @Override
     protected void onResume() {

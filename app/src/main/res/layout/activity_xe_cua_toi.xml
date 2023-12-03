@@ -180,6 +180,25 @@
                         android:background="#E1D7D7" />
 
                     <TextView
+                        android:id="@+id/btn_hopdong_chuyenxe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_document"
+                        android:drawableRight="@drawable/icon_next_v1"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Hợp đồng mẫu"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E1D7D7" />
+
+                    <TextView
                         android:id="@+id/btn_themXe_inXeCuaToi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

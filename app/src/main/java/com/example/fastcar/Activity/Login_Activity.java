@@ -40,7 +40,8 @@ public class Login_Activity extends AppCompatActivity {
     GoogleSignInAccount acct;
     AppCompatButton btn_login;
     TextView tvSignUp;
-    TextInputLayout edtEmail,edtPass;
+    TextInputLayout edtEmail, edtPass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +51,7 @@ public class Login_Activity extends AppCompatActivity {
         btnGoogle.setOnClickListener(view -> signIn());
         btn_login.setOnClickListener(v -> logInEmail());
         tvSignUp.setOnClickListener(view -> {
-            Intent intent  = new Intent(Login_Activity.this,SignUp_Activity.class);
+            Intent intent = new Intent(Login_Activity.this, SignUp_Activity.class);
             startActivity(intent);
         });
     }
@@ -58,11 +59,11 @@ public class Login_Activity extends AppCompatActivity {
     private void logInEmail() {
         String email = edtEmail.getEditText().getText().toString();
         String pass = edtPass.getEditText().getText().toString();
-        if (email.length() ==0){
+        if (email.length() == 0) {
             edtEmail.setError("Không được để trống.");
-        }else if (pass.length() == 0){
+        } else if (pass.length() == 0) {
             edtPass.setError("Không được để trống");
-        }else if (email.length()!=0 && pass.length() != 0 ){
+        } else if (email.length() != 0 && pass.length() != 0) {
             // firebase
             mAuth.signInWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -113,25 +114,27 @@ public class Login_Activity extends AppCompatActivity {
 
     private void find() {
         btnGoogle = findViewById(R.id.loginAct_btnGoogle);
-        btn_login =findViewById(R.id.Logint_btn_login);
+        btn_login = findViewById(R.id.Logint_btn_login);
         tvSignUp = findViewById(R.id.Login_Signup);
         edtEmail = findViewById(R.id.Login_sdt_email);
         edtPass = findViewById(R.id.LogIn_matkhau);
     }
-    private void googleBuile(){
+
+    private void googleBuile() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                . requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
+        gsc = GoogleSignIn.getClient(this, gso);
 
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
     }
 
     int RC_SIGN_IN = 40;
+
     private void signIn() {
         Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,RC_SIGN_IN);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -139,7 +142,7 @@ public class Login_Activity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 task.getResult(ApiException.class);
@@ -154,26 +157,27 @@ public class Login_Activity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth.getCurrentUser() !=null){
+        if (mAuth.getCurrentUser() != null) {
             navigateToSecondActivity();
         }
     }
-    private void  handleGoogleAccessToken(GoogleSignInAccount acct){
-        AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(),null);
+
+    private void handleGoogleAccessToken(GoogleSignInAccount acct) {
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(authCredential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             navigateToSecondActivity();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(Login_Activity.this, "ERROR", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
     }
+
     private void navigateToSecondActivity() {
         finish();
         Intent intent = new Intent(Login_Activity.this, KhamPha_Activity.class);

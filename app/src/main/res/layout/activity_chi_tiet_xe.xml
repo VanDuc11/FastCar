@@ -270,9 +270,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -285,14 +285,63 @@
                             android:id="@+id/tv_xedaThue_inChiTietXe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
                             android:gravity="center_vertical"
                             android:lineHeight="25dp"
-                            android:layout_marginStart="10dp"
                             android:text="Xe đã được thuê từ ngày 8:00 04/10/2023 - 8:00 04/10/2023"
                             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                             android:textColor="@color/red"
                             android:textSize="15dp" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ln_thoigian_giaonhanxe_inCTX"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Chú ý: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textColor="@color/red"
+                            android:textSize="15dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_thoigian_giaoxe_inChiTietXe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:gravity="center_vertical"
+                                android:lineHeight="25dp"
+                                android:text="Thời gian giao xe: 07:00 - 12:00"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                android:textColor="@color/red"
+                                android:textSize="15dp" />
+
+                            <TextView
+                                android:id="@+id/tv_thoigian_nhanxe_inChiTietXe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:gravity="center_vertical"
+                                android:layout_marginTop="5dp"
+                                android:lineHeight="25dp"
+                                android:text="Thời gian nhận xe: 07:00 - 12:00"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                android:textColor="@color/red"
+                                android:textSize="15dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -558,8 +607,8 @@
                                 android:id="@+id/tv_tieuHao_inChiTietXe"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
                                 android:layout_marginTop="5dp"
+                                android:gravity="center"
                                 android:text="10km/ 1 lần sạc đầy"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textSize="16dp" />

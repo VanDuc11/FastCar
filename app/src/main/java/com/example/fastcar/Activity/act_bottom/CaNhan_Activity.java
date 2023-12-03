@@ -1,5 +1,6 @@
 package com.example.fastcar.Activity.act_bottom;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -12,6 +13,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,8 +40,12 @@ import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.User_Method;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -61,6 +69,7 @@ public class CaNhan_Activity extends AppCompatActivity {
     private FirebaseUser fBaseuser;
     FirebaseDatabase database;
     String username, phone, email, url;
+    ProgressBar progressBar;
     Uri uri;
     User user;
     List<Car> listCars;
@@ -136,6 +145,7 @@ public class CaNhan_Activity extends AppCompatActivity {
         btnThemXe = findViewById(R.id.btn_ThemXe_in_tabUser);
         btnXeCuaToi = findViewById(R.id.btn_XeCuaToi_in_tabUser);
         btnTaiKhoanNH = findViewById(R.id.btn_nganhang_in_tabUser);
+        progressBar = findViewById(R.id.progressBar_inCaNhan);
     }
 
     private void load() {
@@ -143,7 +153,7 @@ public class CaNhan_Activity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();
         email = fBaseuser.getEmail();
-
+        progressBar.setVisibility(View.GONE);
         fetchData_UserLogin(email);
     }
 
@@ -188,13 +198,14 @@ public class CaNhan_Activity extends AppCompatActivity {
         img_close_dialog.setOnClickListener(view -> dialog.dismiss());
 
         btn_confirm_dialog.setOnClickListener(view -> {
-            dialog.dismiss();
+            progressBar.setVisibility(View.VISIBLE);
             auth.getInstance().signOut();
             LoginManager.getInstance().logOut();
             logout(email);
+            dialog.dismiss();
+            progressBar.setVisibility(View.GONE);
             startActivity(new Intent(getBaseContext(), Login_Activity.class));
             finish();
-
             editor.clear();
             editor.apply();
         });
@@ -222,14 +233,43 @@ public class CaNhan_Activity extends AppCompatActivity {
         window.setAttributes(windowAttributes);
         dialog.show();
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) AppCompatButton btn_confirm_dialog = custom.findViewById(R.id.btn_confirm_DoiMK);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageView img_close_dialog = custom.findViewById(R.id.icon_back_in_doiMK);
+        AppCompatButton btn_confirm_dialog = dialog.findViewById(R.id.btn_confirm_DoiMK);
+        ImageView img_close_dialog = dialog.findViewById(R.id.icon_back_in_doiMK);
+        TextInputLayout oldPass = dialog.findViewById(R.id.edt_oldpass);
+        TextInputLayout newPass = dialog.findViewById(R.id.edt_newpass);
+        TextInputLayout renewPass = dialog.findViewById(R.id.edt_renewpass);
 
         img_close_dialog.setOnClickListener(view -> dialog.dismiss());
 
+        boolean isCheck;
+        if (user.getMatKhau().length() == 0) {
+            // user chưa có mật khẩu ( login bằng google )
+            oldPass.setVisibility(View.GONE);
+            isCheck = false;
+        } else {
+            isCheck = true;
+        }
+
         btn_confirm_dialog.setOnClickListener(view -> {
-            dialog.dismiss();
-            CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Chức năng đang phát triển");
+            if (validateForm(isCheck, oldPass, newPass, renewPass)) {
+                if (user.getMatKhau().equals(oldPass.getEditText().getText().toString().trim())) {
+                    String newpassStr = newPass.getEditText().getText().toString().trim();
+                    fBaseuser.updatePassword(newpassStr).addOnCompleteListener(task -> {
+                        // thành công
+                        user.setMatKhau(newpassStr);
+                        User_Method.func_updateUser(CaNhan_Activity.this, email, user, true);
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        Runnable myRunnable = () -> {
+                            oldPass.getEditText().setText("");
+                            newPass.getEditText().setText("");
+                            renewPass.getEditText().setText("");
+                        };
+                        handler.postDelayed(() -> handler.post(myRunnable), 1500);
+                    });
+                } else {
+                    CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Mật khẩu cũ không trùng khớp");
+                }
+            }
         });
     }
 
@@ -314,6 +354,45 @@ public class CaNhan_Activity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean validateForm(boolean havePassword, TextInputLayout edt_oldpass, TextInputLayout edt_newpass, TextInputLayout edt_renewpass) {
+        String oldpass = edt_oldpass.getEditText().getText().toString().trim();
+        String newpass = edt_newpass.getEditText().getText().toString().trim();
+        String renewpass = edt_renewpass.getEditText().getText().toString().trim();
+
+        if (havePassword) {
+            // đã có pass
+            if (oldpass.length() == 0) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập mật khẩu cũ");
+                edt_oldpass.requestFocus();
+                return false;
+            }
+        }
+
+        if (newpass.length() == 0) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập mật khẩu mới");
+            edt_newpass.requestFocus();
+            return false;
+        } else {
+            if (newpass.length() < 6) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Mật khẩu phải dài hơn 6 ký tự");
+                edt_newpass.requestFocus();
+                return false;
+            }
+        }
+
+        if (renewpass.length() == 0) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập lại mật khẩu mới");
+            edt_renewpass.requestFocus();
+            return false;
+        }
+
+        if (!newpass.equals(renewpass)) {
+            CustomDialogNotify.showToastCustom(getBaseContext(), "Mật khẩu không trùng khớp");
+            return false;
+        }
+        return true;
     }
 
 //    @Override

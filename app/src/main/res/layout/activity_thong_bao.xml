@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.act_bottom.ThongBao_Activity">
 
     <RelativeLayout
@@ -24,12 +24,276 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Thông báo của tôi"
+            android:text="Thông báo"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textSize="17dp" />
     </RelativeLayout>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_thongbao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/action_bar_TB">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/loading" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@color/loading" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:paddingVertical="3dp"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@color/loading" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:paddingVertical="3dp"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@color/loading" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:paddingVertical="3dp"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@color/loading" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:paddingVertical="3dp"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@color/loading" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/loading"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:paddingVertical="3dp"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/loading"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <LinearLayout
+        android:id="@+id/data_view_thongbao"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/action_bar_TB"
@@ -37,21 +301,29 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Thông báo mới nhất"
-            android:textColor="@color/black"
+            android:layout_height="35dp"
             android:background="#E4DDDD"
+            android:gravity="center_vertical"
+            android:padding="5dp"
             android:paddingStart="15dp"
+            android:text="Thông báo mới nhất"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/black"
             android:textSize="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_data_inThongBao"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:id="@+id/recyclerView_thongbao" />
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_thongbao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     </LinearLayout>
 </RelativeLayout>

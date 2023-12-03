@@ -39,10 +39,12 @@
                     <TextView
                         android:id="@+id/tv_trangthaixe_inItem_XeCuaToi"
                         android:layout_width="180dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:gravity="center"
-                        android:background="@drawable/custom_border_item_tinhnangxe_selected"
+                        android:background="@drawable/radius_top_10"
+                        android:backgroundTint="#80F87B7B"
                         android:text="Đang hoạt động"
+                        android:textColor="@color/white"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:layout_alignBottom="@id/img_xe_inItem_XeCuaToi"
                         android:textSize="15dp" />

@@ -91,7 +91,7 @@ public class MaGiamGia_Activity extends AppCompatActivity {
                     if(!response.body().isEmpty()) {
                         ln_noResult.setVisibility(View.GONE);
                         listVoucher = response.body();
-                        adapter = new VoucherAdapter(MaGiamGia_Activity.this, listVoucher, isIcon,1);
+                        adapter = new VoucherAdapter(MaGiamGia_Activity.this, listVoucher, isIcon, 1);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     } else {

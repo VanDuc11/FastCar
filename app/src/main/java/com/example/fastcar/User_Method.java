@@ -16,7 +16,7 @@ public class User_Method {
         RetrofitClient.FC_services().updateUser(email, user).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                if(isShowToast) {
+                if (isShowToast) {
                     CustomDialogNotify.showToastCustom(context, "Cập nhật thành công");
                 }
             }
@@ -29,19 +29,4 @@ public class User_Method {
         });
     }
 
-    public static void func_updateSoDu(Context context, String email, User user, boolean isShowToast) {
-        RetrofitClient.FC_services().updateSoDu(email, user).enqueue(new Callback<ResMessage>() {
-            @Override
-            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                if(isShowToast) {
-                    CustomDialogNotify.showToastCustom(context, "Cập nhật thành công");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResMessage> call, Throwable t) {
-                System.out.println("Có lỗi khi updateSoDu() " + t);
-            }
-        });
-    }
 }

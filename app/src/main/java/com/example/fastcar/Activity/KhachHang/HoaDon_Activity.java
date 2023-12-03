@@ -37,6 +37,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,6 +91,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     TextView tv_tenChuSH, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4, tvGoiChoChuSH, tvTraXe, tvXemHinhAnh;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_coc, ln_sdtChuSH, ln_traxe;
     HoaDon hoaDon;
+    ProgressBar progressBar;
     float TrungBinhSao;
     private int totalChuyen_ofChuSH;
     private float totalStar_ofChuSH;
@@ -156,12 +158,14 @@ public class HoaDon_Activity extends AppCompatActivity {
         tvTraXe = findViewById(R.id.btn_traxe_cho_chuSH_inHD);
         tvGoiChoChuSH = findViewById(R.id.btn_goi_cho_chuSH_inHD);
         ln_traxe = findViewById(R.id.ln_traxe_inHD);
+        progressBar = findViewById(R.id.progressBar_inHoaDon);
     }
 
     private void load() {
         Intent intent = getIntent();
         HoaDon hoadon_intent = intent.getParcelableExtra("hoadon");
 
+        progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
@@ -263,8 +267,8 @@ public class HoaDon_Activity extends AppCompatActivity {
             } else if (statusCode == 3) {
                 // đặt cọc thành công
                 ln_4stt.setVisibility(View.VISIBLE);
-//                ln_view_huy_or_coc.setVisibility(View.GONE);
                 btn_datcoc.setVisibility(View.GONE);
+                btn_huychuyen.setBackgroundResource(R.drawable.custom_btn7_v1);
                 tv_thoiGianThanhToan.setText("Quý khách đã đặt cọc thành công. Vui lòng liên hệ chủ xe theo thông tin bên dưới để tiến hành nhận xe");
                 tv_thoiGianThanhToan.setTextColor(Color.BLACK);
                 ic_in_4stt.setImageResource(R.drawable.icon_dadatcoc);
@@ -328,16 +332,17 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_diachiXe.setText(diaChiXe);
                 tvContentInfo.setVisibility(View.GONE);
                 tvSdtChuSH.setText(hoaDon.getXe().getChuSH().getSDT());
-                tvGoiChoChuSH.setVisibility(View.INVISIBLE);
-                if (hoaDon.isHaveFeedback() == false) {
+                tvGoiChoChuSH.setVisibility(View.GONE);
+                tvTraXe.setBackgroundResource(R.drawable.custom_btn4);
+                if (!hoaDon.isHaveFeedback()) {
                     tvTraXe.setText("Thêm đánh giá");
                 } else {
                     tvTraXe.setText("Xem đánh giá");
                 }
             }
 
-            if (hoaDon.getXe().getTheChap() == true) {
-                int number = 0;
+            if (hoaDon.getXe().getTheChap()) {
+                int number;
                 if (hoaDon.getXe().getGiaThue1Ngay() < 1500000) {
                     number = 20;
                 } else if (hoaDon.getXe().getGiaThue1Ngay() < 3000000) {
@@ -430,11 +435,14 @@ public class HoaDon_Activity extends AppCompatActivity {
     }
 
     private void updateTrangThaiHD(HoaDon hoaDon) {
+        progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.FC_services().updateTrangThaiHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
                     System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
                     load();
                 }
             }
@@ -442,6 +450,7 @@ public class HoaDon_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 System.out.println("Có lỗi khi cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + "  " + t);
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
             }
         });
     }
@@ -519,15 +528,14 @@ public class HoaDon_Activity extends AppCompatActivity {
                 }
                 if (hoaDon.getTrangThaiHD() == 3) {
                     // đã cọc => huỷ
-                    HoaDon hoadonNewModel = hoaDon;
-                    hoadonNewModel.setTrangThaiHD(0);
-                    showDialog_HuyChuyen_MatCoc(hoadonNewModel, dialog);
+                    hoaDon.setTrangThaiHD(0);
+                    showDialog_HuyChuyen_MatCoc(hoaDon, dialog);
                 } else {
                     hoaDon.setTrangThaiHD(0);
                     updateTrangThaiHD(hoaDon);
                     dialog.dismiss();
-                    startActivity(new Intent(HoaDon_Activity.this, KhamPha_Activity.class));
-                    finish();
+//                    startActivity(new Intent(HoaDon_Activity.this, KhamPha_Activity.class));
+//                    finish();
                 }
             } else {
                 CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Vui lòng chọn lý do");
@@ -540,7 +548,6 @@ public class HoaDon_Activity extends AppCompatActivity {
         @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_post_feedback, null);
         Dialog dialog = new Dialog(HoaDon_Activity.this);
         dialog.setContentView(custom);
-        dialog.setCanceledOnTouchOutside(false);
 
         Window window = dialog.getWindow();
         if (window == null) {
@@ -582,9 +589,9 @@ public class HoaDon_Activity extends AppCompatActivity {
             star3.setEnabled(false);
             star4.setEnabled(false);
             star5.setEnabled(false);
+        } else {
+            tv_content.setVisibility(View.GONE);
         }
-
-        tv_content.setVisibility(View.GONE);
 
         // gán giá trị = 5 sao
 
@@ -695,13 +702,9 @@ public class HoaDon_Activity extends AppCompatActivity {
                         }
                         TrungBinhSao = totalStar / feedBackList.size();
                         car.setTrungBinhSao(TrungBinhSao);
-                        updateRateXeAndSoChuyen(car);
+                        updateRateXe(car);
                     }
-//                    else {
-//                        TrungBinhSao = 0;
-//                        car.setTrungBinhSao(0);
-//                        updateRateXeAndSoChuyen(car);
-//                    }
+
                 } else {
                     System.out.println("Có lỗi khi get feedback id: " + car.get_id() + " - " + response.message());
                 }
@@ -715,6 +718,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     }
 
     private void createFeedback(FeedBack feedBack, Dialog dialog) {
+        progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.FC_services().createFeedBack(feedBack).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
@@ -739,7 +743,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         });
     }
 
-    private void updateRateXeAndSoChuyen(Car car) {
+    private void updateRateXe(Car car) {
         RetrofitClient.FC_services().updateXe(car.get_id(), car).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
@@ -815,6 +819,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         RetrofitClient.FC_services().updateTrangThaiHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
                     CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Đã đăng nhận xét");
                     dialog.dismiss();
@@ -867,9 +872,11 @@ public class HoaDon_Activity extends AppCompatActivity {
     }
 
     private void uploadImage_TraXeThanhCong(Dialog dialog) {
+        progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.FC_services().updateHinhAnh_KhachHangTraXe(hoaDon.getMaHD(), OutImagePaths()).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
                     CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Thành công");
                     dialog.dismiss();
@@ -1150,8 +1157,6 @@ public class HoaDon_Activity extends AppCompatActivity {
             updateTrangThaiHD(hoaDon);
             dialogOld.dismiss();
             dialog.dismiss();
-            startActivity(new Intent(HoaDon_Activity.this, KhamPha_Activity.class));
-            finish();
         });
     }
 }

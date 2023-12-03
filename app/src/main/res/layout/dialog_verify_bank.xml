@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="15dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xin chào "
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="20dp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_tenUser_inDialogVerifyBank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="Khách hàng"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="20dp"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trước khi thuê xe, quý khách vui lòng thêm tài khoản ngân hàng để phòng trừ trường hợp chủ xe không sẵn sàng cho thuê, nhờ đó mà chúng tôi có thể chuyển khoản tiền cọc lại cho quý khách. Xin cảm ơn!"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/btn_confirm_inDialogVerifyBank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tiếp tục"
+            android:background="@drawable/custom_btn4"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/btn_cancel_inDialogVerifyBank"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:text="Huỷ"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:layout_marginBottom="15dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

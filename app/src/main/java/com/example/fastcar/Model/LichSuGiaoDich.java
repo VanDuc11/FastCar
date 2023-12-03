@@ -17,6 +17,7 @@ public class LichSuGiaoDich implements Parcelable {
     int TrangThai;
     HoaDon HoaDon;
     NganHang NganHang;
+    int title;
     String HinhAnh;
 
     protected LichSuGiaoDich(Parcel in) {
@@ -28,6 +29,7 @@ public class LichSuGiaoDich implements Parcelable {
         TrangThai = in.readInt();
         HoaDon = in.readParcelable(HoaDon.class.getClassLoader());
         NganHang = in.readParcelable(NganHang.class.getClassLoader());
+        title = in.readInt();
         HinhAnh = in.readString();
     }
 
@@ -58,23 +60,25 @@ public class LichSuGiaoDich implements Parcelable {
         dest.writeInt(TrangThai);
         dest.writeParcelable(HoaDon, flags);
         dest.writeParcelable(NganHang, flags);
+        dest.writeInt(title);
         dest.writeString(HinhAnh);
     }
 
     public LichSuGiaoDich() {
     }
 
-    public LichSuGiaoDich(String _id, String maLSGD, User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, HoaDon hoaDon, NganHang nganHang, String hinhAnh) {
+    public LichSuGiaoDich(String _id, String maLSGD, User user, int soTienGD, Date thoiGian, String noiDung, int trangThai, HoaDon hoaDon, NganHang nganHang, int title, String hinhAnh) {
         this._id = _id;
-        MaLSGD = maLSGD;
-        User = user;
-        SoTienGD = soTienGD;
-        ThoiGian = thoiGian;
-        NoiDung = noiDung;
-        TrangThai = trangThai;
-        HoaDon = hoaDon;
-        NganHang = nganHang;
-        HinhAnh = hinhAnh;
+        this.MaLSGD = maLSGD;
+        this.User = user;
+        this.SoTienGD = soTienGD;
+        this.ThoiGian = thoiGian;
+        this.NoiDung = noiDung;
+        this.TrangThai = trangThai;
+        this.HoaDon = hoaDon;
+        this.NganHang = nganHang;
+        this.title = title;
+        this.HinhAnh = hinhAnh;
     }
 
 
@@ -156,5 +160,13 @@ public class LichSuGiaoDich implements Parcelable {
 
     public void setHinhAnh(String hinhAnh) {
         HinhAnh = hinhAnh;
+    }
+
+    public int getTitle() {
+        return title;
+    }
+
+    public void setTitle(int title) {
+        this.title = title;
     }
 }

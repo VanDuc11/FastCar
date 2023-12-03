@@ -31,7 +31,7 @@
                     android:id="@+id/icon_status_inLSThueXe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="25dp"
                     android:src="@drawable/icon_hoanthanh" />
 
                 <TextView

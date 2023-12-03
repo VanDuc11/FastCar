@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,7 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
     private static final int REQUEST_GALLERY = 2;
     private Uri cameraImageUri;
     int index = 0;
+    ProgressBar progressBar;
     String pathTruoc, pathSau, pathTrai, pathPhai, pathBaoHiem, pathDangKy, pathDangkiem;
     MultipartBody.Part BKS, HangXe, MauXe, NSX, Soghe, lnl, tieuHao, mota, diachi, latitude, longitude, giathue, id_user, chuyenDong, thechap, thoigiangiaoxe, thoigiannhanxe;
     AddCar addCar;
@@ -89,15 +91,18 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
 
         btn_confirm.setOnClickListener(v -> {
             if (validateImage()) {
-                RetrofitClient.FC_services().addCarUser(OutImagePaths(), filePart("DangKyXe", pathDangKy), filePart("DangKiem", pathDangkiem), filePart("BaoHiem", pathBaoHiem), BKS, HangXe, MauXe, NSX, chuyenDong, Soghe, lnl, tieuHao, mota, diachi, latitude, longitude, giathue, thechap, thoigiangiaoxe, thoigiannhanxe ,id_user).enqueue(new Callback<ResMessage>() {
+                progressBar.setVisibility(View.VISIBLE);
+                RetrofitClient.FC_services().addCarUser(OutImagePaths(), filePart("DangKyXe", pathDangKy), filePart("DangKiem", pathDangkiem), filePart("BaoHiem", pathBaoHiem), BKS, HangXe, MauXe, NSX, chuyenDong, Soghe, lnl, tieuHao, mota, diachi, latitude, longitude, giathue, thechap, thoigiangiaoxe, thoigiannhanxe, id_user).enqueue(new Callback<ResMessage>() {
                     @Override
                     public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                        progressBar.setVisibility(View.GONE);
                         if (response.code() == 201) {
                             CustomDialogNotify.showToastCustom(getBaseContext(), "Thêm xe thành công");
                             Handler handler = new Handler(Looper.getMainLooper());
                             Runnable myRunnable = () -> {
-                                startActivity(new Intent(getBaseContext(), CaNhan_Activity.class));
-                                finish();
+                                Intent intent = new Intent(getBaseContext(), ThemXe_Activity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(intent);
                             };
                             handler.postDelayed(() -> handler.post(myRunnable), 1000);
                         } else {
@@ -154,6 +159,8 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
         img_dangky = findViewById(R.id.img_dangky_xe);
         img_baohiem = findViewById(R.id.img_baohiem_xe);
         img_dangkiem = findViewById(R.id.img_dangkiem_xe);
+        progressBar = findViewById(R.id.progressBar_inThemXe);
+        progressBar.setVisibility(View.GONE);
         addCar = (AddCar) getIntent().getSerializableExtra("addCar2");
 
         BKS = MultipartBody.Part.createFormData("BKS", addCar.getBKS());
@@ -247,9 +254,45 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 Uri selectedImageUri = cameraImageUri;
                 // Xử lý ảnh được chọn từ thư viện
-//                if (img_truoc != null) {
-//                    img_truoc.setImageURI(selectedImageUri);
-//                }
+                if (index == 0) {
+                    if (img_truoc != null) {
+                        img_truoc.setImageURI(selectedImageUri);
+                        pathTruoc = getImagePath(selectedImageUri);
+                    }
+                } else if (index == 1) {
+                    if (img_sau != null) {
+                        img_sau.setImageURI(selectedImageUri);
+                        pathSau = getImagePath(selectedImageUri);
+                    }
+                } else if (index == 2) {
+                    if (img_trai != null) {
+                        img_trai.setImageURI(selectedImageUri);
+                        pathTrai = getImagePath(selectedImageUri);
+                    }
+
+                } else if (index == 3) {
+                    if (img_phai != null) {
+                        img_phai.setImageURI(selectedImageUri);
+                        pathPhai = getImagePath(selectedImageUri);
+                    }
+                } else if (index == 4) {
+                    if (img_dangkiem != null) {
+                        img_dangkiem.setImageURI(selectedImageUri);
+                        pathDangkiem = getImagePath(selectedImageUri);
+                    }
+
+                } else if (index == 5) {
+                    if (img_baohiem != null) {
+                        img_baohiem.setImageURI(selectedImageUri);
+                        pathBaoHiem = getImagePath(selectedImageUri);
+                    }
+
+                } else if (index == 6) {
+                    if (img_dangky != null) {
+                        img_dangky.setImageURI(selectedImageUri);
+                        pathDangKy = getImagePath(selectedImageUri);
+                    }
+                }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // xử lý hoạt động bị huỷ bỏ
             }
@@ -294,7 +337,6 @@ public class Upload_ImageXe_Activity extends AppCompatActivity {
                         img_dangky.setImageURI(selectedImageUri);
                         pathDangKy = getImagePath(selectedImageUri);
                     }
-
                 }
             }
 

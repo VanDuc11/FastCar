@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 
-import com.example.fastcar.Activity.ChuXe.ChiTietXeCuaToi_Activity;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
 import com.example.fastcar.FavoriteCar_Method;
 import com.example.fastcar.Model.Car;
@@ -51,7 +49,7 @@ public class DanhSachXeAdapter extends RecyclerView.Adapter<DanhSachXeAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay, tvMienTheChap, tvTrangThaiXe, tvDiaChiXe, tvKhoangCach;
+        TextView tv_tenXe, tv_soSao, tv_soChuyen, tv_truyenDong, tv_soTien1ngay, tvMienTheChap, tvDiaChiXe, tvKhoangCach;
         CardView item;
         ImageView img_favorite;
         RelativeLayout button_favorite;

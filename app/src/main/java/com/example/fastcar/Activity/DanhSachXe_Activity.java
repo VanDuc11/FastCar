@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -49,16 +50,16 @@ import retrofit2.Response;
 
 public class DanhSachXe_Activity extends AppCompatActivity {
     RecyclerView recyclerView;
-    ImageView ic_back;
+    RelativeLayout ic_back;
     List<Car> listCarFilter = new ArrayList<>();
-    LinearLayout ln_noResult, ln_listView, data_view, data_view_filter, btnResetFilter, btnFilterHangXe, btnFilterChiTiet, btnRate5Star;
+    LinearLayout ln_noResult, ln_listView, data_view, data_view_filter, btnResetFilter, btnFilterHangXe, btnFilterChiTiet, btnRate5Star, btnFilterMienTheChap;
     ShimmerFrameLayout shimmer_view, shimmer_view_filter;
     private User user;
     private String longitude, latitude;
-    private boolean isSelectedRate5Star = false;
-    private String rate5star;
+    private boolean isSelectedRate5Star, isSelectedMienTheChap = false;
+    private String rate5star, mienthechap;
     RangeSlider rangeSlider_soghe, rangeSlider_tienThue1ngay, rangeSlider_namSX;
-    TextView tv_khoangcach_seekbar, tv_mucGiaFrom, tv_mucGiaTo, tvSoGheFrom, tvSoGheTo, tvNSXFrom, tvNSXTo, btnResetFilterChiTiet;
+    TextView tv_khoangcach_seekbar, tv_mucGiaFrom, tv_mucGiaTo, tvSoGheFrom, tvSoGheTo, tvNSXFrom, tvNSXTo, btnResetFilterChiTiet, tvDiaChi, tvThoiGian;
     LinearLayout btn_search;
     SeekBar seekBar_KhoangCach;
     CheckBox ckbox_sosan, ckbox_std, ckbox_xang, ckbox_dau, ckbox_dien;
@@ -72,7 +73,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
 
         mapping();
         loadUI();
-        getData(null, null, null, null, null, null, null, null, null, null, khoangcach);
+        getData(null, null, null, null, null, null, null, null, null, null, null, khoangcach);
         getData_ofCarFilter();
 
         ic_back.setOnClickListener(view -> {
@@ -88,7 +89,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
 
             // fetch lại list
             loadUI();
-            getData(null, null, null, null, null, null, null, null, null, null, khoangcach);
+            getData(null, null, null, null, null, null, null, null, null, null, null, khoangcach);
         });
 
         btnFilterHangXe.setOnClickListener(view -> {
@@ -97,6 +98,33 @@ public class DanhSachXe_Activity extends AppCompatActivity {
 
         btnFilterChiTiet.setOnClickListener(view -> {
             showDialog_Filter_ChiTiet();
+        });
+
+        btnFilterMienTheChap.setOnClickListener(view -> {
+            String finalTheChap;
+            if (isSelectedMienTheChap) {
+                isSelectedMienTheChap = false;
+                mienthechap = "";
+                finalTheChap = null;
+                btnFilterMienTheChap.setBackgroundResource(R.drawable.custom_border_item_filter_non_selected);
+
+            } else {
+                isSelectedMienTheChap = true;
+                mienthechap = "false";
+                finalTheChap = "false";
+                btnFilterMienTheChap.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
+            }
+
+            SharedPreferences preferences = getSharedPreferences("data_filter", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("mienthechap", mienthechap);
+            editor.apply();
+            if (queryHangXeFilter.equals("")) {
+                getData(null, finalTheChap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+            } else {
+                getData(queryHangXeFilter, finalTheChap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+            }
+            loadUI();
         });
 
         btnRate5Star.setOnClickListener(view -> {
@@ -117,10 +145,10 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("rate5Star", rate5star);
             editor.apply();
-            if(queryHangXeFilter.equals("")) {
-                getData(null, truyendongFilter, nhienlieuFilter, number, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+            if (queryHangXeFilter.equals("")) {
+                getData(null, mienthechap, truyendongFilter, nhienlieuFilter, number, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
             } else {
-                getData(queryHangXeFilter, truyendongFilter, nhienlieuFilter, number, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+                getData(queryHangXeFilter, mienthechap, truyendongFilter, nhienlieuFilter, number, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
             }
             loadUI();
         });
@@ -139,12 +167,16 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         btnFilterHangXe = findViewById(R.id.btn_filter_hangxe);
         btnFilterChiTiet = findViewById(R.id.btn_filter_chitiet);
         btnRate5Star = findViewById(R.id.btn_filter_rate5Star);
+        btnFilterMienTheChap = findViewById(R.id.btn_filter_thechap);
+        tvDiaChi = findViewById(R.id.tv_diachi_timkiem_inItemDSX);
+        tvThoiGian = findViewById(R.id.tv_thoigian_timkiem_inItemDSX);
         data_view_filter.setVisibility(View.GONE);
         shimmer_view_filter.startShimmerAnimation();
 
         // lấy địa chỉ từ shared
         SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
-        String diachi = preferences.getString("diachi", "");
+        tvDiaChi.setText(preferences.getString("diachi", ""));
+        tvThoiGian.setText(preferences.getString("time", ""));
         longitude = preferences.getString("long", "");
         latitude = preferences.getString("lat", "");
 
@@ -164,6 +196,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         khoangcach = preferences.getInt("khoangcach", 0);
         truyendongFilter = preferences.getString("truyendong", "");
         nhienlieuFilter = preferences.getString("nhienlieu", "");
+        mienthechap = preferences.getString("mienthechap", "");
         sogheFrom = preferences.getInt("sogheFrom", 0);
         sogheTo = preferences.getInt("sogheTo", 0);
         nsxFrom = preferences.getInt("nsxFrom", 0);
@@ -198,6 +231,14 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             btnResetFilter.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
         }
 
+        if (mienthechap.equals("")) {
+            btnFilterMienTheChap.setBackgroundResource(R.drawable.custom_border_item_filter_non_selected);
+            mienthechap = null;
+        } else {
+            btnFilterMienTheChap.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
+            btnResetFilter.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
+        }
+
         if (isSelectedHangXeFilter) {
             btnFilterHangXe.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
             btnResetFilter.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
@@ -220,22 +261,22 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             btnResetFilter.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
         }
 
-        if (rate5star == null && !isSelectedHangXeFilter && mucgiaFrom == 100000 && khoangcach == 20000 &&
-        truyendongFilter == null && nhienlieuFilter == null && sogheFrom == 2 && sogheTo == 20 && nsxFrom == 2000 && nsxTo == Integer.parseInt(sdf.format(getYear))) {
+        if (rate5star == null && !isSelectedHangXeFilter && mienthechap == null && mucgiaFrom == 100000 && khoangcach == 20000 &&
+                truyendongFilter == null && nhienlieuFilter == null && sogheFrom == 2 && sogheTo == 20 && nsxFrom == 2000 && nsxTo == Integer.parseInt(sdf.format(getYear))) {
             btnResetFilter.setBackgroundResource(R.drawable.custom_border_item_filter_non_selected);
         } else {
             btnResetFilter.setBackgroundResource(R.drawable.custom_border_item_filter_selected);
         }
     }
 
-    private void getData(String HangXe, String ChuyenDong, String NhienLieu, String Rate5Sao, String giaThueFrom, String giaThueTo, String soGheFrom, String soGheTo, String yearFrom, String yearTo, int distance) {
+    private void getData(String HangXe, String TheChap, String ChuyenDong, String NhienLieu, String Rate5Sao, String giaThueFrom, String giaThueTo, String soGheFrom, String soGheTo, String yearFrom, String yearTo, int distance) {
         ln_noResult.setVisibility(View.GONE);
         ln_listView.setVisibility(View.VISIBLE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getListCar_NotUser(user.getEmail(), 1, HangXe, ChuyenDong, NhienLieu, Rate5Sao, giaThueFrom, giaThueTo, soGheFrom, soGheTo, yearFrom, yearTo).enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_NotUser(user.getEmail(), 1, HangXe, TheChap, ChuyenDong, NhienLieu, Rate5Sao, giaThueFrom, giaThueTo, soGheFrom, soGheTo, yearFrom, yearTo).enqueue(new Callback<List<Car>>() {
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.code() == 200) {
@@ -260,7 +301,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     }
 
     private void getData_ofCarFilter() {
-        RetrofitClient.FC_services().getListCar_NotUser(user.getEmail(), 1, null, null, null, null, null, null, null, null, null, null).enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_NotUser(user.getEmail(), 1, null, null, null, null, null, null, null, null, null, null, null).enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
@@ -390,9 +431,9 @@ public class DanhSachXe_Activity extends AppCompatActivity {
 
             if (check) {
                 // all
-                getData(null, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+                getData(null, mienthechap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
             } else {
-                getData(queryHangXeFilter, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+                getData(queryHangXeFilter, mienthechap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr, String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
             }
             loadUI();
             dialog.dismiss();
@@ -425,7 +466,6 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         ckbox_dau = dialog.findViewById(R.id.ckbox_dau_infilter_chitiet);
         ckbox_dien = dialog.findViewById(R.id.ckbox_dien_infilter_chitiet);
 
-//        loadUI();
         genderUI_DialogFilterChiTiet();
         btnResetFilterChiTiet.setOnClickListener(view -> {
             SharedPreferences preferences = getSharedPreferences("data_filter", Context.MODE_PRIVATE);
@@ -492,11 +532,11 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             if (nhienlieuFilter.length() == 0) {
                 nhienlieuFilter = null;
             }
-            if(queryHangXeFilter.equals("")) {
-                getData(null, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr,
+            if (queryHangXeFilter.equals("")) {
+                getData(null, mienthechap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr,
                         String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
             } else {
-                getData(queryHangXeFilter, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr,
+                getData(queryHangXeFilter, mienthechap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr,
                         String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
             }
 

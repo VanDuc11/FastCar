@@ -3,6 +3,7 @@ package com.example.fastcar.Activity.KhachHang;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.ItemTouchHelper;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -21,13 +22,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Activity.MaGiamGia_Activity;
+import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Activity.ThongTinGPLX_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Adapter.NganHangAdapter;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Dialog.Dialog_GoiYLoiNhan;
@@ -40,6 +44,7 @@ import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.FormatString.RandomMaHD;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
@@ -53,6 +58,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -72,8 +78,10 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     LinearLayout ln_view_voucher;
     ShapeableImageView img_Xe;
     Long startTime, endTime;
+    ProgressBar progressBar;
     long soNgayThueXe;
     Car car;
+    NganHang nganHang;
     User user;
     int giaThue1ngay, phiDVFastCar1ngay, tongPhiDV, tongTien, coc30Per, thanhToan70Per, tongTienGiamGia;
 
@@ -105,6 +113,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv_diaChiNhanXe = findViewById(R.id.tv_diachi_nhanxe_inThongTinThue);
         tv_tienThue1ngay = findViewById(R.id.tv_tienThue_1ngay);
         tv_tongTienxSoNgay = findViewById(R.id.tv_tongTien_x_soNgay_inThongTinThue);
+        progressBar = findViewById(R.id.progressBar_inThongTinThue);
         tv_coc30Per = findViewById(R.id.tv_soTien30Per_inThongTinThue);
         tv_tt70Per = findViewById(R.id.tv_soTien70Per_inThongTinThue);
         tv_thanhTien = findViewById(R.id.tv_thanhTien_inThongTinThue);
@@ -129,6 +138,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         soNgayThueXe = intent.getLongExtra("soNgayThueXe", 0);
         int totalChuyen_ofChuSH = intent.getIntExtra("chuyen", 0);
         float totalStar_ofChuSH = intent.getFloatExtra("stars", 0);
+        progressBar.setVisibility(View.GONE);
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
 
@@ -237,7 +247,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         }
 
         ckbox_dieuKhoan.setChecked(true);
-
+        fetch_ListNH_ofUser(user.getEmail());
     }
 
     @SuppressLint("SetTextI18n")
@@ -304,39 +314,45 @@ public class ThongTinThue_Activity extends AppCompatActivity {
 
         if (user.getTrangThai_GPLX() == 2) {
             // đã xác minh gplx
-            String ngayNhanStr = tv_ngayNhanXe.getText().toString().trim();
-            String ngayTraStr = tv_ngayTraXe.getText().toString().trim();
-            String voucher = tv_tenVoucher.getText().toString().trim();
-            String maHD = "FCAR" + RandomMaHD.random(5);
-            String loiNhan = edt_loiNhan.getText().toString();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            Date ngayNhan = null, ngayTra = null;
-            try {
-                ngayNhan = sdf.parse(ngayNhanStr);
-                ngayTra = sdf.parse(ngayTraStr);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            if (nganHang != null) {
+                String ngayNhanStr = tv_ngayNhanXe.getText().toString().trim();
+                String ngayTraStr = tv_ngayTraXe.getText().toString().trim();
+                String voucher = tv_tenVoucher.getText().toString().trim();
+                String maHD = "FCAR" + RandomMaHD.random(5);
+                String loiNhan = edt_loiNhan.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                Date ngayNhan = null, ngayTra = null;
+                try {
+                    ngayNhan = sdf.parse(ngayNhanStr);
+                    ngayTra = sdf.parse(ngayTraStr);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
 
-            HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                    voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, null, null, null, 1, "", false);
+                HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
+                        voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, null, null, null, 1, "", false);
+                progressBar.setVisibility(View.VISIBLE);
+                RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
+                    @Override
+                    public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                        progressBar.setVisibility(View.GONE);
+                        if (response.code() == 201) {
+                            showDialog_DatCoc_or_ThueXeKhac(hoaDon);
+                        } else {
+                            System.out.println(response.message());
+                        }
 
-            RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
-                @Override
-                public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                    if (response.code() == 201) {
-                        showDialog_DatCoc_or_ThueXeKhac(hoaDon);
-                    } else {
-                        System.out.println(response.message());
                     }
 
-                }
+                    @Override
+                    public void onFailure(Call<ResMessage> call, Throwable t) {
+                        System.out.println("Có lỗi khi thực hiện createHoaDon: " + t);
+                    }
+                });
+            } else {
+                showDialog_VerifyBank();
+            }
 
-                @Override
-                public void onFailure(Call<ResMessage> call, Throwable t) {
-                    System.out.println("Có lỗi khi thực hiện createHoaDon: " + t);
-                }
-            });
         } else {
             showDialog_VerifyGPLX();
         }
@@ -372,6 +388,42 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         btn_confirm.setOnClickListener(view -> {
             Intent intent = new Intent(ThongTinThue_Activity.this, ThongTinGPLX_Activity.class);
             intent.putExtra("emailUser", user.getEmail());
+            startActivity(intent);
+            dialog.dismiss();
+        });
+    }
+
+    private void showDialog_VerifyBank() {
+        LayoutInflater inflater = LayoutInflater.from(ThongTinThue_Activity.this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.dialog_verify_bank, null);
+        Dialog dialog = new Dialog(ThongTinThue_Activity.this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        TextView tvNameUser = dialog.findViewById(R.id.tv_tenUser_inDialogVerifyBank);
+        TextView btn_cancel = dialog.findViewById(R.id.btn_cancel_inDialogVerifyBank);
+        TextView btn_confirm = dialog.findViewById(R.id.btn_confirm_inDialogVerifyBank);
+
+        tvNameUser.setText(user.getUserName());
+
+        btn_cancel.setOnClickListener(view -> dialog.dismiss());
+        btn_confirm.setOnClickListener(view -> {
+            Intent intent = new Intent(ThongTinThue_Activity.this, TaiKhoanNganHang_Activity.class);
+            intent.putExtra("emailUser", user.getEmail());
+            intent.putExtra("user", user);
             startActivity(intent);
             dialog.dismiss();
         });
@@ -483,6 +535,25 @@ public class ThongTinThue_Activity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void fetch_ListNH_ofUser(String email) {
+        RetrofitClient.FC_services().getListNH_ofUser(email).enqueue(new Callback<List<NganHang>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<List<NganHang>> call, Response<List<NganHang>> response) {
+                if (response.code() == 200) {
+                    if (!response.body().isEmpty()) {
+                        nganHang = response.body().get(0);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NganHang>> call, Throwable t) {
+                System.out.println("Có lỗi khi fetch_NH_ofUser(): " + t);
+            }
+        });
     }
 
 }

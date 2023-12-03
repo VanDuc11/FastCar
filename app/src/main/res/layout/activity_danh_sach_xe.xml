@@ -7,30 +7,69 @@
     android:orientation="vertical"
     tools:context=".Activity.DanhSachXe_Activity">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rr1"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
         app:titleTextColor="@color/white">
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/icon_back_in_dsxe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/icon_back_black" />
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_btn9">
 
-        <TextView
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_prev" />
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:gravity="center"
-            android:paddingRight="30dp"
-            android:text="Danh sách xe"
-            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-            android:textSize="17dp" />
-    </RelativeLayout>
+            android:background="@drawable/custom_bg_grey"
+            android:layout_marginHorizontal="5dp"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_diachi_timkiem_inItemDSX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Quận Nam Từ Liêm, Hà Nội"
+                android:padding="3dp"
+                android:layout_marginEnd="15dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_thoigian_timkiem_inItemDSX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="12/12/1212 - 12/12/1222"
+                android:layout_marginEnd="15dp"
+                android:maxLines="1"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rlt_filter"

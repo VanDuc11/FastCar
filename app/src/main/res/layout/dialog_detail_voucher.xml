@@ -1,136 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="10dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/icon_close_dialog_detail_voucher"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/icon_close_black" />
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img1_inDetail_voucher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="250dp"
+                    android:src="@drawable/image_khuyenmai" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/img2_inDetail_voucher"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:src="@drawable/icon_voucher_v3" />
+
+                    <TextView
+                        android:id="@+id/tv_ten_voucher_inDetail_voucher"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_border_edittext"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="TESTKM"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_ngaybd_to_ngaykt_inDetail_voucher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Áp dụng từ 11/11/2011 đến 12/11/2011"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textColor="@color/button_green"
+                        android:textSize="14dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Giảm "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/tv_soTien_giamgia_inDetail_voucher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="200.000 đ"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" cho tất cả chuyến đi"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="- Có giá trị đến hết ngày "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/tv_ngayHetHan_voucher_inDetail_voucher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12/11/2011"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="- Không áp dụng chung với các chương trình khuyến mãi khác. "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="30dp"
+                        android:text="- Mỗi chuyến đi chỉ được sử dụng 1 mã khuyến mãi duy nhất. "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/icon_close_dialog_detail_voucher"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/custom_btn9"
+            android:backgroundTint="#EDE6E6">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:src="@drawable/icon_voucher_v3" />
+                android:id="@+id/icon_favorite_car_inListXe"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_close_black" />
+        </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_ten_voucher_inDetail_voucher"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/custom_border_edittext"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="TESTKM"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                android:textSize="17dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_ngaybd_to_ngaykt_inDetail_voucher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="Áp dụng từ 11/11/2011 đến 12/11/2011"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textColor="@color/button_green"
-                android:textSize="14dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Giảm "
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:id="@+id/tv_soTien_giamgia_inDetail_voucher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="200.000 đ"
-                    android:textStyle="bold"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" cho tất cả chuyến đi"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="- Có giá trị đến hết ngày "
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/tv_ngayHetHan_voucher_inDetail_voucher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12/11/2011"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="- Không áp dụng chung với các chương trình khuyến mãi khác. "
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textSize="14dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="30dp"
-                android:text="- Mỗi chuyến đi chỉ được sử dụng 1 mã khuyến mãi duy nhất. "
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textSize="14dp" />
-
-
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

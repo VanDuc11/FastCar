@@ -170,10 +170,10 @@ public class ViChuXe_Activity extends AppCompatActivity {
 
         btn_create.setOnClickListener(v -> {
             String cleanString = ed_sotien.getText().toString().replaceAll("\\.", "");
-            int sotiengd = Integer.parseInt(cleanString);
             if (cleanString.length() == 0) {
                 CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập số tiền");
             } else {
+                int sotiengd = Integer.parseInt(cleanString);
                 if (sotiengd < 10000) {
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Rút tối thiểu 10.000 VNĐ");
                 } else {
@@ -181,7 +181,7 @@ public class ViChuXe_Activity extends AppCompatActivity {
                         CustomDialogNotify.showToastCustom(getBaseContext(), "Số dư của bạn không đủ");
                     } else {
                         String maLSGD = RandomMaHD.random(8) + "";
-                        lichSuGiaoDich = new LichSuGiaoDich(null, maLSGD, user, sotiengd, date, "Yêu cầu rút tiền", 0, null, nganHangList.get(0), "");
+                        lichSuGiaoDich = new LichSuGiaoDich(null, maLSGD, user, sotiengd, date, "Yêu cầu rút tiền", 0, null, nganHangList.get(0), 0, "");
                         RetrofitClient.FC_services().createLSGD(lichSuGiaoDich).enqueue(new Callback<ResMessage>() {
                             @Override
                             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
