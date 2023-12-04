@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -92,6 +93,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_coc, ln_sdtChuSH, ln_traxe;
     HoaDon hoaDon;
     ProgressBar progressBar;
+    SwipeRefreshLayout refreshLayout;
     float TrungBinhSao;
     private int totalChuyen_ofChuSH;
     private float totalStar_ofChuSH;
@@ -111,6 +113,11 @@ public class HoaDon_Activity extends AppCompatActivity {
 
         mapping();
         load();
+
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            refreshLayout.setRefreshing(false);
+        });
 
         btn_datcoc.setOnClickListener(view -> {
             Intent intent = new Intent(getBaseContext(), ThanhToan_Activity.class);
@@ -154,6 +161,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         stt3 = findViewById(R.id.stt_3);
         stt4 = findViewById(R.id.stt_4);
         data_view = findViewById(R.id.data_view_inHoaDon);
+        refreshLayout = findViewById(R.id.refreshData_inHoaDon);
         shimmer_view = findViewById(R.id.shimmer_view_inHoaDon);
         tvTraXe = findViewById(R.id.btn_traxe_cho_chuSH_inHD);
         tvGoiChoChuSH = findViewById(R.id.btn_goi_cho_chuSH_inHD);
@@ -279,7 +287,9 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_diachiXe.setText(diaChiXe);
                 tvContentInfo.setVisibility(View.GONE);
                 tvSdtChuSH.setText(hoaDon.getXe().getChuSH().getSDT());
-                ln_traxe.setVisibility(View.GONE);
+                ln_traxe.setVisibility(View.VISIBLE);
+                tvGoiChoChuSH.setBackgroundResource(R.drawable.custom_btn4);
+                tvTraXe.setVisibility(View.GONE);
                 tvXemHinhAnh.setVisibility(View.GONE);
             } else if (statusCode == 4) {
                 ln_4stt.setVisibility(View.VISIBLE);

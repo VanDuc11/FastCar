@@ -80,7 +80,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
         });
 
         ic_back.setOnClickListener(view -> onBackPressed());
-        ic_add.setOnClickListener(view -> showDialog_ThemNganHang());
+        ic_add.setOnClickListener(view -> showDialog_ThemNganHang_orUpdateNganHang(0, null, 0));
     }
 
     private void mapping() {
@@ -106,8 +106,8 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void showDialog_ThemNganHang() {
-        if(nganHangList.size() == 1) {
+    private void showDialog_ThemNganHang_orUpdateNganHang(int index, NganHang nganHang, int position) {
+        if (nganHangList.size() == 1 && index == 0) {
             CustomDialogNotify.showToastCustom(getBaseContext(), "Chỉ thêm tối đa 1 tài khoản");
         } else {
             LayoutInflater inflater = LayoutInflater.from(TaiKhoanNganHang_Activity.this);
@@ -131,23 +131,53 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
 
             ImageView ic_back = dialog.findViewById(R.id.icon_back_inThemNganHang);
             TextView btnConfirm = dialog.findViewById(R.id.btn_confirm_inThemNganHang);
+            TextView tv_actionbar = dialog.findViewById(R.id.tv_actionbar_dialog_themnganhang);
             edtTenNH = dialog.findViewById(R.id.edt_tenNH_inThemNganHang);
             edtChuNH = dialog.findViewById(R.id.edt_tenChuTK_inThemNganHang);
             edtSTK = dialog.findViewById(R.id.edt_soTK_inThemNganHang);
 
-            edtTenNH.setText("Chưa chọn");
             edtTenNH.setOnClickListener(view -> showDialogListBank());
 
-            ic_back.setOnClickListener(view -> dialog.dismiss());
-            btnConfirm.setOnClickListener(view -> {
-                tenNH = edtTenNH.getText().toString();
-                tenChuTK = edtChuNH.getText().toString();
-                stk = edtSTK.getText().toString();
-                if (validateForm()) {
-                    NganHang nganHang = new NganHang(tenNH, tenChuTK, stk, user);
-                    createNewModel(nganHang, dialog);
-                }
-            });
+            if (index == 0) {
+                // thêm
+                edtTenNH.setText("Chưa chọn");
+                tv_actionbar.setText("Thêm tài khoản ngân hàng");
+                btnConfirm.setText("Thêm");
+                ic_back.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+                btnConfirm.setOnClickListener(view -> {
+                    tenNH = edtTenNH.getText().toString();
+                    tenChuTK = edtChuNH.getText().toString();
+                    stk = edtSTK.getText().toString();
+                    if (validateForm()) {
+                        NganHang nganHangNew = new NganHang(tenNH, tenChuTK, stk, user);
+                        createNewModel(nganHangNew, dialog);
+                    }
+                });
+            } else {
+                // sửa
+                edtTenNH.setText(nganHang.getTenNH());
+                edtChuNH.setText(nganHang.getTenChuTK());
+                edtSTK.setText(nganHang.getSoTK());
+                tv_actionbar.setText("Sửa tài khoản ngân hàng");
+                btnConfirm.setText("Sửa");
+                ic_back.setOnClickListener(view -> {
+                    dialog.dismiss();
+                    recyclerView.getAdapter().notifyItemChanged(position);
+                });
+                btnConfirm.setOnClickListener(view -> {
+                    tenNH = edtTenNH.getText().toString();
+                    tenChuTK = edtChuNH.getText().toString();
+                    stk = edtSTK.getText().toString();
+                    if (validateForm()) {
+                        nganHang.setTenNH(tenNH);
+                        nganHang.setTenChuTK(tenChuTK);
+                        nganHang.setSoTK(stk);
+                        updateItem(nganHang, dialog);
+                    }
+                });
+            }
         }
     }
 
@@ -177,6 +207,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<List<NganHang>> call, Throwable t) {
                 System.out.println("Có lỗi khi fetch_ListNH_ofUser(): " + t);
@@ -186,7 +217,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
         });
     }
 
-    ItemTouchHelper.SimpleCallback callBackMethod = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback callBackMethod = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -200,6 +231,9 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
             if (direction == ItemTouchHelper.LEFT) {
                 // delete item
                 showDialogConfirmDelete(nganHang.get_id(), position);
+            } else if (direction == ItemTouchHelper.RIGHT) {
+                // delete item
+                showDialog_ThemNganHang_orUpdateNganHang(1, nganHang, position);
             }
         }
 
@@ -215,6 +249,14 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
                     .addSwipeLeftCornerRadius(1, 15)
                     .addSwipeLeftPadding(1, 10, 10, 10)
                     .setSwipeLeftLabelTextSize(1, 16)
+                    .addSwipeRightLabel("Sửa")
+                    .setSwipeRightLabelColor(Color.WHITE)
+                    .addSwipeRightActionIcon(R.drawable.icon_edit)
+                    .setSwipeRightActionIconTint(Color.WHITE)
+                    .addSwipeRightBackgroundColor(Color.GREEN)
+                    .addSwipeRightCornerRadius(1, 15)
+                    .addSwipeRightPadding(1, 10, 10, 10)
+                    .setSwipeRightLabelTextSize(1, 16)
                     .create().decorate();
 
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -263,16 +305,43 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
         return true;
     }
 
-    private void deleteItem(String id) {
-        RetrofitClient.FC_services().deleteNganHang(id).enqueue(new Callback<ResMessage>() {
+    private void updateItem(NganHang nganHang, Dialog dialog) {
+        RetrofitClient.FC_services().updateNganHang(nganHang.get_id(), nganHang).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if (response.code() == 200) {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    Runnable myRunnable = dialog::dismiss;
+                    handler.postDelayed(() -> handler.post(myRunnable), 1000);
+                } else {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
+                System.out.println("Có lỗi khi sửa tài khoản ngân hàng: " + t);
+            }
+        });
+    }
+
+    private void deleteItem(String idBank) {
+        RetrofitClient.FC_services().deleteNganHang(idBank).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if (response.code() == 200) {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
+                } else {
+                    CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
+                }
             }
 
             @Override
             public void onFailure(Call<ResMessage> call, Throwable t) {
                 System.out.println("Có lỗi khi xoá tài khoản ngân hàng: " + t);
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
             }
         });
     }
@@ -332,7 +401,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<BankNameAPI> call, Response<BankNameAPI> response) {
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     tv_noResult.setVisibility(View.GONE);
                     listBanks = new ArrayList<>(response.body().getData());
                     listFind = new ArrayList<>(listBanks);
@@ -360,13 +429,13 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 listFind.clear();
-                for (Bank item: listBanks) {
-                    if(item.getShortName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                for (Bank item : listBanks) {
+                    if (item.getShortName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
                         listFind.add(item);
                     }
                 }
 
-                if(listFind.size() > 0) {
+                if (listFind.size() > 0) {
                     tv_noResult.setVisibility(View.GONE);
                     recyclerView_nameBank.setVisibility(View.VISIBLE);
                 } else {

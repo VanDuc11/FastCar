@@ -2,64 +2,59 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/refresh_data_inChuyenXe1_ChuSH"
+    android:id="@+id/refresh_data_LSGD_ruttien"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.ChuXe.QuanLyChuyenXe.Upcoming_CarFragment">
+    tools:context=".Activity.ChuXe.LichSuGiaoDich">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_view_inChuyenXe1_chush"
+            android:id="@+id/shimmer_view_lichSuGiaoDich_ruttien"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/backgroud">
 
-            <include layout="@layout/layout_chuyen_xe_placeholder" />
+            <include layout="@layout/lay_out_danh_sach_ls_placeholder" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <LinearLayout
-            android:id="@+id/data_view_inChuyenXe1_chush"
+            android:id="@+id/data_view_lichSuGiaoDich_ruttien"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/backgroud"
             android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_chuyenxe1_chush"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/ln_no_result_inChuyenXe1_chuSH"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_lich_su_giao_dich_ruttien"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <LinearLayout
+                    android:id="@+id/ln_no_result_inRutTien"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:src="@drawable/img_khongcochuyen" />
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:text="Không có dữ liệu"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                        android:textSize="19dp" />
-
+                        android:textSize="17dp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

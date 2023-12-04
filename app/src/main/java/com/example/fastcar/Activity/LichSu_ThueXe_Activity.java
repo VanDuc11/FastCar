@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.fastcar.Adapter.LichSuThueXeAdapter;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -88,7 +89,7 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     } else {
-                        refreshLayout.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
                     }
                 }
@@ -97,8 +98,7 @@ public class LichSu_ThueXe_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<HoaDon>> call, Throwable t) {
                 System.out.println("Có lỗi xảy ra: " + t);
-                refreshLayout.setVisibility(View.GONE);
-                ln_noResult.setVisibility(View.VISIBLE);
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
             }
         });
         img_back.setOnClickListener(view -> onBackPressed());

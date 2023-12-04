@@ -7,108 +7,236 @@
     android:orientation="vertical"
     tools:context=".Activity.DanhSachXe_Activity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="20dp"
+        tools:ignore="MissingConstraints">
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="20dp"
-            tools:ignore="MissingConstraints">
+            android:background="@drawable/bo_goc_xekhampha"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
+                android:id="@+id/gr1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bo_goc_xekhampha"
-                android:padding="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:background="@color/loading"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/img_XekhamPha" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_truyendong_inItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_tv"
+                android:backgroundTint="@color/loading"
+                android:enabled="true"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5">
+                app:layout_constraintTop_toBottomOf="@+id/gr1" />
 
-                <RelativeLayout
-                    android:id="@+id/gr1"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_tv2"
+                android:backgroundTint="@color/loading"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toEndOf="@+id/tv_truyendong_inItem"
+                app:layout_constraintTop_toBottomOf="@+id/gr1" />
+
+            <TextView
+                android:id="@+id/tv_tenxe_inItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/loading"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_truyendong_inItem" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/loading"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inItem" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
+        tools:ignore="MissingConstraints">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bo_goc_xekhampha"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <RelativeLayout
+                android:id="@+id/gr2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:ignore="MissingConstraints">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="210dp"
-                        android:background="@color/loading"
-                        android:scaleType="centerCrop"
-                        app:shapeAppearanceOverlay="@style/img_XekhamPha" />
-
-                </RelativeLayout>
-
-
-                <TextView
-                    android:id="@+id/tv_truyendong_inItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/custom_tv"
-                    android:backgroundTint="@color/loading"
-                    android:enabled="true"
-                    android:gravity="center"
-                    android:maxLines="2"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/gr1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/custom_tv2"
-                    android:backgroundTint="@color/loading"
-                    android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/tv_truyendong_inItem"
-                    app:layout_constraintTop_toBottomOf="@+id/gr1" />
-
-                <TextView
-                    android:id="@+id/tv_tenxe_inItem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_height="210dp"
                     android:background="@color/loading"
-                    android:drawablePadding="10dp"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textColor="@color/black"
-                    android:textSize="19dp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_truyendong_inItem" />
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/img_XekhamPha" />
 
-                <TextView
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_truyendong_inItem2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_tv"
+                android:backgroundTint="@color/loading"
+                android:enabled="true"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gr2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_tv2"
+                android:backgroundTint="@color/loading"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toEndOf="@+id/tv_truyendong_inItem2"
+                app:layout_constraintTop_toBottomOf="@+id/gr2" />
+
+            <TextView
+                android:id="@+id/tv_tenxe_inItem2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/loading"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/black"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_truyendong_inItem2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/loading"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inItem2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
+        tools:ignore="MissingConstraints">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bo_goc_xekhampha"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <RelativeLayout
+                android:id="@+id/gr3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_height="210dp"
                     android:background="@color/loading"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_tenxe_inItem" />
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/img_XekhamPha" />
 
+            </RelativeLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

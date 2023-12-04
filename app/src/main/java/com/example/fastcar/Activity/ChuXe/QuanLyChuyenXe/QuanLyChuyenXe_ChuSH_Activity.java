@@ -9,17 +9,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import android.widget.RelativeLayout;
-
-import com.example.fastcar.Activity.MaGiamGia_Activity;
-import com.example.fastcar.Activity.ThongBao_Activity;
-import com.example.fastcar.Activity.act_bottom.HoTro_Activity;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
-import com.google.android.material.tabs.TabLayout;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
@@ -88,7 +81,7 @@ public class QuanLyChuyenXe_ChuSH_Activity extends AppCompatActivity {
         btn_active.setTextColor(getResources().getColor(R.color.white));
         btn_upcoming.setBackgroundResource(R.drawable.custom_item_non_selected);
         btn_upcoming.setTextColor(getResources().getColor(R.color.black));
-        viewPager = findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager_ChuyenXeChuSH);
         data_view = findViewById(R.id.data_view_inQLCX);
         shimmer_view = findViewById(R.id.shimmer_view_inQLCX);
         btn_back = findViewById(R.id.icon_back_in_QLCX);
@@ -115,7 +108,6 @@ public class QuanLyChuyenXe_ChuSH_Activity extends AppCompatActivity {
             btn_active.setBackgroundResource(R.drawable.custom_item_non_selected);
             btn_active.setTextColor(getResources().getColor(R.color.black));
         });
-
     }
 
     private void fetchListCar_ofUser() {

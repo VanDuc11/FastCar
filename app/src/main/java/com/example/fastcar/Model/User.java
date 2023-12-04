@@ -98,6 +98,7 @@ public class User implements Parcelable {
         Avatar = in.readString();
         SoDu = in.readInt();
         TokenFCM = in.readString();
+        NgayThamGia = new Date(in.readLong());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -140,6 +141,7 @@ public class User implements Parcelable {
         parcel.writeString(Avatar);
         parcel.writeInt(SoDu);
         parcel.writeString(TokenFCM);
+        parcel.writeLong(NgayThamGia.getTime());
     }
 
     public String get_id() {

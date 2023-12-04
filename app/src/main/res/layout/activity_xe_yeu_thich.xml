@@ -32,23 +32,31 @@
             android:textSize="18dp" />
     </RelativeLayout>
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_view_inXeYeuThich"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_data_inXeYeuThich"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/action_bar_xeYeuThich">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <include layout="@layout/layout_xe_yeu_thich_placeholder" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_view_inXeYeuThich"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/data_view_inXeYeuThich"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/action_bar_xeYeuThich"
-        android:orientation="vertical">
+                <include layout="@layout/layout_xe_yeu_thich_placeholder" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <include layout="@layout/layout_xe_yeu_thich" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/data_view_inXeYeuThich"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <include layout="@layout/layout_xe_yeu_thich" />
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

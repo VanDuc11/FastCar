@@ -41,7 +41,7 @@
             android:name=".Activity.ChuXe.ChiTietHoaDonActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ChuXe.LichSuGD_Activity"
+            android:name=".Activity.ChuXe.LichSuGiaoDich.LichSuGD_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.ChuXe.HoaDon_ChuSH_Activity"

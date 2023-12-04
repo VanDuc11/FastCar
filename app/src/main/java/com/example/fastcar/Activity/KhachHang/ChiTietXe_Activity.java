@@ -4,19 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.text.Html;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,8 +35,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Adapter.DanhSachXeAdapter;
 import com.example.fastcar.Adapter.NhanXetAdapter;
 import com.example.fastcar.Adapter.PhotoChiTietXeAdapter;
+import com.example.fastcar.Adapter.XeKhamPhaAdapter;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Dialog.Dialog_PhuPhi_PhatSinh;
 import com.example.fastcar.Dialog.Dialog_TS_TheChap;
@@ -49,6 +61,7 @@ import com.google.gson.Gson;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,8 +76,8 @@ import retrofit2.Response;
 public class ChiTietXe_Activity extends AppCompatActivity {
     TextView btnThueXe, tv_tenxe_actionbar, tv_tenxe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe;
     TextView tv_truyendong, tv_soGhe, tv_nhienlieu, tv_tieuhao, tv_mota, tv_soNgayThueXe, tv_tongTien, tv_xeDaThue;
-    TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_noResult_inFB, tv_soTien1ngay;
-    TextView tv_diaChiXe, tv_diaChiXe2, tv_thechap, tvTimeGiaoXe, tvTimeNhanXe;
+    TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_soTien1ngay;
+    TextView tv_diaChiXe, tv_diaChiXe2, tv_thechap, tvTimeGiaoXe, tvTimeNhanXe, tvXemThemNhanXet, tvSoluongNX;
     boolean isSeeMore_inDieuKhoan = false;
     CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi, cardview_danhgiaXe, cardview_chuxe;
     RadioButton rd_selection1, rd_selection2;
@@ -77,7 +90,10 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     CircleIndicator circleIndicator;
     CircleImageView img_chuSH_Xe;
     PhotoChiTietXeAdapter photoAdapter;
+    private String formatted_NgayThamGia_ChuSH;
     NhanXetAdapter nhanXetAdapter;
+    List<FeedBack> listFeedbacks = new ArrayList<>();
+    List<Car> listXe_ofChuSH = new ArrayList<>();
     Long startTimeLong, endTimeLong;
     MaterialDatePicker<Pair<Long, Long>> datePicker;
     long soNgayThueXe;
@@ -109,7 +125,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         });
 
         ic_back.setOnClickListener(view -> onBackPressed());
-
+        tvXemThemNhanXet.setOnClickListener(view -> showDialog_FullNhanXet());
+        cardview_chuxe.setOnClickListener(view -> showDialog_info_ChuSH());
     }
 
     private void mapping() {
@@ -150,16 +167,17 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         tv_tenChuSH_Xe = findViewById(R.id.tv_tenChuSH_Xe_inCTX);
         tv_soSao_ofChuSH = findViewById(R.id.tv_soSao_ofChuSH_Xe_inCTX);
         tv_soChuyen_ofChuSH = findViewById(R.id.tv_soChuyen_ofChuSH_Xe_inCTX);
-        tv_noResult_inFB = findViewById(R.id.tv_noResult_inFB);
         cardview_DieuKhoan_PhuPhi = findViewById(R.id.cardview_DieuKhoan_PhuPhi);
         cardview_thoigianThueXe = findViewById(R.id.cardview_thoigianThueXe);
         cardview_chuxe = findViewById(R.id.cardview_chuxe);
         tvTimeGiaoXe = findViewById(R.id.tv_thoigian_giaoxe_inChiTietXe);
-        tvTimeNhanXe = tv_diaChiXe.findViewById(R.id.tv_thoigian_nhanxe_inChiTietXe);
+        tvTimeNhanXe = findViewById(R.id.tv_thoigian_nhanxe_inChiTietXe);
         ln_giaonhanxe = findViewById(R.id.ln_thoigian_giaonhanxe_inCTX);
         cardview_danhgiaXe = findViewById(R.id.cardview_danhgiaXe);
         ln_view_buttonThueXe_inCTX = findViewById(R.id.ln_view_buttonThueXe_inCTX);
         webView_loadMap = findViewById(R.id.webView_loadMap);
+        tvXemThemNhanXet = findViewById(R.id.tv_xemthem_NhanXet_inCTX);
+        tvSoluongNX = findViewById(R.id.tv_sl_nhanxet_inCTX);
     }
 
     @SuppressLint({"SetTextI18n", "SetJavaScriptEnabled"})
@@ -305,6 +323,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         // chủ SH
         String url_image_chuSH = car.getChuSH().getAvatar();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        formatted_NgayThamGia_ChuSH = dateFormat.format(car.getChuSH().getNgayThamGia());
+        System.out.println("date: " + car.getChuSH().getNgayThamGia());
 
         if (url_image_chuSH != null) {
             Glide.with(getBaseContext()).load(url_image_chuSH).into(img_chuSH_Xe);
@@ -452,11 +473,17 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             @Override
             public void onResponse(retrofit2.Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
                 if (response.code() == 200) {
-                    if (response.body().size() != 0) {
-                        nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, response.body());
-                        reyNhanXet.setAdapter(nhanXetAdapter);
-                        nhanXetAdapter.notifyDataSetChanged();
-                        tv_noResult_inFB.setVisibility(View.GONE);
+                    listFeedbacks = response.body();
+                    if (listFeedbacks.size() != 0) {
+                        if (listFeedbacks.size() > 2) {
+                            nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, response.body(), false);
+                            reyNhanXet.setAdapter(nhanXetAdapter);
+                            nhanXetAdapter.notifyDataSetChanged();
+                        } else {
+                            tvXemThemNhanXet.setVisibility(View.GONE);
+                        }
+                        tvSoluongNX.setText(response.body().size() + " nhận xét");
+
                     } else {
                         cardview_danhgiaXe.setVisibility(View.GONE);
                     }
@@ -470,6 +497,106 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                 System.out.println("Có lỗi khi get feedback id: " + id_xe + " --- " + t);
             }
         });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void showDialog_FullNhanXet() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_showfull_nhanxet, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_fullnhanxet);
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView_full_nhanxet);
+
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+
+        nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, listFeedbacks, true);
+        recyclerView.setAdapter(nhanXetAdapter);
+        nhanXetAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
+    private void showDialog_info_ChuSH() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_info_chush, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_info_chush);
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView_listxe_indialog_info_chush);
+        CircleImageView imgChuXe = dialog.findViewById(R.id.avt_chush_inDialog_info_chush);
+        TextView tvTenChuXe = dialog.findViewById(R.id.tv_name_chush_inDialog_info_chush);
+        TextView tvNgayThamGia = dialog.findViewById(R.id.tv_ngaythamgia_chush_inDialog_info_chush);
+        TextView tvSoChuyen = dialog.findViewById(R.id.tv_sochuyen_ofChuSH_inDialog_info);
+        TextView tvTotalXe = dialog.findViewById(R.id.btn_showmore_listxe_ofchush);
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+        Glide.with(this).load(car.getChuSH().getAvatar()).into(imgChuXe);
+        tvTenChuXe.setText(car.getChuSH().getUserName());
+        tvNgayThamGia.setText(formatted_NgayThamGia_ChuSH);
+        tvSoChuyen.setText(totalChuyen_ofChuSH + " chuyến");
+        tvTotalXe.setText("Danh sách xe (" + listXe_ofChuSH.size() + " xe)");
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(ChiTietXe_Activity.this, listXe_ofChuSH);
+        recyclerView.setAdapter(adapter);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+        adapter.notifyDataSetChanged();
+        tvTotalXe.setOnClickListener(view -> showDialog_FullXe_ofChuSH(listXe_ofChuSH));
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void showDialog_FullXe_ofChuSH(List<Car> listCars) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_showfull_xe_chush, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        dialog.show();
+
+        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_full_listxe_chush);
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView_full_listxe_chush);
+        btnBack.setOnClickListener(view -> dialog.dismiss());
+        DanhSachXeAdapter danhSachXeAdapter = new DanhSachXeAdapter(ChiTietXe_Activity.this, listCars, null);
+        recyclerView.setAdapter(danhSachXeAdapter);
+        danhSachXeAdapter.notifyDataSetChanged();
     }
 
     public void showDialog_GiayToThueXe_inCTX(View view) {
@@ -561,10 +688,11 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             @Override
             public void onResponse(retrofit2.Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.code() == 200) {
+                    listXe_ofChuSH = response.body();
                     float numberStar = 0;
                     int count = 0;
-                    List<Car> listCar_ofChuSH = response.body();
-                    for (Car car : listCar_ofChuSH) {
+                    assert listXe_ofChuSH != null;
+                    for (Car car : listXe_ofChuSH) {
                         if (car.getTrungBinhSao() > 0) {
                             numberStar += car.getTrungBinhSao();
                             count++;
@@ -575,7 +703,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                     DecimalFormat df = new DecimalFormat("0.0");
                     String formattedNumber = df.format(totalStar_ofChuSH);
                     tv_soSao_ofChuSH.setText(formattedNumber);
-                    tv_soChuyen_ofChuSH.setText(String.valueOf(totalChuyen_ofChuSH) + " chuyến");
+                    tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
                 }
             }
 

@@ -1,22 +1,11 @@
 package com.example.fastcar.Activity.ChuXe.QuanLyChuyenXe;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
-
-import com.example.fastcar.Activity.MaGiamGia_Activity;
-import com.example.fastcar.Activity.ThongBao_Activity;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private String id_xe;
-    private boolean isLoaded;
     public MyPagerAdapter(FragmentManager fm,String id_xe) {
         super(fm);
         this.id_xe = id_xe;

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class VehicleWorksFragment extends Fragment {
     LinearLayout ln_noResult;
     ShimmerFrameLayout shimmer_view;
     LinearLayout data_view;
+    SwipeRefreshLayout refreshLayout;
 
     public static VehicleWorksFragment newInstance(String data) {
         VehicleWorksFragment fragment = new VehicleWorksFragment();
@@ -57,7 +59,12 @@ public class VehicleWorksFragment extends Fragment {
         ln_noResult = view.findViewById(R.id.ln_no_result_inChuyenXe2345_chuSH);
         data_view = view.findViewById(R.id.data_view_inChuyenXe2345_chush);
         shimmer_view = view.findViewById(R.id.shimmer_view_inChuyenXe2345_chush);
+        refreshLayout = view.findViewById(R.id.refresh_data_inChuyenXe2345_ChuSH);
         fetchListHoaDon_2345(allCarID);
+        refreshLayout.setOnRefreshListener(() -> {
+            fetchListHoaDon_2345(allCarID);
+            refreshLayout.setRefreshing(false);
+        });
     }
 
     private void fetchListHoaDon_2345(String carIDs) {
@@ -75,7 +82,6 @@ public class VehicleWorksFragment extends Fragment {
 
                 if (response.code() == 200) {
                     if (response.body().size() > 0) {
-                        ln_noResult.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         adapter = new ChuyenXeChuSHAdapter(getContext(), response.body());
                         recyclerView.setAdapter(adapter);

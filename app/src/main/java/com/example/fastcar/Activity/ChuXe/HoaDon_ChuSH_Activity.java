@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -87,6 +88,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     TextView btn_xemChiTietGia, tvXemHinhAnh;
     TextView tv_tenxe, tv_maHD, tv_ngayNhan, tv_ngayTra, tv_diachiXe, tv_tongTien, tv_coc30Per, tv_tt70Per, tvContentInfo, tvSdtKhachHang;
     CircleImageView img_khachhang;
+    SwipeRefreshLayout refreshLayout;
     TextView tv_tenKhachHang, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4, tvGiaoXe, tvGoiChoKhach;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_dongy, ln_sdtKhachHang, ln_giaoxe;
     HoaDon hoaDon;
@@ -106,6 +108,11 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
 
         mapping();
         load();
+
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            refreshLayout.setRefreshing(false);
+        });
 
         btn_back.setOnClickListener(view -> onBackPressed());
         btn_dongychothue.setOnClickListener(view -> showDialog_Confirm());
@@ -137,6 +144,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         ln_view_thoiGianThanhToan = findViewById(R.id.ln_cho_thanhtoan_inHD_ChuSH);
         ln_view_huy_or_dongy = findViewById(R.id.ln_view_huy_or_dongy_inHD_ChuSH);
         ic_in_4stt = findViewById(R.id.icon_in_4sttHD_inHD_ChuSH);
+        refreshLayout = findViewById(R.id.refresh_data_inHoaDon_ChuSH);
         stt1 = findViewById(R.id.stt_1_inHD_ChuSH);
         stt2 = findViewById(R.id.stt_2_inHD_ChuSH);
         stt3 = findViewById(R.id.stt_3_inHD_ChuSH);
@@ -376,8 +384,8 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         RetrofitClient.FC_services().updateTimeXNHD(hoaDon.getMaHD(), hoaDon).enqueue(new Callback<ResMessage>() {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
-                    progressBar.setVisibility(View.GONE);
                     System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
                     load();

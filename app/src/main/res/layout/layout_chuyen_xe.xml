@@ -6,59 +6,64 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_data_inChuyenXe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_chuyenxe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
-
         <LinearLayout
-            android:id="@+id/ln_no_result_inChuyenXe"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/img_khongcochuyen" />
-
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_chuyenxe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Bạn không có chuyến hiện tại"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textSize="23dp" />
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:onClick="fromChuyenXe_to_LSChuyenXe"
-                android:text="Xem lịch sử chuyến"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                android:textColor="@color/button_green"
-                android:textSize="17dp"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/ln_no_result_inChuyenXe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:src="@drawable/img_khongcochuyen" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Bạn không có chuyến hiện tại"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="23dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:onClick="fromChuyenXe_to_LSChuyenXe"
+                        android:text="Xem lịch sử chuyến"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                        android:textColor="@color/button_green"
+                        android:textSize="17dp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+        
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

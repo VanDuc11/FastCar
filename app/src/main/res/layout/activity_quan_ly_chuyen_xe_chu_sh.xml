@@ -42,7 +42,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_inQLCX"
         android:layout_width="match_parent"
@@ -113,7 +112,7 @@
         </LinearLayout>
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+            android:id="@+id/viewPager_ChuyenXeChuSH"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp" />

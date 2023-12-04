@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.ChuXe.LichSuGD_Activity">
+    android:orientation="vertical"
+    tools:context=".Activity.ChuXe.LichSuGiaoDich.LichSuGD_Activity">
 
     <RelativeLayout
         android:id="@+id/action_bar_lich_su_giao_dich"
@@ -30,37 +31,71 @@
             android:textSize="17dp" />
     </RelativeLayout>
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_view_lichSuGiaoDich"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/action_bar_lich_su_giao_dich"
-        android:background="@color/backgroud">
-
-        <include layout="@layout/lay_out_danh_sach_ls_placeholder" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
     <LinearLayout
-        android:id="@+id/data_view_lichSuGiaoDich"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/backgroud"
-        android:layout_below="@id/action_bar_lich_su_giao_dich"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/custom_btn4"
+        android:backgroundTint="#E4E1E1"
+        android:orientation="horizontal">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refresh_data_inListLichSuGiaoDich"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/btn_tatca_lsgd"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Tất cả"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_lich_su_giao_dich"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/btn_ruttien_lsgd"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Rút tiền"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textColor="@color/button_default_text"
+            android:textSize="15dp" />
 
+        <TextView
+            android:id="@+id/btn_nhantien_lsgd"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Nhận tiền"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textColor="@color/button_default_text"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/btn_hoantien_lsgd"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Hoàn tiền"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            android:textColor="@color/button_default_text"
+            android:textSize="15dp" />
     </LinearLayout>
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager_LSGD"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp" />
 
-</RelativeLayout>
+</LinearLayout>

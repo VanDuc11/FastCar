@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
 import com.example.fastcar.Adapter.DanhSachChuyenXeAdapter;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -68,7 +69,7 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getListHoaDonUser( user.get_id(), "1,2,3,4,5").enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDonUser(user.get_id(), "1,2,3,4,5").enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
@@ -77,13 +78,13 @@ public class ChuyenXe_Activity extends AppCompatActivity {
                 shimmer_view.setVisibility(View.GONE);
 
                 if (response.code() == 200) {
-                    if(!response.body().isEmpty()) {
+                    if (!response.body().isEmpty()) {
                         ln_noResult.setVisibility(View.GONE);
                         adapter = new DanhSachChuyenXeAdapter(ChuyenXe_Activity.this, response.body());
                         recyclerView_chuyenXe.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     } else {
-                        refreshLayout.setVisibility(View.GONE);
+                        recyclerView_chuyenXe.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
                     }
                 }
@@ -92,8 +93,7 @@ public class ChuyenXe_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<HoaDon>> call, Throwable t) {
                 System.out.println("Có lỗi xảy ra: " + t);
-                refreshLayout.setVisibility(View.GONE);
-                ln_noResult.setVisibility(View.VISIBLE);
+                CustomDialogNotify.showToastCustom(getBaseContext(), "Có lỗi xảy ra");
             }
         });
     }
@@ -118,9 +118,4 @@ public class ChuyenXe_Activity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        load();
-//    }
 }

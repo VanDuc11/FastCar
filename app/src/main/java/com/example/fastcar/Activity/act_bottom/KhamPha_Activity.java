@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -86,22 +87,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class KhamPha_Activity extends AppCompatActivity {
-    TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem;
-    RecyclerView recyclerView_khuyenmai, recyclerView_xeKhamPha;
-    CircleImageView img_user;
+    private TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem;
+    private RecyclerView recyclerView_khuyenmai, recyclerView_xeKhamPha;
+    private CircleImageView img_user;
     private FirebaseAuth auth;
-    ShimmerFrameLayout shimmer_view;
-    LinearLayout data_view;
+    private ShimmerFrameLayout shimmer_view;
+    private SwipeRefreshLayout refreshLayout;
+    private LinearLayout data_view;
     private FirebaseUser fBaseuser;
     FirebaseDatabase database;
-    MaterialDatePicker<Pair<Long, Long>> datePicker;
-    Long todayInMillis, tomorrowInMillis;
+    private MaterialDatePicker<Pair<Long, Long>> datePicker;
+    private Long todayInMillis, tomorrowInMillis;
     private boolean isChooseDatePicker = false;
-    ImageView img_notify;
-    Dialog dialogDiaChi;
-    FusedLocationProviderClient fusedLocationProviderClient;
+    private ImageView img_notify;
+    private Dialog dialogDiaChi;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
-    String tokenFCM;
+    private String tokenFCM;
     private VoucherAdapter adapterVoucher;
     private PlacesAdapter adapter;
     private ProgressBar progressBar;
@@ -124,6 +126,15 @@ public class KhamPha_Activity extends AppCompatActivity {
         getTokenFCM();
         Save();
         loadXeKhamPha();
+
+        refreshLayout.setOnRefreshListener(() -> {
+            load();
+            build_DatePicker();
+            setDefault_SelectionDate();
+            Save();
+            loadXeKhamPha();
+            refreshLayout.setRefreshing(false);
+        });
 
         btnTim.setOnClickListener(view -> {
             String diachi = tvDiaDiem.getText().toString();
@@ -165,6 +176,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         img_notify = findViewById(R.id.ic_notify);
         data_view = findViewById(R.id.data_view_inXeKhamPha);
         shimmer_view = findViewById(R.id.shimmer_view_inXeKhamPha);
+        refreshLayout = findViewById(R.id.refresh_data_inKhamPha);
     }
 
     void load() {
@@ -181,6 +193,9 @@ public class KhamPha_Activity extends AppCompatActivity {
                         adapterVoucher = new VoucherAdapter(KhamPha_Activity.this, response.body(), isIcon, 0);
                         recyclerView_khuyenmai.setAdapter(adapterVoucher);
                         adapterVoucher.notifyDataSetChanged();
+                        recyclerView_khuyenmai.setOnFlingListener(null);
+                        SnapHelper snapHelper = new PagerSnapHelper();
+                        snapHelper.attachToRecyclerView(recyclerView_khuyenmai);
                     } else {
                     }
                 } else {
@@ -193,9 +208,6 @@ public class KhamPha_Activity extends AppCompatActivity {
                 System.out.println("Có lỗi khi get list voucher: " + t);
             }
         });
-        recyclerView_khuyenmai.setAdapter(adapterVoucher);
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView_khuyenmai);
 
         img_notify.setOnClickListener(view -> startActivity(new Intent(KhamPha_Activity.this, ThongBao_Activity.class)));
     }
@@ -267,6 +279,7 @@ public class KhamPha_Activity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (!response.body().isEmpty()) {
+                        Glide.with(getBaseContext()).load(response.body().get(0).getAvatar()).into(img_user);
                         List<User> list = response.body();
                         Gson gson = new Gson();
                         String json = gson.toJson(list.get(0));
@@ -275,7 +288,6 @@ public class KhamPha_Activity extends AppCompatActivity {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("user", json);
                         editor.apply();
-                        Glide.with(getBaseContext()).load(response.body().get(0).getAvatar()).into(img_user);
                     } else {
                         funcAddNewUser(userNew);
                         Gson gson = new Gson();
@@ -427,6 +439,7 @@ public class KhamPha_Activity extends AppCompatActivity {
                 if (response.code() == 200) {
                     XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(KhamPha_Activity.this, response.body());
                     recyclerView_xeKhamPha.setAdapter(adapter);
+                    recyclerView_xeKhamPha.setOnFlingListener(null);
                     SnapHelper snapHelper = new PagerSnapHelper();
                     snapHelper.attachToRecyclerView(recyclerView_xeKhamPha);
                     adapter.notifyDataSetChanged();

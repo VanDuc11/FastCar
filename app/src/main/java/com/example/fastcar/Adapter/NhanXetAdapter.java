@@ -22,10 +22,12 @@ import java.util.List;
 public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHoder> {
     Context context;
     List<FeedBack> list;
+    private boolean isShowMore;
 
-    public NhanXetAdapter(Context context, List<FeedBack> list) {
+    public NhanXetAdapter(Context context, List<FeedBack> list, boolean isShowMore) {
         this.context = context;
         this.list = list;
+        this.isShowMore = isShowMore;
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder {
@@ -76,7 +78,15 @@ public class NhanXetAdapter extends RecyclerView.Adapter<NhanXetAdapter.ViewHode
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if (list.size() <= 2) {
+            return list.size();
+        } else {
+            if (isShowMore) {
+                return list.size();
+            } else {
+                return 2;
+            }
+        }
     }
 
 }

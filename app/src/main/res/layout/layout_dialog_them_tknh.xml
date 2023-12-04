@@ -22,6 +22,7 @@
             android:src="@drawable/icon_back_black" />
 
         <TextView
+            android:id="@+id/tv_actionbar_dialog_themnganhang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

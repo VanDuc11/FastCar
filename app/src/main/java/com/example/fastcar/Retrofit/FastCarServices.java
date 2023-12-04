@@ -207,7 +207,8 @@ public interface FastCarServices {
     // model LSGD
     // lấy lsgd của 1 user
     @GET("lsgd/list")
-    Call<List<LichSuGiaoDich>> getLSGD_ofUser(@Query("User") String idUser);
+    Call<List<LichSuGiaoDich>> getLSGD_ofUser(@Query("User") String idUser,
+                                              @Query("title") String title);
 
     // tạo lsgd ( yc rút tiền )
     @Headers("Content-Type: application/json")
@@ -258,9 +259,15 @@ public interface FastCarServices {
     @POST("nganhang/create")
     Call<ResMessage> createNganHang(@Body NganHang nganHang);
 
+    // sửa tknh
+    @Headers("Content-Type: application/json")
+    @PUT("nganhang/update/{id}")
+    Call<ResMessage> updateNganHang(@Path("id") String idBank,
+                                    @Body NganHang nganHang);
+
     // xoá tknh
     @DELETE("nganhang/delete/{id}")
-    Call<ResMessage> deleteNganHang(@Path("id") String idNganHang);
+    Call<ResMessage> deleteNganHang(@Path("id") String idBank);
 
     // GET banks in VietNam
     // lấy danh sách tên các ngân hàng ở Việt Nam

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.fastcar.Activity.ChuXe.LichSuGiaoDich.LichSuGD_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.FormatString.RandomMaHD;

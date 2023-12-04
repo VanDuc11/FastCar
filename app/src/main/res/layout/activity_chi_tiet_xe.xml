@@ -658,7 +658,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:drawableLeft="@drawable/icon_location_black"
+                        android:drawableLeft="@drawable/icon_location_green_v1"
+                        android:drawablePadding="5dp"
                         android:text="Quận Nam Từ Liêm, Hà Nội"
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                         android:textColor="@color/grey"
@@ -991,21 +992,33 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                         android:textSize="17dp" />
 
+                    <TextView
+                        android:id="@+id/tv_sl_nhanxet_inCTX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 nhận xét"
+                        android:padding="3dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="15dp" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/act_chitietxe_reyNhanXet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <TextView
-                        android:id="@+id/tv_noResult_inFB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Chưa có nhận xét nào"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:id="@+id/tv_xemthem_NhanXet_inCTX"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Xem thêm"
+                        android:gravity="center"
+                        android:background="@drawable/bo_goc_nhanxet"
+                        android:padding="3dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                         android:textSize="15dp" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
