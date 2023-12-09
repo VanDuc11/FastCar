@@ -10,10 +10,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fastcar.Activity.ChuXe.QuanLyChuyenXe.QuanLyChuyenXe_ChuSH_Activity;
-import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
+import com.example.fastcar.Activity.ChuXe.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.User;
@@ -37,13 +35,6 @@ import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
 import com.example.fastcar.User_Method;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 

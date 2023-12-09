@@ -35,7 +35,7 @@ public class ThanhToan20Per_Fragment extends Fragment {
     private ShimmerFrameLayout shimmer_view;
     private LinearLayout dataView;
     private LinearLayout ln_noresult;
-    private String idUser;
+    private String emailUser;
 
     public static ThanhToan20Per_Fragment newInstance(String data) {
         ThanhToan20Per_Fragment fragment = new ThanhToan20Per_Fragment();
@@ -48,7 +48,7 @@ public class ThanhToan20Per_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        idUser = getArguments().getString("data_lsgd");
+        emailUser = getArguments().getString("data_lsgd");
         return inflater.inflate(R.layout.fragment_thanh_toan20_per, container, false);
     }
 
@@ -60,9 +60,9 @@ public class ThanhToan20Per_Fragment extends Fragment {
         dataView = view.findViewById(R.id.data_view_lichSuGiaoDich_nhantien);
         shimmer_view = view.findViewById(R.id.shimmer_view_lichSuGiaoDich_nhantien);
         ln_noresult = view.findViewById(R.id.ln_no_result_nhantien);
-        fetchData_LSGD_NhanTien(idUser);
+        fetchData_LSGD_NhanTien(emailUser);
         refreshLayout.setOnRefreshListener(() -> {
-            fetchData_LSGD_NhanTien(idUser);
+            fetchData_LSGD_NhanTien(emailUser);
             refreshLayout.setRefreshing(false);
         });
     }
@@ -72,7 +72,7 @@ public class ThanhToan20Per_Fragment extends Fragment {
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getLSGD_ofUser(idUser, "1").enqueue(new Callback<List<LichSuGiaoDich>>() {
+        RetrofitClient.FC_services().getLSGD_ofUser(idUser, "1", null).enqueue(new Callback<List<LichSuGiaoDich>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
@@ -103,7 +103,7 @@ public class ThanhToan20Per_Fragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded() && getView() != null) {
-            fetchData_LSGD_NhanTien(idUser);
+            fetchData_LSGD_NhanTien(emailUser);
         }
     }
 }

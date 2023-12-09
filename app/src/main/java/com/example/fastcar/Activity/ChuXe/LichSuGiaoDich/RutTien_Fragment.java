@@ -34,7 +34,7 @@ public class RutTien_Fragment extends Fragment {
     private ShimmerFrameLayout shimmer_view;
     private LinearLayout dataView;
     private LinearLayout ln_noresult;
-    private String idUser;
+    private String emailUser;
 
     public static RutTien_Fragment newInstance(String data) {
         RutTien_Fragment fragment = new RutTien_Fragment();
@@ -48,7 +48,7 @@ public class RutTien_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        idUser = getArguments().getString("data_lsgd");
+        emailUser = getArguments().getString("data_lsgd");
         return inflater.inflate(R.layout.fragment_rut_tien, container, false);
     }
 
@@ -60,9 +60,9 @@ public class RutTien_Fragment extends Fragment {
         dataView = view.findViewById(R.id.data_view_lichSuGiaoDich_ruttien);
         shimmer_view = view.findViewById(R.id.shimmer_view_lichSuGiaoDich_ruttien);
         ln_noresult = view.findViewById(R.id.ln_no_result_inRutTien);
-        fetchData_LSGD_RutTien(idUser);
+        fetchData_LSGD_RutTien(emailUser);
         refreshLayout.setOnRefreshListener(() -> {
-            fetchData_LSGD_RutTien(idUser);
+            fetchData_LSGD_RutTien(emailUser);
             refreshLayout.setRefreshing(false);
         });
     }
@@ -72,7 +72,7 @@ public class RutTien_Fragment extends Fragment {
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getLSGD_ofUser(idUser, "0").enqueue(new Callback<List<LichSuGiaoDich>>() {
+        RetrofitClient.FC_services().getLSGD_ofUser(idUser, "0", null).enqueue(new Callback<List<LichSuGiaoDich>>() {
             @Override
             public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
                 dataView.setVisibility(View.VISIBLE);
@@ -102,7 +102,7 @@ public class RutTien_Fragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded() && getView() != null) {
-            fetchData_LSGD_RutTien(idUser);
+            fetchData_LSGD_RutTien(emailUser);
         }
     }
 }

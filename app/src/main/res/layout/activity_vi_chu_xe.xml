@@ -53,11 +53,29 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <TextView
+                android:id="@+id/btn_SelectMonth_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/icon_next_v1"
+                android:padding="10dp"
+                android:text="Tháng 12/2023"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#E1D7D7" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="vertical">
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -65,29 +83,206 @@
                     android:gravity="center"
                     android:text="Số dư hiện tại"
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="16dp" />
+                    android:textSize="17dp" />
 
                 <TextView
                     android:id="@+id/tv_sodu_vichuxe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="0 đ"
-                    android:padding="5dp"
                     android:maxLines="1"
+                    android:padding="5dp"
+                    android:text="0 đ"
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                     android:textColor="@color/button_green"
-                    android:textSize="24dp" />
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_sl_nhanxet_vichuxe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="0"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đánh giá mới"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="2dp"
+                    android:layout_height="40dp"
+                    android:background="#E1D7D7" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_chuyenhoanthanh_vichuxe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="0"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chuyến hoàn thành"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="16dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_btn4"
+                android:backgroundTint="#EFEAEA"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.1"
+                    android:text="Tổng thay đổi\n/ Chuyến hoàn thành (1)"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_sotien_tu_chuyenhoanthanh"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:gravity="right"
+                    android:text="0 đ"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="19dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_btn4"
+                android:backgroundTint="#EFEAEA"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.1"
+                    android:text="Tổng thay đổi\n/ Giao dịch rút tiền (2)"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_sotien_ruttien"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:gravity="right"
+                    android:text="0 đ"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="19dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_btn4"
+                android:backgroundTint="#EFEAEA"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.1"
+                    android:text="Tổng thay đổi\n/ Giao dịch hoàn tiền (3)"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_sotien_duoc_hoantien"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:gravity="right"
+                    android:text="0 đ"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="19dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_btn4"
+                android:backgroundTint="#EFEAEA"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.1"
+                    android:text="Tổng thay đổi trong tháng\n\ (1) - (2)"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_tongthaydoi_trongthang"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:gravity="right"
+                    android:text="0 đ"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="19dp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/btn_RutTien_vichuxe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Yêu cầu rút tiền"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/custom_btn4"
                 android:gravity="center"
+                android:text="Yêu cầu rút tiền"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                 android:textColor="@color/white"
                 android:textSize="17dp" />
 
@@ -96,13 +291,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Lịch sử giao dịch"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                 android:background="@drawable/custom_btn4"
                 android:gravity="center"
+                android:text="Lịch sử giao dịch"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                 android:textColor="@color/white"
                 android:textSize="17dp" />
 
         </LinearLayout>
+
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar_inViChuXe"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminateTint="#474A34" />
 </RelativeLayout>

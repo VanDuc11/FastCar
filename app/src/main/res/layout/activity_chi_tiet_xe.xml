@@ -222,7 +222,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:drawableLeft="@drawable/icon_date"
+                                    android:drawableLeft="@drawable/icon_date_24x24"
                                     android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="Nhận xe"
@@ -232,7 +232,7 @@
                                     android:id="@+id/tv_ngayNhanXe_inChiTietXe"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="33dp"
+                                    android:layout_marginLeft="28dp"
                                     android:text="12/12/2000"
                                     android:textColor="@color/black"
                                     android:textSize="16dp"
@@ -248,7 +248,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:drawableLeft="@drawable/icon_date"
+                                    android:drawableLeft="@drawable/icon_date_24x24"
                                     android:drawablePadding="5dp"
                                     android:gravity="center"
                                     android:text="Trả xe"
@@ -258,7 +258,7 @@
                                     android:id="@+id/tv_ngayTraXe_inChiTietXe"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="33dp"
+                                    android:layout_marginLeft="28dp"
                                     android:text="13/12/2000"
                                     android:textColor="@color/black"
                                     android:textSize="16dp"
@@ -289,7 +289,7 @@
                             android:gravity="center_vertical"
                             android:lineHeight="25dp"
                             android:text="Xe đã được thuê từ ngày 8:00 04/10/2023 - 8:00 04/10/2023"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                             android:textColor="@color/red"
                             android:textSize="15dp" />
                     </LinearLayout>
@@ -306,7 +306,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:text="Chú ý: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                             android:textColor="@color/red"
                             android:textSize="15dp" />
 
@@ -321,9 +321,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:gravity="center_vertical"
-                                android:lineHeight="25dp"
                                 android:text="Thời gian giao xe: 07:00 - 12:00"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textColor="@color/red"
                                 android:textSize="15dp" />
 
@@ -333,10 +332,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:gravity="center_vertical"
-                                android:layout_marginTop="5dp"
-                                android:lineHeight="25dp"
+                                android:layout_marginTop="3dp"
                                 android:text="Thời gian nhận xe: 07:00 - 12:00"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textColor="@color/red"
                                 android:textSize="15dp" />
                         </LinearLayout>
@@ -353,7 +351,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_selection_1"
-                        android:layout_width="359dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="2dp"
@@ -1062,6 +1060,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:layout_marginTop="10dp"
+            android:drawableRight="@drawable/icon_question_16x16"
+            android:drawablePadding="10dp"
             android:text="1 ngày"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textSize="15dp"
@@ -1088,7 +1088,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/custom_btn3"
             android:gravity="center"
             android:text="Chọn thuê"

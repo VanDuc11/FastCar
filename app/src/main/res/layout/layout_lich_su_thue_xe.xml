@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.LichSu_ThueXe_Activity">
+    tools:context=".Activity.KhachHang.LichSu_ThueXe_Activity">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_data_inLSThueXe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refresh_data_inLSThueXe"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/action_bar_lsthuexe">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_lsthuexe"
@@ -23,38 +22,36 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="55dp"
-            android:gravity="center"
-            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ln_no_result_inLSChuyenXe"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="55dp"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:src="@drawable/img_khongcochuyen" />
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ln_no_result_inLSChuyenXe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Bạn chưa có chuyến"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                    android:textSize="23dp" />
+                    android:orientation="vertical">
 
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:src="@drawable/img_khongcochuyen" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Bạn chưa có chuyến"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:textSize="23dp" />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
-    </LinearLayout>
 </RelativeLayout>

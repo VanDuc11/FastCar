@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -129,14 +130,24 @@ public class LichSuGiaoDichApdater extends RecyclerView.Adapter<LichSuGiaoDichAp
     @SuppressLint("CheckResult")
     public void showImageDialog(LichSuGiaoDich lichSuGiaoDich) {
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+        LayoutInflater inflater = LayoutInflater.from(context);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.activity_chi_tiet_hoa_don, null);
         Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_chi_tiet_hoa_don);
+        dialog.setContentView(custom);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        // set kích thước dialog
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set vị trí dialog
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
         ImageView close = dialog.findViewById(R.id.btn_close_hoadonchitiet);
         TextView tv_mahd = dialog.findViewById(R.id.tv_mahd_inDialogChiTiet);
         TextView tv_tenuser = dialog.findViewById(R.id.tv_ten_user_inDialogChiTiet);

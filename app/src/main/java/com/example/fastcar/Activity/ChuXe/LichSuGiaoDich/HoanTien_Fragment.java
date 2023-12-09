@@ -34,7 +34,7 @@ public class HoanTien_Fragment extends Fragment {
     private ShimmerFrameLayout shimmer_view;
     private LinearLayout dataView;
     private LinearLayout ln_noresult;
-    private String idUser;
+    private String emailUser;
 
     public static HoanTien_Fragment newInstance(String data) {
         HoanTien_Fragment fragment = new HoanTien_Fragment();
@@ -47,7 +47,7 @@ public class HoanTien_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        idUser = getArguments().getString("data_lsgd");
+        emailUser = getArguments().getString("data_lsgd");
         return inflater.inflate(R.layout.fragment_hoan_tien, container, false);
     }
 
@@ -59,9 +59,9 @@ public class HoanTien_Fragment extends Fragment {
         dataView = view.findViewById(R.id.data_view_lichSuGiaoDich_hoantien);
         shimmer_view = view.findViewById(R.id.shimmer_view_lichSuGiaoDich_hoantien);
         ln_noresult = view.findViewById(R.id.ln_no_result_hoantien);
-        fetchData_LSGD_HoanTien(idUser);
+        fetchData_LSGD_HoanTien(emailUser);
         refreshLayout.setOnRefreshListener(() -> {
-            fetchData_LSGD_HoanTien(idUser);
+            fetchData_LSGD_HoanTien(emailUser);
             refreshLayout.setRefreshing(false);
         });
     }
@@ -71,7 +71,7 @@ public class HoanTien_Fragment extends Fragment {
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getLSGD_ofUser(idUser, "2").enqueue(new Callback<List<LichSuGiaoDich>>() {
+        RetrofitClient.FC_services().getLSGD_ofUser(idUser, "2", null).enqueue(new Callback<List<LichSuGiaoDich>>() {
             @Override
             public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
                 dataView.setVisibility(View.VISIBLE);
@@ -101,7 +101,7 @@ public class HoanTien_Fragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded() && getView() != null) {
-            fetchData_LSGD_HoanTien(idUser);
+            fetchData_LSGD_HoanTien(emailUser);
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Car implements Parcelable {
     String _id, BKS, HangXe, MauXe, NSX;
@@ -24,9 +25,10 @@ public class Car implements Parcelable {
     User ChuSH;
     int TrangThai, SoChuyen;
     float TrungBinhSao;
+    List<String> LichBan;
     private double distance;
 
-    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, String longitude, String latitude, int giaThue1Ngay, boolean theChap, String thoiGianGiaoXe, String thoiGianNhanXe, User chuSH, int trangThai, int soChuyen, float trungBinhSao) {
+    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, String longitude, String latitude, int giaThue1Ngay, boolean theChap, String thoiGianGiaoXe, String thoiGianNhanXe, User chuSH, int trangThai, int soChuyen, float trungBinhSao, List<String> lichBan) {
         this._id = _id;
         this.BKS = BKS;
         this.HangXe = hangXe;
@@ -52,6 +54,7 @@ public class Car implements Parcelable {
         this.TrangThai = trangThai;
         this.SoChuyen = soChuyen;
         this.TrungBinhSao = trungBinhSao;
+        this.LichBan = lichBan;
     }
 
 
@@ -86,6 +89,7 @@ public class Car implements Parcelable {
         TrangThai = in.readInt();
         SoChuyen = in.readInt();
         TrungBinhSao = in.readFloat();
+        LichBan = in.createStringArrayList();
     }
 
     public static final Creator<Car> CREATOR = new Creator<Car>() {
@@ -301,6 +305,14 @@ public class Car implements Parcelable {
         BaoHiem = baoHiem;
     }
 
+    public List<String> getLichBan() {
+        return LichBan;
+    }
+
+    public void setLichBan(List<String> lichBan) {
+        LichBan = lichBan;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -342,5 +354,6 @@ public class Car implements Parcelable {
         parcel.writeInt(TrangThai);
         parcel.writeInt(SoChuyen);
         parcel.writeFloat(TrungBinhSao);
+        parcel.writeStringList(LichBan);
     }
 }

@@ -27,12 +27,16 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -43,9 +47,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.Activity.ThemXe.Upload_ImageXe_Activity;
-import com.example.fastcar.Activity.act_bottom.HoTro_Activity;
-import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_BangGiaChiTiet;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
@@ -82,29 +83,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HoaDon_Activity extends AppCompatActivity {
-    AppCompatButton btn_datcoc, btn_huychuyen;
-    ImageView img_xe, img_viewXe, ic_in_4stt;
-    ShimmerFrameLayout shimmer_view;
-    LinearLayout data_view;
-    TextView btn_xemChiTietGia, tv_TheChap;
-    TextView tv_tenxe, tv_maHD, tv_ngayNhan, tv_ngayTra, tv_diachiXe, tv_tongTien, tv_coc30Per, tv_tt70Per, tvContentInfo, tvSdtChuSH;
-    CircleImageView img_chuSH;
-    TextView tv_tenChuSH, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4, tvGoiChoChuSH, tvTraXe, tvXemHinhAnh;
+    private AppCompatButton btn_datcoc, btn_huychuyen;
+    private ImageView img_xe, img_viewXe, ic_in_4stt;
+    private ShimmerFrameLayout shimmer_view;
+    private LinearLayout data_view;
+    private TextView btn_xemChiTietGia, tv_TheChap, tvChiduong;
+    private TextView tv_tenxe, tv_maHD, tv_ngayNhan, tv_ngayTra, tv_diachiXe, tv_tongTien, tv_coc30Per, tv_tt70Per, tvContentInfo, tvSdtChuSH;
+    private CircleImageView img_chuSH;
+    private TextView tv_tenChuSH, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4, tvGoiChoChuSH, tvTraXe, tvXemHinhAnh;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_coc, ln_sdtChuSH, ln_traxe;
-    HoaDon hoaDon;
-    ProgressBar progressBar;
-    SwipeRefreshLayout refreshLayout;
+    private WebView webView_loadMap;
+    private HoaDon hoaDon;
+    private ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
     float TrungBinhSao;
     private int totalChuyen_ofChuSH;
     private float totalStar_ofChuSH;
-    int index = 0;
+    private int index = 0;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
     private static final int REQUEST_CALL_PERMISSION = 123;
     private Uri cameraImageUri;
-    ImageView img1, img2, ic_add1, ic_add2;
-    String pathImage1, pathImage2;
-    int finalStar = 5;
+    private ImageView img1, img2, ic_add1, ic_add2;
+    private String pathImage1, pathImage2;
+    private int finalStar = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +169,8 @@ public class HoaDon_Activity extends AppCompatActivity {
         tvGoiChoChuSH = findViewById(R.id.btn_goi_cho_chuSH_inHD);
         ln_traxe = findViewById(R.id.ln_traxe_inHD);
         progressBar = findViewById(R.id.progressBar_inHoaDon);
+        webView_loadMap = findViewById(R.id.webView_loadMap_inHD);
+        tvChiduong = findViewById(R.id.tv_chiduong_inHD);
     }
 
     private void load() {
@@ -182,7 +186,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         fetchHoaDon_byMaHD(hoadon_intent.getMaHD());
     }
 
-    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+    @SuppressLint({"SetTextI18n", "ResourceAsColor", "SetJavaScriptEnabled"})
     private void renderUI() {
         if (hoaDon != null) {
             Glide.with(this)
@@ -195,7 +199,7 @@ public class HoaDon_Activity extends AppCompatActivity {
                 intent1.putExtra("isMyCar", false);
                 startActivity(intent1);
             });
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
             tv_maHD.setText(hoaDon.getMaHD());
             tv_ngayNhan.setText(sdf.format(hoaDon.getNgayThue()));
             tv_ngayTra.setText(sdf.format(hoaDon.getNgayTra()));
@@ -235,6 +239,35 @@ public class HoaDon_Activity extends AppCompatActivity {
 
                 diachi = quanHuyen + ", " + thanhPhoTinh;
             }
+            // map
+            WebSettings webSettings = webView_loadMap.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setDomStorageEnabled(true);
+            // bo tròn WebView = css
+            String css = "body {" +
+                    "   border-radius: 20px;" +
+                    "}";
+            String js = "var style = document.createElement('style');" +
+                    "style.innerHTML = '" + css + "';" +
+                    "document.head.appendChild(style);";
+            webView_loadMap.evaluateJavascript(js, null);
+            webView_loadMap.setWebViewClient(new WebViewClient());
+            loadMap_fromHTML_withMarker(hoaDon.getXe().getLongitude(), hoaDon.getXe().getLatitude());
+            tvChiduong.setOnClickListener(view -> {
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("https")
+                        .authority("www.google.com")
+                        .appendPath("maps")
+                        .appendPath("dir")
+                        .appendPath("")
+                        .appendQueryParameter("api", "1")
+                        .appendQueryParameter("destination", hoaDon.getXe().getLatitude() + "," + hoaDon.getXe().getLongitude());
+                String url = builder.build().toString();
+                Log.d("Directions", url);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            });
 
             if (statusCode == 0) {
                 // bị huỷ
@@ -247,6 +280,8 @@ public class HoaDon_Activity extends AppCompatActivity {
                 ln_sdtChuSH.setVisibility(View.GONE);
                 ln_traxe.setVisibility(View.GONE);
                 tvXemHinhAnh.setVisibility(View.GONE);
+                webView_loadMap.setVisibility(View.GONE);
+                tvChiduong.setVisibility(View.GONE);
             } else if (statusCode == 1) {
                 // chờ chủ xe duyệt
                 ic_in_4stt.setImageResource(R.drawable.icon_time_black);
@@ -260,6 +295,8 @@ public class HoaDon_Activity extends AppCompatActivity {
                 btn_datcoc.setEnabled(false);
                 ln_traxe.setVisibility(View.GONE);
                 tvXemHinhAnh.setVisibility(View.GONE);
+                webView_loadMap.setVisibility(View.GONE);
+                tvChiduong.setVisibility(View.GONE);
             } else if (statusCode == 2) {
                 // chờ đặt cọc
                 ic_in_4stt.setImageResource(R.drawable.icon_time_black);
@@ -272,6 +309,10 @@ public class HoaDon_Activity extends AppCompatActivity {
                 ln_sdtChuSH.setVisibility(View.GONE);
                 ln_traxe.setVisibility(View.GONE);
                 tvXemHinhAnh.setVisibility(View.GONE);
+                webView_loadMap.setVisibility(View.GONE);
+                tvChiduong.setVisibility(View.GONE);
+                btn_datcoc.setBackgroundResource(R.drawable.custom_btn3);
+                btn_datcoc.setEnabled(true);
             } else if (statusCode == 3) {
                 // đặt cọc thành công
                 ln_4stt.setVisibility(View.VISIBLE);
@@ -286,17 +327,22 @@ public class HoaDon_Activity extends AppCompatActivity {
                 stt2.setBackgroundResource(R.drawable.custom_btn5);
                 tv_diachiXe.setText(diaChiXe);
                 tvContentInfo.setVisibility(View.GONE);
+                ln_sdtChuSH.setVisibility(View.VISIBLE);
                 tvSdtChuSH.setText(hoaDon.getXe().getChuSH().getSDT());
                 ln_traxe.setVisibility(View.VISIBLE);
                 tvGoiChoChuSH.setBackgroundResource(R.drawable.custom_btn4);
                 tvTraXe.setVisibility(View.GONE);
                 tvXemHinhAnh.setVisibility(View.GONE);
+                tvChiduong.setVisibility(View.VISIBLE);
+                webView_loadMap.setVisibility(View.VISIBLE);
             } else if (statusCode == 4) {
                 ln_4stt.setVisibility(View.VISIBLE);
                 ln_view_huy_or_coc.setVisibility(View.GONE);
                 tv_thoiGianThanhToan.setText("Đã nhận xe thành công");
                 tvXemHinhAnh.setText("Xem hình ảnh");
+                tvXemHinhAnh.setVisibility(View.VISIBLE);
                 tv_thoiGianThanhToan.setTextColor(Color.BLACK);
+                ln_sdtChuSH.setVisibility(View.VISIBLE);
                 ic_in_4stt.setImageResource(R.drawable.icon_car);
                 stt1.setTextColor(Color.WHITE);
                 stt1.setBackgroundResource(R.drawable.custom_btn5);
@@ -307,6 +353,8 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_diachiXe.setText(diaChiXe);
                 tvContentInfo.setVisibility(View.GONE);
                 tvSdtChuSH.setText(hoaDon.getXe().getChuSH().getSDT());
+                tvGoiChoChuSH.setBackgroundResource(R.drawable.custom_btn3);
+                tvTraXe.setVisibility(View.VISIBLE);
                 tvTraXe.setText("Trả xe");
             } else if (statusCode == 5) {
                 tv_thoiGianThanhToan.setText("Đã trả xe thành công");
@@ -316,6 +364,7 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tvTraXe.setText("Đã trả xe");
                 tvXemHinhAnh.setText("Xem hình ảnh");
                 tvTraXe.setEnabled(false);
+                ln_sdtChuSH.setVisibility(View.VISIBLE);
                 tvContentInfo.setVisibility(View.GONE);
                 stt1.setTextColor(Color.WHITE);
                 stt1.setBackgroundResource(R.drawable.custom_btn5);
@@ -330,6 +379,7 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tv_thoiGianThanhToan.setText("Đã kết thúc");
                 tvXemHinhAnh.setVisibility(View.GONE);
                 tv_thoiGianThanhToan.setTextColor(Color.BLACK);
+                ln_sdtChuSH.setVisibility(View.VISIBLE);
                 ic_in_4stt.setImageResource(R.drawable.icon_hoanthanh);
                 stt1.setTextColor(Color.WHITE);
                 stt1.setBackgroundResource(R.drawable.custom_btn5);
@@ -343,6 +393,7 @@ public class HoaDon_Activity extends AppCompatActivity {
                 tvContentInfo.setVisibility(View.GONE);
                 tvSdtChuSH.setText(hoaDon.getXe().getChuSH().getSDT());
                 tvGoiChoChuSH.setVisibility(View.GONE);
+                tvTraXe.setEnabled(true);
                 tvTraXe.setBackgroundResource(R.drawable.custom_btn4);
                 if (!hoaDon.isHaveFeedback()) {
                     tvTraXe.setText("Thêm đánh giá");
@@ -845,14 +896,21 @@ public class HoaDon_Activity extends AppCompatActivity {
     }
 
     private void showDialog_UploadImage_TraXe() {
-        Dialog dialog = new Dialog(HoaDon_Activity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_dialog_upload_image_traxe);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_upload_image_traxe, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_image_traxe);
         img1 = dialog.findViewById(R.id.img1_traxe_thanhcong);
@@ -1168,5 +1226,68 @@ public class HoaDon_Activity extends AppCompatActivity {
             dialogOld.dismiss();
             dialog.dismiss();
         });
+    }
+
+    private void loadMap_fromHTML_withMarker(String longitude, String latitude) {
+        String html = "<html lang=\"en\" style=\"height: 100%;\">\n" +
+                "\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                "    <title>Map</title>\n" +
+                "    <style>\n" +
+                "        html,\n" +
+                "        body {\n" +
+                "            height: 100%;\n" +
+                "            margin: 0;\n" +
+                "            padding: 0;\n" +
+                "        }\n" +
+                "\n" +
+                "        #map {\n" +
+                "            width: 100%;\n" +
+                "            height: 100%;\n" +
+                "        }\n" +
+                "\n" +
+                "    </style>\n" +
+                "\n" +
+                "    <script src='https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js'></script>\n" +
+                "    <link href='https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css' rel='stylesheet' />\n" +
+                "\n" +
+                "</head>\n" +
+                "\n" +
+                "<body style=\"height: 100%; margin: 0;\">\n" +
+                "    <div id='map'></div>\n" +
+                "\n" +
+                "    <script>\n" +
+                "        goongjs.accessToken = '" + HostApi.api_key_load_map + "';\n" +
+                "        var map = new goongjs.Map({\n" +
+                "            container: 'map',\n" +
+                "            style: 'https://tiles.goong.io/assets/goong_light_v2.json',\n" +
+                "            center: [" + longitude + "," + latitude + "],\n" +
+                "            zoom: 15, // starting zoom\n" +
+                "            maxZoom: 20,\n" +
+                "            minZoom: 15,\n" +
+                "            dragRotate: false,\n" +
+                "            // dragPan: false\n" +
+                "        });\n" +
+                "\n" +
+                "        // Tạo một Marker và thêm vào bản đồ\n" +
+                "        var marker = new goongjs.Marker()\n" +
+                "            .setLngLat([" + longitude + "," + latitude + "])\n" +
+                "            .addTo(map);\n" +
+                "    </script>\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>";
+        webView_loadMap.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView_loadMap != null && webView_loadMap.canGoBack()) {
+            webView_loadMap.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.OnBoarding.OnBoaring_Activity">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager_onboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_skip_in_onboarding"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/custom_border_item_filter_selected"
+        android:backgroundTint="#EBF1F1"
+        android:gravity="center"
+        android:text="Bỏ qua"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="16dp"
+        app:layout_anchor="@id/pager_onboard"
+        app:layout_anchorGravity="right" />
+
+    <LinearLayout
+        android:id="@+id/layout_show_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_anchor="@id/pager_onboard"
+        app:layout_anchorGravity="bottom">
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/circle_ic_onboarding"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            app:ci_drawable="@drawable/bg_onboard" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

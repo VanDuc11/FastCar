@@ -2,6 +2,7 @@ package com.example.fastcar.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Adapter.ThongBaoAdapter;
+import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.ThongBao;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -77,6 +80,9 @@ public class ThongBao_Activity extends AppCompatActivity {
                     adapter = new ThongBaoAdapter(ThongBao_Activity.this, response.body());
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    user.setReadNotify(response.body().size());
+                    func_update_Number_ofNotifyRead(user);
                 } else {
                     System.out.println(response.code() + ":" + response.message());
                 }
@@ -91,6 +97,23 @@ public class ThongBao_Activity extends AppCompatActivity {
     }
 
     public void back_in_ThongBaoACT(View view) {
-        onBackPressed();
+        startActivity(new Intent(ThongBao_Activity.this, KhamPha_Activity.class));
+        finish();
+    }
+
+    private void func_update_Number_ofNotifyRead(User user) {
+        RetrofitClient.FC_services().updateReadNotify(user.getEmail(), user).enqueue(new Callback<ResMessage>() {
+            @Override
+            public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                if (response.code() == 200) {
+                    // thành công
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResMessage> call, Throwable t) {
+                System.out.println("Có lỗi khi update_Number_ofNotifyRead: " + t);
+            }
+        });
     }
 }

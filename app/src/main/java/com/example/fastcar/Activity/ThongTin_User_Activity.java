@@ -331,7 +331,7 @@ public class ThongTin_User_Activity extends AppCompatActivity {
 
     private void updateAvatarUser_inFirebase_andMongoDB(Uri selectedImageUri) {
         // Lấy hồ sơ người dùng
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser userFB = FirebaseAuth.getInstance().getCurrentUser();
 
         // Cập nhật ID hình ảnh
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -342,7 +342,7 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         StorageReference imageRef = storageRef.child("images/" + imageName);
 
         // Cập nhật hồ sơ người dùng
-        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+        userFB.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
             }

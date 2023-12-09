@@ -1,6 +1,5 @@
 package com.example.fastcar.Activity.act_bottom;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -27,12 +26,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
-import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
+import com.example.fastcar.Activity.ChuXe.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Activity.MaGiamGia_Activity;
 import com.example.fastcar.Activity.ChuXe.XeCuaToi_Activity;
 import com.example.fastcar.Activity.XeYeuThich_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
-import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
+import com.example.fastcar.Activity.KhachHang.LichSu_ThueXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongTin_User_Activity;
 import com.example.fastcar.Model.Car;
@@ -43,8 +42,6 @@ import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.User_Method;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -81,7 +78,6 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         mapping();
         load();
-        getCar_ofUserLogin();
 
         // Thông tin cá nhân
         btnInfoUser.setOnClickListener(view -> {
@@ -104,7 +100,11 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         // Thêm xe
         btnThemXe.setOnClickListener(
-                view -> startActivity(new Intent(this, ThemXe_Activity.class)));
+                view -> {
+                    Intent intent = new Intent(this, ThemXe_Activity.class);
+                    intent.putExtra("isLoaded", true);
+                    startActivity(intent);
+                });
 
         // Tài khoản ngân hàng
         btnTaiKhoanNH.setOnClickListener(view -> {
@@ -183,17 +183,15 @@ public class CaNhan_Activity extends AppCompatActivity {
         if (window == null) {
             return;
         }
-        // set kích thước dialog
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set vị trí dialog
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
         dialog.show();
 
         AppCompatButton btn_confirm_dialog = custom.findViewById(R.id.btn_confirm_logout);
-        ImageView img_close_dialog = custom.findViewById(R.id.btn_cancel_dialog_logout);
+        TextView img_close_dialog = custom.findViewById(R.id.btn_cancel_dialog_logout);
 
         img_close_dialog.setOnClickListener(view -> dialog.dismiss());
 
@@ -278,6 +276,9 @@ public class CaNhan_Activity extends AppCompatActivity {
     }
 
     private void fetchData_UserLogin(String emailUser) {
+        data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
+        shimmer_view.startShimmerAnimation();
         RetrofitClient.FC_services().getListUser(emailUser).enqueue(new Callback<List<User>>() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -295,7 +296,6 @@ public class CaNhan_Activity extends AppCompatActivity {
                 } else {
                     Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(avt_user);
                 }
-
                 getCar_ofUserLogin();
             }
 
@@ -307,10 +307,6 @@ public class CaNhan_Activity extends AppCompatActivity {
     }
 
     private void getCar_ofUserLogin() {
-        data_view.setVisibility(View.GONE);
-        shimmer_view.setVisibility(View.VISIBLE);
-        shimmer_view.startShimmerAnimation();
-
         // get data
         RetrofitClient.FC_services().getListCar_ofUser(email, "0,1,2,3").enqueue(new Callback<List<Car>>() {
             @Override
@@ -335,9 +331,6 @@ public class CaNhan_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Car>> call, Throwable t) {
                 System.out.println("Có lỗi khi getListCar_ofUser(): " + email + " --- " + t);
-                listCars = null;
-                btnThemXe.setVisibility(View.VISIBLE);
-                btnXeCuaToi.setVisibility(View.GONE);
             }
         });
     }

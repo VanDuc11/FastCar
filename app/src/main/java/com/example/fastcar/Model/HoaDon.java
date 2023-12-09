@@ -16,14 +16,14 @@ public class HoaDon implements Parcelable {
     Date NgayThue, NgayTra;
     int TongSoNgayThue, PhiDV;
     String MaGiamGia;
-    int GiamGia, PhuPhi, TongTien, TienCoc, ThanhToan, TrangThaiHD;
+    int GiamGia, PhuPhi, TongTien, TienCoc, TienCocGoc, ThanhToan, TrangThaiHD;
     Date GioTaoHD, TimeChuXeXN;
     List<String> HinhAnhChuXeGiaoXe, HinhAnhKhachHangTraXe;
     String LyDo;
     String LoiNhan;
     boolean HaveFeedback;
 
-    public HoaDon(String maHD, User user, Car xe, Date ngayThue, Date ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int thanhToan, String loiNhan, Date gioTaoHD, Date timeChuXeXN, List<String> hinhAnhChuXeGiaoXe, List<String> hinhAnhKhachHangTraXe, int trangThaiHD, String lyDo, boolean haveFeedback) {
+    public HoaDon(String maHD, User user, Car xe, Date ngayThue, Date ngayTra, int tongSoNgayThue, int phiDV, String maGiamGia, int giamGia, int phuPhi, int tongTien, int tienCoc, int tienCocGoc, int thanhToan, String loiNhan, Date gioTaoHD, Date timeChuXeXN, List<String> hinhAnhChuXeGiaoXe, List<String> hinhAnhKhachHangTraXe, int trangThaiHD, String lyDo, boolean haveFeedback) {
         MaHD = maHD;
         User = user;
         Xe = xe;
@@ -36,6 +36,7 @@ public class HoaDon implements Parcelable {
         PhuPhi = phuPhi;
         TongTien = tongTien;
         TienCoc = tienCoc;
+        TienCocGoc = tienCocGoc;
         ThanhToan = thanhToan;
         LoiNhan = loiNhan;
         GioTaoHD = gioTaoHD;
@@ -64,6 +65,7 @@ public class HoaDon implements Parcelable {
         PhuPhi = in.readInt();
         TongTien = in.readInt();
         TienCoc = in.readInt();
+        TienCocGoc = in.readInt();
         ThanhToan = in.readInt();
         LoiNhan = in.readString();
         GioTaoHD = new Date(in.readLong());
@@ -106,6 +108,7 @@ public class HoaDon implements Parcelable {
         parcel.writeInt(PhuPhi);
         parcel.writeInt(TongTien);
         parcel.writeInt(TienCoc);
+        parcel.writeInt(TienCocGoc);
         parcel.writeInt(ThanhToan);
         parcel.writeString(LoiNhan);
         parcel.writeLong(GioTaoHD.getTime());
@@ -202,6 +205,14 @@ public class HoaDon implements Parcelable {
 
     public void setTienCoc(int tienCoc) {
         TienCoc = tienCoc;
+    }
+
+    public int getTienCocGoc() {
+        return TienCocGoc;
+    }
+
+    public void setTienCocGoc(int tienCocGoc) {
+        TienCocGoc = tienCocGoc;
     }
 
     public int getThanhToan() {

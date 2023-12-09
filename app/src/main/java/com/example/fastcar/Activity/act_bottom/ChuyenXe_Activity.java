@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.example.fastcar.Activity.LichSu_ThueXe_Activity;
+import com.example.fastcar.Activity.KhachHang.LichSu_ThueXe_Activity;
 import com.example.fastcar.Adapter.DanhSachChuyenXeAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.HoaDon;
@@ -64,7 +64,6 @@ public class ChuyenXe_Activity extends AppCompatActivity {
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
 
-        ln_noResult.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
@@ -74,6 +73,7 @@ public class ChuyenXe_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
                 data_view.setVisibility(View.VISIBLE);
+                recyclerView_chuyenXe.setVisibility(View.VISIBLE);
                 shimmer_view.stopShimmerAnimation();
                 shimmer_view.setVisibility(View.GONE);
 

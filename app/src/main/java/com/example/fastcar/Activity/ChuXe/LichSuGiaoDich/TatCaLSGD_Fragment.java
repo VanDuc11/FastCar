@@ -35,7 +35,7 @@ public class TatCaLSGD_Fragment extends Fragment {
     ShimmerFrameLayout shimmer_view;
     LinearLayout dataView;
     LinearLayout ln_noresult;
-    String idUser;
+    String emailUser;
 
     public static TatCaLSGD_Fragment newInstance(String data) {
         TatCaLSGD_Fragment fragment = new TatCaLSGD_Fragment();
@@ -48,7 +48,7 @@ public class TatCaLSGD_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        idUser = getArguments().getString("data_lsgd");
+        emailUser = getArguments().getString("data_lsgd");
         return inflater.inflate(R.layout.fragment_tat_ca_lsgd, container, false);
     }
 
@@ -60,19 +60,19 @@ public class TatCaLSGD_Fragment extends Fragment {
         dataView = view.findViewById(R.id.data_view_all_lichSuGiaoDich);
         shimmer_view = view.findViewById(R.id.shimmer_view_all_lichSuGiaoDich);
         ln_noresult = view.findViewById(R.id.ln_no_result_inallLSGD);
-        fetchData_All_LSGD(idUser);
+        fetchData_All_LSGD(emailUser);
         refreshLayout.setOnRefreshListener(() -> {
-            fetchData_All_LSGD(idUser);
+            fetchData_All_LSGD(emailUser);
             refreshLayout.setRefreshing(false);
         });
     }
 
-    private void fetchData_All_LSGD(String idUser) {
+    private void fetchData_All_LSGD(String emailUser) {
         ln_noresult.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
 
-        RetrofitClient.FC_services().getLSGD_ofUser(idUser, null).enqueue(new Callback<List<LichSuGiaoDich>>() {
+        RetrofitClient.FC_services().getLSGD_ofUser(emailUser, null, null).enqueue(new Callback<List<LichSuGiaoDich>>() {
             @Override
             public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
                 dataView.setVisibility(View.VISIBLE);
@@ -103,7 +103,7 @@ public class TatCaLSGD_Fragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded() && getView() != null) {
-            fetchData_All_LSGD(idUser);
+            fetchData_All_LSGD(emailUser);
         }
     }
 }

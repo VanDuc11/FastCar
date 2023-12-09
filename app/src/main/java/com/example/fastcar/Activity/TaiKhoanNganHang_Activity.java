@@ -95,6 +95,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
 
     private void load() {
         data_view.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
         ln_noResult.setVisibility(View.GONE);
@@ -202,7 +203,7 @@ public class TaiKhoanNganHang_Activity extends AppCompatActivity {
                         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callBackMethod);
                         itemTouchHelper.attachToRecyclerView(recyclerView);
                     } else {
-                        refreshLayout.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
                     }
                 }

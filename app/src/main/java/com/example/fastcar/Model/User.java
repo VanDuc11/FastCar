@@ -9,17 +9,18 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class User implements Parcelable {
-    String _id, UID, UserName, SDT, NgaySinh, GioiTinh , Email;
-    String So_GPLX, HoTen_GPLX, NgayCap_GPLX, DiaChi_GPLX;
-    ArrayList<String> HinhAnh_GPLX;
-    int TrangThai_GPLX;
-    String So_CCCD, NgayCap_CCCD, NoiCap_CCCD;
-    String MatKhau, Avatar;
-    Date NgayThamGia;
-    int SoDu;
-    String TokenFCM;
+    private String _id, UID, UserName, SDT, NgaySinh, GioiTinh, Email;
+    private String So_GPLX, HoTen_GPLX, NgayCap_GPLX, DiaChi_GPLX;
+    private ArrayList<String> HinhAnh_GPLX;
+    private int TrangThai_GPLX;
+    private String So_CCCD, NgayCap_CCCD, NoiCap_CCCD;
+    private String MatKhau, Avatar;
+    private Date NgayThamGia;
+    private int SoDu;
+    private String Token, TokenFCM;
+    private int ReadNotify;
 
-    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, String so_GPLX, String hoTen_GPLX, String ngayCap_GPLX, String diaChi_GPLX, ArrayList<String> hinhAnh_GPLX, int trangThai_GPLX, String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD, String matKhau, String avatar, Date ngayThamGia, int soDu, String tokenFCM) {
+    public User(String _id, String UID, String userName, String SDT, String ngaySinh, String gioiTinh, String email, String so_GPLX, String hoTen_GPLX, String ngayCap_GPLX, String diaChi_GPLX, ArrayList<String> hinhAnh_GPLX, int trangThai_GPLX, String so_CCCD, String ngayCap_CCCD, String noiCap_CCCD, String matKhau, String avatar, Date ngayThamGia, int soDu, String token, String tokenFCM, int readNotify) {
         this._id = _id;
         this.UID = UID;
         UserName = userName;
@@ -40,7 +41,9 @@ public class User implements Parcelable {
         Avatar = avatar;
         NgayThamGia = ngayThamGia;
         SoDu = soDu;
-        TokenFCM = tokenFCM;
+        this.Token = token;
+        this.TokenFCM = tokenFCM;
+        this.ReadNotify = readNotify;
     }
 
     public User(String UID, String userName, String email, String matKhau, String avatar, Date ngayThamGia, String tokenFCM) {
@@ -97,8 +100,10 @@ public class User implements Parcelable {
         MatKhau = in.readString();
         Avatar = in.readString();
         SoDu = in.readInt();
+        Token = in.readString();
         TokenFCM = in.readString();
         NgayThamGia = new Date(in.readLong());
+        ReadNotify = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -140,8 +145,10 @@ public class User implements Parcelable {
         parcel.writeString(MatKhau);
         parcel.writeString(Avatar);
         parcel.writeInt(SoDu);
+        parcel.writeString(Token);
         parcel.writeString(TokenFCM);
         parcel.writeLong(NgayThamGia.getTime());
+        parcel.writeInt(ReadNotify);
     }
 
     public String get_id() {
@@ -304,11 +311,27 @@ public class User implements Parcelable {
         SoDu = soDu;
     }
 
+    public String getToken() {
+        return Token;
+    }
+
+    public void setToken(String token) {
+        Token = token;
+    }
+
     public String getTokenFCM() {
         return TokenFCM;
     }
 
     public void setTokenFCM(String tokenFCM) {
         TokenFCM = tokenFCM;
+    }
+
+    public int getReadNotify() {
+        return ReadNotify;
+    }
+
+    public void setReadNotify(int readNotify) {
+        ReadNotify = readNotify;
     }
 }

@@ -30,15 +30,15 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/img_xe_inItem_XeCuaToi"
-                        android:layout_width="180dp"
-                        android:layout_height="160dp"
+                        android:layout_width="170dp"
+                        android:layout_height="150dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/img_vinfast_in_chuyen"
                         app:shapeAppearanceOverlay="@style/img_XekhamPha" />
 
                     <TextView
                         android:id="@+id/tv_trangthaixe_inItem_XeCuaToi"
-                        android:layout_width="180dp"
+                        android:layout_width="170dp"
                         android:layout_height="30dp"
                         android:gravity="center"
                         android:background="@drawable/radius_top_10"

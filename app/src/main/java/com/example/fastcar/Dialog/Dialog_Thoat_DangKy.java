@@ -13,7 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.example.fastcar.Activity.ThemXe.ThemXe_Activity;
+import com.example.fastcar.Activity.ChuXe.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.R;
 

@@ -2,6 +2,7 @@ package com.example.fastcar.Retrofit;
 
 import com.example.fastcar.Server.HostApi;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

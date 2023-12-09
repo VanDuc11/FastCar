@@ -4,44 +4,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.text.Html;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
-import com.example.fastcar.Adapter.DanhSachXeAdapter;
+import com.example.fastcar.Activity.DanhSachXe_Activity;
 import com.example.fastcar.Adapter.NhanXetAdapter;
 import com.example.fastcar.Adapter.PhotoChiTietXeAdapter;
-import com.example.fastcar.Adapter.XeKhamPhaAdapter;
+import com.example.fastcar.CustomTimePickerDialog;
+import com.example.fastcar.Dialog.CustomDialogNotify;
+import com.example.fastcar.Dialog.Dialog_FullNhanXet;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
+import com.example.fastcar.Dialog.Dialog_InfoChuSH;
 import com.example.fastcar.Dialog.Dialog_PhuPhi_PhatSinh;
+import com.example.fastcar.Dialog.Dialog_SoNgayThue;
 import com.example.fastcar.Dialog.Dialog_TS_TheChap;
 import com.example.fastcar.FavoriteCar_Method;
 import com.example.fastcar.Model.Car;
@@ -66,41 +62,45 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChiTietXe_Activity extends AppCompatActivity {
+public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     TextView btnThueXe, tv_tenxe_actionbar, tv_tenxe, tv_soSao, tv_soChuyen, tv_ngayNhanXe, tv_ngayTraXe;
     TextView tv_truyendong, tv_soGhe, tv_nhienlieu, tv_tieuhao, tv_mota, tv_soNgayThueXe, tv_tongTien, tv_xeDaThue;
     TextView tv_400km, tv_dieuKhoan, btn_see_more, tv_tenChuSH_Xe, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_soTien1ngay;
     TextView tv_diaChiXe, tv_diaChiXe2, tv_thechap, tvTimeGiaoXe, tvTimeNhanXe, tvXemThemNhanXet, tvSoluongNX;
-    boolean isSeeMore_inDieuKhoan = false;
+    private boolean isSeeMore_inDieuKhoan = false;
     CardView selection1, selection2, cardview_thoigianThueXe, cardview_DieuKhoan_PhuPhi, cardview_danhgiaXe, cardview_chuxe;
     RadioButton rd_selection1, rd_selection2;
-    ConstraintLayout ln_view_buttonThueXe_inCTX;
-    LinearLayout btn_showDatePicker, ln_giaonhanxe;
-    ImageView ic_back, ic_favorite, icon_redflag_xedathue;
+    private ConstraintLayout ln_view_buttonThueXe_inCTX;
+    private LinearLayout btn_showDatePicker, ln_giaonhanxe;
+    private ImageView ic_back, ic_favorite, icon_redflag_xedathue;
     boolean isFavorite;
-    RecyclerView reyNhanXet;
-    ViewPager viewPager;
-    CircleIndicator circleIndicator;
-    CircleImageView img_chuSH_Xe;
-    PhotoChiTietXeAdapter photoAdapter;
-    private String formatted_NgayThamGia_ChuSH;
-    NhanXetAdapter nhanXetAdapter;
-    List<FeedBack> listFeedbacks = new ArrayList<>();
-    List<Car> listXe_ofChuSH = new ArrayList<>();
-    Long startTimeLong, endTimeLong;
-    MaterialDatePicker<Pair<Long, Long>> datePicker;
-    long soNgayThueXe;
-    Car car;
-    WebView webView_loadMap;
+    private RecyclerView reyNhanXet;
+    private ViewPager viewPager;
+    private CircleIndicator circleIndicator;
+    private CircleImageView img_chuSH_Xe;
+    private PhotoChiTietXeAdapter photoAdapter;
+    private NhanXetAdapter nhanXetAdapter;
+    private List<FeedBack> listFeedbacks = new ArrayList<>();
+    private List<FeedBack> allFeedbacks_ofAllCars = new ArrayList<>();
+    private List<Car> listXe_ofChuSH = new ArrayList<>();
+    private Long startTimeLong, endTimeLong;
+    private MaterialDatePicker<Pair<Long, Long>> datePicker;
+    private long soNgayThueXe;
+    private Car car;
+    private WebView webView_loadMap;
     private int totalChuyen_ofChuSH;
     private float totalStar_ofChuSH;
+    private CustomTimePickerDialog timePickerDialog;
+    private String formattedStartDate, formattedEndDate, timestr1, timestr2;
+    private int time1, time2;
+    private List<String> listsLichBan;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -111,9 +111,9 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         mapping();
         load();
 
-        func_TinhTongTien(startTimeLong, endTimeLong);
+        func_TinhTongTien(formattedStartDate, formattedEndDate);
 
-        btn_showDatePicker.setOnClickListener(view -> showDatePicker_inChiTietXe(car));
+        btn_showDatePicker.setOnClickListener(view -> showDatePicker_inChiTietXe());
 
         btnThueXe.setOnClickListener(v -> {
             Intent intent = new Intent(this, ThongTinThue_Activity.class);
@@ -124,9 +124,10 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        tv_soNgayThueXe.setOnClickListener(view -> Dialog_SoNgayThue.showDialog(this));
         ic_back.setOnClickListener(view -> onBackPressed());
-        tvXemThemNhanXet.setOnClickListener(view -> showDialog_FullNhanXet());
-        cardview_chuxe.setOnClickListener(view -> showDialog_info_ChuSH());
+        tvXemThemNhanXet.setOnClickListener(view -> Dialog_FullNhanXet.showDialog(this, listFeedbacks));
+        cardview_chuxe.setOnClickListener(view -> Dialog_InfoChuSH.showDialog(this, car, listXe_ofChuSH, allFeedbacks_ofAllCars, totalChuyen_ofChuSH));
     }
 
     private void mapping() {
@@ -186,6 +187,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         car = intent.getParcelableExtra("car");
         boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
         isNotContinue();
+        listsLichBan = car.getLichBan();
 
         String diaChiXe = car.getDiaChiXe();
         String[] parts = diaChiXe.split(",");
@@ -218,15 +220,21 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         }
 
         SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
-
         boolean check = preferences.getBoolean("check", false);
-
         if (check) {
             startTimeLong = preferences.getLong("startTime2", 0);
             endTimeLong = preferences.getLong("endTime2", 0);
+            time1 = preferences.getInt("startHour2", 0);
+            time2 = preferences.getInt("endHour2", 0);
+            timestr1 = preferences.getString("s2", "");
+            timestr2 = preferences.getString("e2", "");
         } else {
             startTimeLong = preferences.getLong("startTime1", 0);
             endTimeLong = preferences.getLong("endTime1", 0);
+            time1 = preferences.getInt("startHour1", 0);
+            time2 = preferences.getInt("endHour1", 0);
+            timestr1 = preferences.getString("s1", "");
+            timestr2 = preferences.getString("e1", "");
         }
         tv_xeDaThue.setVisibility(View.GONE);
         icon_redflag_xedathue.setVisibility(View.GONE);
@@ -323,9 +331,6 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         // chủ SH
         String url_image_chuSH = car.getChuSH().getAvatar();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        formatted_NgayThamGia_ChuSH = dateFormat.format(car.getChuSH().getNgayThamGia());
-        System.out.println("date: " + car.getChuSH().getNgayThamGia());
 
         if (url_image_chuSH != null) {
             Glide.with(getBaseContext()).load(url_image_chuSH).into(img_chuSH_Xe);
@@ -338,8 +343,8 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
         rd_selection1.setChecked(true);
         selection2.setCardBackgroundColor(Color.parseColor("#DCCBCB"));
-        if (car.getTheChap() == true) {
-            int number = 0;
+        if (car.getTheChap()) {
+            int number;
             if (car.getGiaThue1Ngay() < 1500000) {
                 number = 20;
             } else if (car.getGiaThue1Ngay() < 3000000) {
@@ -383,32 +388,32 @@ public class ChiTietXe_Activity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void build_DatePicker() {
         datePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(Pair.create(startTimeLong, endTimeLong)).setCalendarConstraints(buildCalendarConstraints()).build();
+        timePickerDialog = new CustomTimePickerDialog();
+        timePickerDialog.setListener(this, time1, time2, 0);
+        setValue_forDate(startTimeLong, endTimeLong, timestr1, timestr2);
 
-        setValue_forDate(startTimeLong, endTimeLong);
-        getListHoaDon_hasTrangThai_2345(car.get_id());
     }
 
 
-    private void showDatePicker_inChiTietXe(Car car) {
+    private void showDatePicker_inChiTietXe() {
+        timePickerDialog = new CustomTimePickerDialog();
+        timePickerDialog.setListener(ChiTietXe_Activity.this, time1, time2, 0);
+        timePickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
         datePicker.show(getSupportFragmentManager(), "Material_Range");
-
         datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
             @Override
             public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                // Lấy ngày bắt đầu và ngày kết thúc từ Pair
                 Long startDate = selection.first;
                 Long endDate = selection.second;
-
                 SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong("startTime2", startDate);
                 editor.putLong("endTime2", endDate);
                 editor.putBoolean("check", true);
                 editor.apply();
-
-                setValue_forDate(startDate, endDate);
-                func_TinhTongTien(startDate, endDate);
-                getListHoaDon_hasTrangThai_2345(car.get_id());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                formattedStartDate = sdf.format(new Date(startDate));
+                formattedEndDate = sdf.format(new Date(endDate));
             }
         });
     }
@@ -420,12 +425,25 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         long today = MaterialDatePicker.todayInUtcMilliseconds();
         constraintsBuilder.setStart(today);
 
-        // Vô hiệu hóa ngày trong quá khứ bằng cách sử dụng setValidator
-        // Các ngày không hợp lệ (trong quá khứ) sẽ không thể chọn được
+        // Tính toán ngày kết thúc tối đa (max 4 tháng)
+        Calendar maxEndDate = Calendar.getInstance();
+        maxEndDate.set(Calendar.DAY_OF_MONTH, maxEndDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        maxEndDate.add(Calendar.MONTH, 3);
+        long maxEndDateMillis = maxEndDate.getTimeInMillis();
+        constraintsBuilder.setEnd(maxEndDateMillis);
+
+        // test
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         constraintsBuilder.setValidator(new CalendarConstraints.DateValidator() {
             @Override
             public boolean isValid(long date) {
-                return date >= today;
+                for (String dateRange : listsLichBan) {
+                    if (isDateInRange(dateRange, date)) {
+                        return false;
+                    }
+                }
+                return date >= today && date <= maxEndDateMillis;
             }
 
             @Override
@@ -436,34 +454,59 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             @Override
             public void writeToParcel(Parcel parcel, int i) {
             }
+
+            private boolean isDateInRange(String dateRange, long date) {
+                try {
+                    String[] dates = dateRange.split(" - ");
+                    long startDate = dateFormat.parse(dates[0]).getTime();
+                    long endDate = dateFormat.parse(dates[1]).getTime() + (24 * 60 * 60 * 1000);
+                    if (date >= startDate && date <= endDate) {
+                        return true;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
         });
 
         return constraintsBuilder.build();
     }
 
-    private void setValue_forDate(Long startTime, Long endTime) {
+    private void setValue_forDate(Long startTime, Long endTime, String s1, String e1) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedStartDate = sdf.format(new Date(startTime));
-        String formattedEndDate = sdf.format(new Date(endTime));
-
+        formattedStartDate = s1 + " " + sdf.format(new Date(startTime));
+        formattedEndDate = e1 + " " + sdf.format(new Date(endTime));
         tv_ngayNhanXe.setText(formattedStartDate);
         tv_ngayTraXe.setText(formattedEndDate);
+        if (checkLichBan(sdf.format(new Date(startTime)), sdf.format(new Date(endTime)))) {
+            if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
+                icon_redflag_xedathue.setVisibility(View.GONE);
+                tv_xeDaThue.setVisibility(View.GONE);
+                isContinue();
+                getListHoaDon_hasTrangThai_2345(car.get_id());
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
-    private void func_TinhTongTien(Long startTime, Long endTime) {
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTimeInMillis(startTime);
+    private void func_TinhTongTien(String startTime, String endTime) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+        try {
+            Date date1 = dateFormat.parse(startTime);
+            Date date2 = dateFormat.parse(endTime);
 
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.setTimeInMillis(endTime);
-
-        // Tính toán số ngày giữa hai ngày
-        long diffInMillis = Math.abs(calendar2.getTimeInMillis() - calendar1.getTimeInMillis());
-        soNgayThueXe = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
-
+            long timeDifferenceMillis = date2.getTime() - date1.getTime();
+            long hours = timeDifferenceMillis / (60 * 60 * 1000);
+            if (hours % 24 == 0) {
+                soNgayThueXe = hours / 24;
+            } else {
+                soNgayThueXe = (hours / 24) + 1; // làm tròn ngày
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         tv_soNgayThueXe.setText(soNgayThueXe + " ngày");
-
         tv_tongTien.setText(NumberFormatK.format((int) (car.getGiaThue1Ngay() * soNgayThueXe)));
     }
 
@@ -475,13 +518,16 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                 if (response.code() == 200) {
                     listFeedbacks = response.body();
                     if (listFeedbacks.size() != 0) {
+                        boolean isShowMore;
                         if (listFeedbacks.size() > 2) {
-                            nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, response.body(), false);
-                            reyNhanXet.setAdapter(nhanXetAdapter);
-                            nhanXetAdapter.notifyDataSetChanged();
+                            isShowMore = false;
                         } else {
                             tvXemThemNhanXet.setVisibility(View.GONE);
+                            isShowMore = true;
                         }
+                        nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, response.body(), isShowMore);
+                        reyNhanXet.setAdapter(nhanXetAdapter);
+                        nhanXetAdapter.notifyDataSetChanged();
                         tvSoluongNX.setText(response.body().size() + " nhận xét");
 
                     } else {
@@ -499,106 +545,6 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void showDialog_FullNhanXet() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_showfull_nhanxet, null);
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(custom);
-
-        Window window = dialog.getWindow();
-        if (window == null) {
-            return;
-        }
-        // set kích thước dialog
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set vị trí dialog
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAttributes);
-        dialog.show();
-
-        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_fullnhanxet);
-        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView_full_nhanxet);
-
-        btnBack.setOnClickListener(view -> dialog.dismiss());
-
-        nhanXetAdapter = new NhanXetAdapter(ChiTietXe_Activity.this, listFeedbacks, true);
-        recyclerView.setAdapter(nhanXetAdapter);
-        nhanXetAdapter.notifyDataSetChanged();
-    }
-
-    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
-    private void showDialog_info_ChuSH() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_info_chush, null);
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(custom);
-
-        Window window = dialog.getWindow();
-        if (window == null) {
-            return;
-        }
-        // set kích thước dialog
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set vị trí dialog
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAttributes);
-        dialog.show();
-
-        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_info_chush);
-        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView_listxe_indialog_info_chush);
-        CircleImageView imgChuXe = dialog.findViewById(R.id.avt_chush_inDialog_info_chush);
-        TextView tvTenChuXe = dialog.findViewById(R.id.tv_name_chush_inDialog_info_chush);
-        TextView tvNgayThamGia = dialog.findViewById(R.id.tv_ngaythamgia_chush_inDialog_info_chush);
-        TextView tvSoChuyen = dialog.findViewById(R.id.tv_sochuyen_ofChuSH_inDialog_info);
-        TextView tvTotalXe = dialog.findViewById(R.id.btn_showmore_listxe_ofchush);
-        btnBack.setOnClickListener(view -> dialog.dismiss());
-        Glide.with(this).load(car.getChuSH().getAvatar()).into(imgChuXe);
-        tvTenChuXe.setText(car.getChuSH().getUserName());
-        tvNgayThamGia.setText(formatted_NgayThamGia_ChuSH);
-        tvSoChuyen.setText(totalChuyen_ofChuSH + " chuyến");
-        tvTotalXe.setText("Danh sách xe (" + listXe_ofChuSH.size() + " xe)");
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        XeKhamPhaAdapter adapter = new XeKhamPhaAdapter(ChiTietXe_Activity.this, listXe_ofChuSH);
-        recyclerView.setAdapter(adapter);
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
-        adapter.notifyDataSetChanged();
-        tvTotalXe.setOnClickListener(view -> showDialog_FullXe_ofChuSH(listXe_ofChuSH));
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void showDialog_FullXe_ofChuSH(List<Car> listCars) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        @SuppressLint("InflateParams") View custom = inflater.inflate(R.layout.layout_dialog_showfull_xe_chush, null);
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(custom);
-
-        Window window = dialog.getWindow();
-        if (window == null) {
-            return;
-        }
-        // set kích thước dialog
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set vị trí dialog
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAttributes);
-        dialog.show();
-
-        ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_full_listxe_chush);
-        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView_full_listxe_chush);
-        btnBack.setOnClickListener(view -> dialog.dismiss());
-        DanhSachXeAdapter danhSachXeAdapter = new DanhSachXeAdapter(ChiTietXe_Activity.this, listCars, null);
-        recyclerView.setAdapter(danhSachXeAdapter);
-        danhSachXeAdapter.notifyDataSetChanged();
-    }
-
     public void showDialog_GiayToThueXe_inCTX(View view) {
         Dialog_GiayToThueXe.showDialog(this);
     }
@@ -613,13 +559,12 @@ public class ChiTietXe_Activity extends AppCompatActivity {
 
     private void getListHoaDon_hasTrangThai_2345(String id_xe) {
         isNotContinue();
-
         String startDateStr = tv_ngayNhanXe.getText().toString();
         String endDateStr = tv_ngayTraXe.getText().toString();
 
         Date startDate, endDate;
-        SimpleDateFormat sdf_dmy = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf_dmy = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
             startDate = sdf_dmy.parse(startDateStr);
             endDate = sdf_dmy.parse(endDateStr);
@@ -644,13 +589,17 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                     if (hoaDonList.size() != 0) {
                         // bị trùng lịch
                         StringBuilder valid = new StringBuilder();
+                        valid.append("Xe đã được thuê:\n");
                         for (HoaDon hoaDon : hoaDonList) {
-                            String text = "+ Xe đã được thuê từ ngày " + sdf_dmy.format(hoaDon.getNgayThue()) + " đến hết ngày " + sdf_dmy.format(hoaDon.getNgayTra()) + "\n";
+                            String text = "+ Từ " + sdf_dmy.format(hoaDon.getNgayThue()) + " đến hết " + sdf_dmy.format(hoaDon.getNgayTra()) + "\n";
                             valid.append(text);
                         }
+                        if (valid.length() > 0) {
+                            valid.deleteCharAt(valid.length() - 1);
+                        }
+                        icon_redflag_xedathue.setVisibility(View.VISIBLE);
                         tv_xeDaThue.setVisibility(View.VISIBLE);
                         isNotContinue();
-                        icon_redflag_xedathue.setVisibility(View.VISIBLE);
                         tv_xeDaThue.setText(valid);
                     } else {
                         tv_xeDaThue.setVisibility(View.GONE);
@@ -663,9 +612,6 @@ public class ChiTietXe_Activity extends AppCompatActivity {
             @Override
             public void onFailure(retrofit2.Call<List<HoaDon>> call, Throwable t) {
                 System.out.println("Có lỗi xảy ra: " + t);
-                tv_xeDaThue.setVisibility(View.GONE);
-                icon_redflag_xedathue.setVisibility(View.GONE);
-                btnThueXe.setEnabled(false);
             }
         });
     }
@@ -691,6 +637,7 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                     listXe_ofChuSH = response.body();
                     float numberStar = 0;
                     int count = 0;
+                    StringBuilder all_idCars = new StringBuilder();
                     assert listXe_ofChuSH != null;
                     for (Car car : listXe_ofChuSH) {
                         if (car.getTrungBinhSao() > 0) {
@@ -698,18 +645,41 @@ public class ChiTietXe_Activity extends AppCompatActivity {
                             count++;
                         }
                         totalChuyen_ofChuSH += car.getSoChuyen();
+                        all_idCars.append(car.get_id()).append(",");
                     }
                     totalStar_ofChuSH = numberStar / count;
                     DecimalFormat df = new DecimalFormat("0.0");
                     String formattedNumber = df.format(totalStar_ofChuSH);
                     tv_soSao_ofChuSH.setText(formattedNumber);
                     tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
+                    if (all_idCars.length() > 0) {
+                        all_idCars.deleteCharAt(all_idCars.length() - 1);
+                    }
+                    getAllFeedBack_ofAllCars_ChuSH(String.valueOf(all_idCars));
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<List<Car>> call, Throwable t) {
                 System.out.println("Có lỗi khi getListCar_ofChuSH: " + t);
+            }
+        });
+    }
+
+    private void getAllFeedBack_ofAllCars_ChuSH(String all_idCars) {
+        RetrofitClient.FC_services().getListFeedBack(all_idCars).enqueue(new Callback<List<FeedBack>>() {
+            @Override
+            public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
+                if (response.code() == 200) {
+                    if (response.body().size() > 0) {
+                        allFeedbacks_ofAllCars = response.body();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FeedBack>> call, Throwable t) {
+                System.out.println("Có lỗi khi getAllFeedBack_ofAllCars_ChuSH: " + t);
             }
         });
     }
@@ -792,5 +762,165 @@ public class ChiTietXe_Activity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private boolean checkLichBan(String startTime, String endTime) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = null, endDate = null;
+        try {
+            startDate = sdf.parse(startTime);
+            endDate = sdf.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder valid = new StringBuilder();
+        for (String lichban : listsLichBan) {
+            Date ngayBD = null;
+            Date ngayKT = null;
+            String[] dates = lichban.split(" - ");
+            try {
+                ngayBD = sdf.parse(dates[0]);
+                ngayKT = sdf.parse(dates[1]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if ((startDate.equals(ngayBD) || startDate.equals(ngayKT) ||
+                    endDate.equals(ngayBD) || endDate.equals(ngayKT)) ||
+                    (startDate.before(ngayKT) && endDate.after(ngayBD))) {
+                String text = "Xe bận từ 00:00 ngày " + dates[0] + " đến 23:59 ngày " + dates[1] + "\n";
+                valid.append(text);
+            }
+        }
+        if (valid.length() > 0) {
+            valid.deleteCharAt(valid.length() - 1);
+            tv_xeDaThue.setVisibility(View.VISIBLE);
+            icon_redflag_xedathue.setVisibility(View.VISIBLE);
+            tv_xeDaThue.setText(valid);
+            isNotContinue();
+            return false;
+        } else {
+            tv_xeDaThue.setVisibility(View.GONE);
+            icon_redflag_xedathue.setVisibility(View.GONE);
+            isContinue();
+            return true;
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("startHour2", i);
+        editor.putInt("endHour2", i1);
+        time1 = i;
+        time2 = i1;
+        String ddMM1 = formattedStartDate;
+        String ddMM2 = formattedEndDate;
+        String selectedTimeRange = timePickerDialog.getSelectedTime();
+        int indexOfDash = selectedTimeRange.indexOf(" - ");
+        formattedStartDate = selectedTimeRange.substring(0, indexOfDash).trim() + " " + formattedStartDate;
+        formattedEndDate = selectedTimeRange.substring(indexOfDash + 3).trim() + " " + formattedEndDate;
+        tv_ngayNhanXe.setText(formattedStartDate);
+        tv_ngayTraXe.setText(formattedEndDate);
+        editor.putString("s2", selectedTimeRange.substring(0, indexOfDash).trim());
+        editor.putString("e2", selectedTimeRange.substring(indexOfDash + 3).trim());
+        editor.apply();
+
+        if (checkLichBan(ddMM1, ddMM2)) {
+            if (checkTimeThueXe(formattedStartDate, formattedEndDate)) {
+                if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
+                    icon_redflag_xedathue.setVisibility(View.GONE);
+                    tv_xeDaThue.setVisibility(View.GONE);
+                    isContinue();
+                    func_TinhTongTien(formattedStartDate, formattedEndDate);
+                    getListHoaDon_hasTrangThai_2345(car.get_id());
+                }
+            }
+        }
+    }
+
+    private boolean checkTimeThueXe(String startTime, String endTime) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+        try {
+            Date date1 = dateFormat.parse(startTime);
+            Date date2 = dateFormat.parse(endTime);
+            if (date2.after(date1)) {
+                long timeDifference = date2.getTime() - date1.getTime();
+                long hoursDifference = timeDifference / (60 * 60 * 1000);
+                if (hoursDifference < 3) {
+                    isNotContinue();
+                    icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                    tv_xeDaThue.setVisibility(View.VISIBLE);
+                    tv_xeDaThue.setText("Thời gian cách nhau tối thiểu 3 tiếng khi thuê xe trong ngày");
+                    return false;
+                }
+                return true;
+            } else {
+                isNotContinue();
+                icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                tv_xeDaThue.setVisibility(View.VISIBLE);
+                tv_xeDaThue.setText("Thời gian không hợp lệ");
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private boolean checkTimeNhanXe_GiaoXe(String startTime, String endTime) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+        try {
+            String[] timeRangeParts1 = car.getThoiGianGiaoXe().split(" - ");
+            Date startTime1 = timeFormat.parse(timeRangeParts1[0]);
+            Date endTime1 = timeFormat.parse(timeRangeParts1[1]);
+
+            String[] timeRangeParts2 = car.getThoiGianNhanXe().split(" - ");
+            Date startTime2 = timeFormat.parse(timeRangeParts2[0]);
+            Date endTime2 = timeFormat.parse(timeRangeParts2[1]);
+
+            Date datetime1 = timeFormat.parse(startTime);
+            Date datetime2 = timeFormat.parse(endTime);
+
+            // Kiểm tra xem thời gian từ String2 có nằm trong khoảng giờ của String1 không
+            boolean isTimeInRange1 = datetime1.compareTo(startTime1) >= 0 && datetime1.compareTo(endTime1) <= 0;
+            boolean isTimeInRange2 = datetime2.compareTo(startTime2) >= 0 && datetime2.compareTo(endTime2) <= 0;
+
+            StringBuilder builder = new StringBuilder();
+            if (isTimeInRange1 && isTimeInRange2) {
+                isContinue();
+                icon_redflag_xedathue.setVisibility(View.GONE);
+                tv_xeDaThue.setVisibility(View.GONE);
+                return true;
+            } else if (!isTimeInRange1 && isTimeInRange2) {
+                isNotContinue();
+                icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                builder.append("Thời gian nhận xe không hợp lệ");
+                tv_xeDaThue.setVisibility(View.VISIBLE);
+                tv_xeDaThue.setText(builder + "");
+                return false;
+            } else if (isTimeInRange1) {
+                isNotContinue();
+                icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                builder.append("Thời gian trả xe không hợp lệ");
+                tv_xeDaThue.setVisibility(View.VISIBLE);
+                tv_xeDaThue.setText(builder + "");
+                return false;
+            } else {
+                isNotContinue();
+                icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                builder.append("Thời gian nhận xe không hợp lệ\n");
+                builder.append("Thời gian trả xe không hợp lệ");
+                tv_xeDaThue.setVisibility(View.VISIBLE);
+                tv_xeDaThue.setText(builder + "");
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }

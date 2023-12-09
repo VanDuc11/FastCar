@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh_data_inListXeCuaToi"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/backgroud"
-    tools:context=".Activity.ThemXe.ThemXe_Activity">
+    android:orientation="vertical"
+    tools:context=".Activity.ChuXe.ThemXe.ThemXe_Activity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_data_inListXeCuaToi"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_listXeCuaToi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="55dp"
-        android:gravity="center"
-        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ln_no_result_inThemXe"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="55dp"
+            android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:src="@drawable/img_noresult_car" />
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/ln_no_result_inThemXe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:text="Không có xe cho thuê"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:textSize="20dp" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/btn_themxe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/custom_btn3"
-                android:gravity="center"
-                android:paddingHorizontal="80dp"
-                android:text="Đăng Xe"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
-                android:textColor="@color/white"
-                android:textSize="17dp" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:src="@drawable/img_noresult_car" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="Không có xe cho thuê"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/btn_themxe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_btn3"
+                    android:gravity="center"
+                    android:paddingHorizontal="80dp"
+                    android:text="Đăng Xe"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+                    android:textColor="@color/white"
+                    android:textSize="17dp" />
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

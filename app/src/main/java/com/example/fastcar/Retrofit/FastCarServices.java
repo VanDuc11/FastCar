@@ -87,7 +87,6 @@ public interface FastCarServices {
     @GET("user/list")
     Call<List<User>> getListUser(@Query("Email") String email);
 
-
     // thêm user
     @Headers("Content-Type: application/json")
     @POST("user/create")
@@ -102,6 +101,11 @@ public interface FastCarServices {
     @Headers("Content-Type: application/json")
     @PUT("user/updateSoDu/{email}")
     Call<ResMessage> updateSoDu(@Path("email") String email, @Body User user);
+
+    // cập nhật số lượng thông báo đã đọc
+    @Headers("Content-Type: application/json")
+    @PUT("user/updateNumberNotifyRead/{email}")
+    Call<ResMessage> updateReadNotify(@Path("email") String email, @Body User user);
 
     // cập nhật gplx
     @Multipart
@@ -206,9 +210,10 @@ public interface FastCarServices {
 
     // model LSGD
     // lấy lsgd của 1 user
-    @GET("lsgd/list")
-    Call<List<LichSuGiaoDich>> getLSGD_ofUser(@Query("User") String idUser,
-                                              @Query("title") String title);
+    @GET("lsgd/list/{email}")
+    Call<List<LichSuGiaoDich>> getLSGD_ofUser(@Path("email") String emailUser,
+                                              @Query("title") String title,
+                                              @Query("startDate") String startDate);
 
     // tạo lsgd ( yc rút tiền )
     @Headers("Content-Type: application/json")

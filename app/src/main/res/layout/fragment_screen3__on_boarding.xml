@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.OnBoarding.Screen3_OnBoarding_Fragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_onboarding3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="60dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bạn cần thuê xe?"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:lineHeight="25dp"
+            android:text="Hãy chọn những chiếc xe yêu thích và đặt chúng một cách dễ dàng với FastCar"
+            android:textSize="17dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_btn4"
+        android:gravity="center"
+        android:text="Bắt đầu"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:textColor="@color/white"
+        android:layout_marginHorizontal="50dp"
+        android:textSize="18dp" />
+
+</RelativeLayout>

@@ -59,24 +59,35 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/radio_group"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ground1">
-
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/radio_zalopay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/radio_momo"
+                        android:layout_marginTop="27px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+            </LinearLayout>
+            <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/radio_zalopay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
+                android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/ln_zalopay"
                     android:layout_width="match_parent"
@@ -99,32 +110,19 @@
                         android:textSize="16dp"
                         android:textStyle="bold" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/radio_momo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
                 <LinearLayout
                     android:id="@+id/ln_momo"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@color/momo"
                     android:gravity="center"
+                    android:layout_marginTop="25px"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/logo_momo1" />
+                        android:src="@drawable/logo_momo3" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -136,7 +134,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-        </RadioGroup>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

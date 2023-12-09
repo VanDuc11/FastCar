@@ -86,7 +86,7 @@ public class ChuyenXe_ChuSH_Activity extends AppCompatActivity {
                         recyclerView_chuyenXe.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     } else {
-                        refreshLayout.setVisibility(View.GONE);
+                        recyclerView_chuyenXe.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
                     }
                 }

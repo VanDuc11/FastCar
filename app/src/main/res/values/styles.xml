@@ -3,6 +3,13 @@
 
     <style name="CustomDatePickerStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#60CE85</item>
+        <item name="dayInvalidStyle">@style/dayInvalid</item>
+    </style>
+
+    <style name="dayInvalid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#D5C5C5</item>
+        <item name="itemFillColor">#9C2F2F</item>
+        <item name="background">@drawable/custom_btn9</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
@@ -13,4 +20,5 @@
         <item name="android:background">@drawable/border_dialog_custom</item>
         <item name="android:radius">20dp</item>
     </style>
+
 </resources>

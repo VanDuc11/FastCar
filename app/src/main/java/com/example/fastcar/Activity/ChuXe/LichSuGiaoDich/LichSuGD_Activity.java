@@ -96,7 +96,7 @@ public class LichSuGD_Activity extends AppCompatActivity {
         User user = gson.fromJson(userStr, User.class);
 
         loadUIItemSelected(0);
-        pagerAdapter_lsgd = new PagerAdapter_LSGD(getSupportFragmentManager(), user.get_id());
+        pagerAdapter_lsgd = new PagerAdapter_LSGD(getSupportFragmentManager(), user.getEmail());
         viewPagerLSGD.setAdapter(pagerAdapter_lsgd);
     }
 

@@ -35,6 +35,28 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".Activity.ChuXe.LichBan_CuaXe_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.OnBoarding.CheckOnBoarding_Activity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Activity.OnBoarding.OnBoaring_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ForgotPassword_Activity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ChuXe.QuanLyChuyenXe.QuanLyChuyenXe_ChuSH_Activity"
             android:exported="false" />
         <activity
@@ -74,19 +96,19 @@
             android:name=".Activity.ChuXe.XeCuaToi_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ThemXe.Upload_ImageXe_Activity"
+            android:name=".Activity.ChuXe.ThemXe.Upload_ImageXe_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ThemXe.GiaChoThue_Activity"
+            android:name=".Activity.ChuXe.ThemXe.GiaChoThue_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ThemXe.ThongTinChiTiet_Activity"
+            android:name=".Activity.ChuXe.ThemXe.ThongTinChiTiet_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ThemXe.ThongTinCoBan_Activity"
+            android:name=".Activity.ChuXe.ThemXe.ThongTinCoBan_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ThemXe.ThemXe_Activity"
+            android:name=".Activity.ChuXe.ThemXe.ThemXe_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.XeYeuThich_Activity"
@@ -137,7 +159,7 @@
             android:name=".Activity.KhachHang.ThongTinThue_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activity.LichSu_ThueXe_Activity"
+            android:name=".Activity.KhachHang.LichSu_ThueXe_Activity"
             android:exported="false" />
         <activity
             android:name=".Activity.DanhSachXe_Activity"
@@ -162,17 +184,7 @@
 
         <activity
             android:name=".Activity.Login_Activity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="true"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

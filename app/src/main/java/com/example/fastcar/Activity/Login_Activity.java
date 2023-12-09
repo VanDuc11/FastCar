@@ -6,15 +6,23 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.FrameLayout;
+import android.text.InputType;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
+import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.facebook.CallbackManager;
+import com.facebook.login.Login;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,84 +39,85 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Login_Activity extends AppCompatActivity {
-    FrameLayout btnGoogle;
+    LinearLayout btnGoogle;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     CallbackManager callbackManager;
     FirebaseAuth mAuth;
     GoogleSignInAccount acct;
     AppCompatButton btn_login;
-    TextView tvSignUp;
-    TextInputLayout edtEmail, edtPass;
+    TextView tvSignUp, btnForgotPassword;
+    EditText edtEmail, edtPass;
+    ImageView btnShowPass;
+    private boolean passwordShowing = false;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         find();
+        load();
         googleBuile();
         btnGoogle.setOnClickListener(view -> signIn());
         btn_login.setOnClickListener(v -> logInEmail());
-        tvSignUp.setOnClickListener(view -> {
-            Intent intent = new Intent(Login_Activity.this, SignUp_Activity.class);
-            startActivity(intent);
+        tvSignUp.setOnClickListener(view -> startActivity(new Intent(Login_Activity.this, SignUp_Activity.class)));
+        btnForgotPassword.setOnClickListener(view -> startActivity(new Intent(this, ForgotPassword_Activity.class)));
+
+        btnShowPass.setOnClickListener(view -> {
+            if (passwordShowing) {
+                passwordShowing = false;
+                edtPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnShowPass.setImageResource(R.drawable.icon_show_pasword);
+            } else {
+                passwordShowing = true;
+                edtPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnShowPass.setImageResource(R.drawable.icon_hide_password);
+            }
+            edtPass.setSelection(edtPass.length());
         });
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void load() {
+        Intent intent = getIntent();
+        edtEmail.setText(intent.getStringExtra("email"));
+        edtPass.setText(intent.getStringExtra("pass"));
     }
 
     private void logInEmail() {
-        String email = edtEmail.getEditText().getText().toString();
-        String pass = edtPass.getEditText().getText().toString();
-        if (email.length() == 0) {
-            edtEmail.setError("Không được để trống.");
-        } else if (pass.length() == 0) {
-            edtPass.setError("Không được để trống");
-        } else if (email.length() != 0 && pass.length() != 0) {
-            // firebase
+        String email = edtEmail.getText().toString();
+        String pass = edtPass.getText().toString();
+        if (validateForm(email, pass)) {
+            progressBar.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                CustomDialogNotify.showToastCustom(Login_Activity.this, "Đăng nhập thành công");
-                                navigateToSecondActivity();
+                                if (mAuth.getCurrentUser() != null) {
+                                    if (mAuth.getCurrentUser().isEmailVerified()) {
+                                        progressBar.setVisibility(View.GONE);
+                                        CustomDialogNotify.showToastCustom(Login_Activity.this, "Đăng nhập thành công");
+                                        Intent intent = new Intent(Login_Activity.this, KhamPha_Activity.class);
+                                        intent.putExtra("pass", pass);
+                                        startActivity(intent);
+                                    } else {
+                                        CustomDialogNotify.showToastCustom(Login_Activity.this, "Vui lòng xác minh email của bạn");
+                                    }
+                                }
                             } else {
-                                // If sign in fails, display a message to the user.
                                 CustomDialogNotify.showToastCustom(Login_Activity.this, "Tài khoản hoặc mật khẩu không chính xác");
                             }
                         }
                     });
-
-
-            // call api login
-//            RequestQueue queue = Volley.newRequestQueue(this);
-//            String url = HostApi.API_URL + "/api/user/login";
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-//                @Override
-//                public void onResponse(String response) {
-//                    CustomDialogNotify.showToastCustom(Login_Activity.this, "Đăng nhập thành công");
-//                    System.out.println("Đăng nhập thành công" + response.toString());
-//                    navigateToSecondActivity();
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    CustomDialogNotify.showToastCustom(Login_Activity.this, "Tài khoản hoặc mật khẩu không chính xác");
-//                }
-//            }) {
-//                @androidx.annotation.Nullable
-//                @Override
-//                protected Map<String, String> getParams() {
-//                    Map<String, String> data = new HashMap<>();
-//                    data.put("email", email);
-//                    data.put("pass", pass);
-//                    return data;
-//                }
-//            };
-//
-//            queue.add(stringRequest);
-
         }
     }
 
@@ -118,6 +127,9 @@ public class Login_Activity extends AppCompatActivity {
         tvSignUp = findViewById(R.id.Login_Signup);
         edtEmail = findViewById(R.id.Login_sdt_email);
         edtPass = findViewById(R.id.LogIn_matkhau);
+        btnForgotPassword = findViewById(R.id.btnForgot_Password);
+        btnShowPass = findViewById(R.id.show_pass_inlogin);
+        progressBar = findViewById(R.id.progressBar_inLogin);
     }
 
     private void googleBuile() {
@@ -184,5 +196,43 @@ public class Login_Activity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private boolean validateForm(String email, String password) {
+        if (email.length() == 0) {
+            CustomDialogNotify.showToastCustom(this, "Chưa có email");
+            edtEmail.requestFocus();
+            return false;
+        } else {
+            if (!validateEmail(email)) {
+                CustomDialogNotify.showToastCustom(this, "Email không đúng định dạng");
+                edtEmail.requestFocus();
+                return false;
+            }
+        }
 
+        if (password.length() == 0) {
+            CustomDialogNotify.showToastCustom(this, "Chưa có mật khẩu");
+            edtPass.requestFocus();
+            return false;
+        } else {
+            if (password.length() < 6) {
+                CustomDialogNotify.showToastCustom(this, "Mật khẩu phải dài hơn 6 ký tự");
+                edtPass.requestFocus();
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+    private boolean validateEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        return pattern.matcher(email).matches();
+    }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

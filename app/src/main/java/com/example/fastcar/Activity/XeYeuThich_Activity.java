@@ -82,7 +82,7 @@ public class XeYeuThich_Activity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                         ln_no_result.setVisibility(View.GONE);
                     } else {
-                        refreshLayout.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         ln_no_result.setVisibility(View.VISIBLE);
                     }
                 }

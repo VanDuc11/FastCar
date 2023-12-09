@@ -1,6 +1,7 @@
 package com.example.fastcar.Activity.act_bottom;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.view.Gravity;
@@ -33,7 +36,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -47,11 +52,13 @@ import com.example.fastcar.Activity.ThongBao_Activity;
 import com.example.fastcar.Adapter.PlacesAdapter;
 import com.example.fastcar.Adapter.VoucherAdapter;
 import com.example.fastcar.Adapter.XeKhamPhaAdapter;
+import com.example.fastcar.CustomTimePickerDialog;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.Geolocation.Geolocation;
 import com.example.fastcar.Model.Places.Place;
 import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.Model.ThongBao;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
 import com.example.fastcar.R;
@@ -74,20 +81,22 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class KhamPha_Activity extends AppCompatActivity {
-    private TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem;
+public class KhamPha_Activity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    private TextView tvName, btnTim, tvTime_inKhamPha, tvDiaDiem, tvNumberNotify;
     private RecyclerView recyclerView_khuyenmai, recyclerView_xeKhamPha;
     private CircleImageView img_user;
     private FirebaseAuth auth;
@@ -99,7 +108,7 @@ public class KhamPha_Activity extends AppCompatActivity {
     private MaterialDatePicker<Pair<Long, Long>> datePicker;
     private Long todayInMillis, tomorrowInMillis;
     private boolean isChooseDatePicker = false;
-    private ImageView img_notify;
+    private FrameLayout img_notify;
     private Dialog dialogDiaChi;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private final static int REQUEST_CODE = 100;
@@ -108,8 +117,13 @@ public class KhamPha_Activity extends AppCompatActivity {
     private PlacesAdapter adapter;
     private ProgressBar progressBar;
     private EditText edt_diachi;
+    private User user;
     private String place_id, longitude, latitude;
+    private CustomTimePickerDialog timePickerDialog;
+    private String formattedStartDate, formattedEndDate;
+    private int time1, time2;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,12 +134,10 @@ public class KhamPha_Activity extends AppCompatActivity {
         fBaseuser = auth.getCurrentUser();
 
         mapping();
-        load();
+        Save();
         build_DatePicker();
         setDefault_SelectionDate();
         getTokenFCM();
-        Save();
-        loadXeKhamPha();
 
         refreshLayout.setOnRefreshListener(() -> {
             load();
@@ -140,16 +152,36 @@ public class KhamPha_Activity extends AppCompatActivity {
             String diachi = tvDiaDiem.getText().toString();
             String time = tvTime_inKhamPha.getText().toString();
             if (!diachi.isEmpty()) {
-                SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("diachi", diachi);
-                editor.putString("time", time);
-                editor.putString("lat", latitude);
-                editor.putString("long", longitude);
-                editor.apply();
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+                try {
+                    Date date1 = dateFormat.parse(formattedStartDate);
+                    Date date2 = dateFormat.parse(formattedEndDate);
+                    // So sánh
+                    if (date2.after(date1)) {
+                        long timeDifference = date2.getTime() - date1.getTime();
+                        long hoursDifference = timeDifference / (60 * 60 * 1000);
 
-                Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
-                startActivity(intent);
+                        // Nếu chênh lệch ít hơn 3 giờ, return false
+                        if (hoursDifference < 3) {
+                            CustomDialogNotify.showToastCustom(this, "Tối thiểu 3 tiếng khi thuê xe trong ngày");
+                        } else {
+                            SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("diachi", diachi);
+                            editor.putString("time", time);
+                            editor.putString("lat", latitude);
+                            editor.putString("long", longitude);
+                            editor.apply();
+
+                            Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        CustomDialogNotify.showToastCustom(this, "Thời gian không hợp lệ");
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             } else {
                 CustomDialogNotify.showToastCustom(KhamPha_Activity.this, "Vui lòng nhập địa chỉ để tìm xe");
             }
@@ -160,9 +192,12 @@ public class KhamPha_Activity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("startTime1", todayInMillis);
         editor.putLong("endTime1", tomorrowInMillis);
+        editor.putInt("startHour1", 47);
+        editor.putInt("endHour1", 47);
+        editor.putString("s1", "23:00");
+        editor.putString("e1", "23:00");
         editor.putBoolean("check", isChooseDatePicker);
         editor.apply();
-
     }
 
     void mapping() {
@@ -177,6 +212,7 @@ public class KhamPha_Activity extends AppCompatActivity {
         data_view = findViewById(R.id.data_view_inXeKhamPha);
         shimmer_view = findViewById(R.id.shimmer_view_inXeKhamPha);
         refreshLayout = findViewById(R.id.refresh_data_inKhamPha);
+        tvNumberNotify = findViewById(R.id.notification_badge);
     }
 
     void load() {
@@ -215,9 +251,14 @@ public class KhamPha_Activity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (fBaseuser == null) {
+        if (fBaseuser.isEmailVerified()) {
+            if (fBaseuser == null) {
+                signOut();
+            }
+        } else {
             signOut();
         }
+
     }
 
     private void getTokenFCM() {
@@ -227,7 +268,6 @@ public class KhamPha_Activity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<String> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             tokenFCM = task.getResult();
-                            System.out.println("TokenFCM: " + tokenFCM);
                             User user = new User(tokenFCM, null);
                             User_Method.func_updateUser(KhamPha_Activity.this, fBaseuser.getEmail(), user, false);
                         } else {
@@ -281,6 +321,7 @@ public class KhamPha_Activity extends AppCompatActivity {
                     if (!response.body().isEmpty()) {
                         Glide.with(getBaseContext()).load(response.body().get(0).getAvatar()).into(img_user);
                         List<User> list = response.body();
+                        user = list.get(0);
                         Gson gson = new Gson();
                         String json = gson.toJson(list.get(0));
 
@@ -288,6 +329,7 @@ public class KhamPha_Activity extends AppCompatActivity {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("user", json);
                         editor.apply();
+
                     } else {
                         funcAddNewUser(userNew);
                         Gson gson = new Gson();
@@ -298,6 +340,10 @@ public class KhamPha_Activity extends AppCompatActivity {
                         editor.putString("user", json);
                         editor.apply();
                     }
+
+                    load();
+                    loadXeKhamPha();
+                    getListNotify_ofUser(user);
                 }
             }
 
@@ -349,6 +395,10 @@ public class KhamPha_Activity extends AppCompatActivity {
     }
 
     public void showDatePicker(View view) {
+        timePickerDialog = new CustomTimePickerDialog();
+        timePickerDialog.setListener(KhamPha_Activity.this, time1, time2, 0);
+        timePickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+
         datePicker.show(getSupportFragmentManager(), "Material_Range");
 
         datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
@@ -359,7 +409,6 @@ public class KhamPha_Activity extends AppCompatActivity {
                 Long endDate = selection.second;
 
                 isChooseDatePicker = true;
-
                 SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong("startTime2", startDate);
@@ -367,24 +416,20 @@ public class KhamPha_Activity extends AppCompatActivity {
                 editor.putBoolean("check", isChooseDatePicker);
                 editor.apply();
 
-
                 // Định dạng ngày tháng theo định dạng tiếng Việt
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                String formattedStartDate = sdf.format(new Date(startDate));
-                String formattedEndDate = sdf.format(new Date(endDate));
-
-                String resultText = formattedStartDate + " - " + formattedEndDate;
-                tvTime_inKhamPha.setText(resultText);
+                formattedStartDate = sdf.format(new Date(startDate));
+                formattedEndDate = sdf.format(new Date(endDate));
             }
         });
     }
 
     private void setDefault_SelectionDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedToday = sdf.format(todayInMillis);
-        String formattedTomorrow = sdf.format(tomorrowInMillis);
+        formattedStartDate = "23:00 " + sdf.format(todayInMillis);
+        formattedEndDate = "23:00 " + sdf.format(tomorrowInMillis);
 
-        String defaultText = formattedToday + " - " + formattedTomorrow;
+        String defaultText = formattedStartDate + " - " + formattedEndDate;
         tvTime_inKhamPha.setText(defaultText);
     }
 
@@ -395,12 +440,17 @@ public class KhamPha_Activity extends AppCompatActivity {
         long today = MaterialDatePicker.todayInUtcMilliseconds();
         constraintsBuilder.setStart(today);
 
-        // Vô hiệu hóa ngày trong quá khứ bằng cách sử dụng setValidator
-        // Các ngày không hợp lệ (trong quá khứ) sẽ không thể chọn được
+        // Tính toán ngày kết thúc tối đa (max 3 tháng)
+        Calendar maxEndDate = Calendar.getInstance();
+        maxEndDate.set(Calendar.DAY_OF_MONTH, maxEndDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        maxEndDate.add(Calendar.MONTH, 2);
+        long maxEndDateMillis = maxEndDate.getTimeInMillis();
+        constraintsBuilder.setEnd(maxEndDateMillis);
+
         constraintsBuilder.setValidator(new CalendarConstraints.DateValidator() {
             @Override
             public boolean isValid(long date) {
-                return date >= today;
+                return date >= today && date <= maxEndDateMillis;
             }
 
             @Override
@@ -616,8 +666,56 @@ public class KhamPha_Activity extends AppCompatActivity {
         }
     }
 
+    private void getListNotify_ofUser(User user) {
+        String ngaythamgia = new SimpleDateFormat("yyyy/MM/dd").format(user.getNgayThamGia());
+        tvNumberNotify.setVisibility(View.VISIBLE);
+        RetrofitClient.FC_services().getThongbao(user.get_id(), ngaythamgia).enqueue(new Callback<List<ThongBao>>() {
+            @Override
+            public void onResponse(Call<List<ThongBao>> call, Response<List<ThongBao>> response) {
+                if (response.code() == 200) {
+                    int number_ofNotify = response.body().size();
+                    int total = number_ofNotify - user.getReadNotify();
+                    if (user.getReadNotify() == number_ofNotify) {
+                        tvNumberNotify.setVisibility(View.GONE);
+                    } else {
+                        if (total > 99) {
+                            tvNumberNotify.setText("99+");
+                        } else {
+                            tvNumberNotify.setText(total + "");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ThongBao>> call, Throwable t) {
+                System.out.println("lỗi : " + t);
+            }
+        });
+    }
+
     private void callBackDialog(String diachi) {
         tvDiaDiem.setText(diachi);
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onDateSet(DatePicker datePicker, int t1, int t2, int i2) {
+        SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("startHour2", t1);
+        editor.putInt("endHour2", t2);
+
+        time1 = t1;
+        time2 = t2;
+        String selectedTimeRange = timePickerDialog.getSelectedTime();
+        int indexOfDash = selectedTimeRange.indexOf(" - ");
+        formattedStartDate = selectedTimeRange.substring(0, indexOfDash).trim() + " " + formattedStartDate;
+        formattedEndDate = selectedTimeRange.substring(indexOfDash + 3).trim() + " " + formattedEndDate;
+
+        tvTime_inKhamPha.setText(formattedStartDate + " - " + formattedEndDate);
+        editor.putString("s2", selectedTimeRange.substring(0, indexOfDash).trim());
+        editor.putString("e2", selectedTimeRange.substring(indexOfDash + 3).trim());
+        editor.apply();
+    }
 }

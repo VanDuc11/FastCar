@@ -325,9 +325,10 @@
 
                                 <TextView
                                     android:id="@+id/btn_goi_cho_khachhang_inHD_ChuSH"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="45dp"
-                                    android:layout_marginHorizontal="20dp"
+                                    android:layout_marginHorizontal="10dp"
                                     android:background="@drawable/custom_btn3"
                                     android:gravity="center"
                                     android:text="Gọi cho khách"
@@ -336,9 +337,10 @@
 
                                 <TextView
                                     android:id="@+id/btn_giaoxe_chokhach_inHD_ChuSH"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="45dp"
-                                    android:layout_marginHorizontal="20dp"
+                                    android:layout_marginHorizontal="10dp"
                                     android:background="@drawable/custom_btn3"
                                     android:gravity="center"
                                     android:text="Giao xe"
@@ -485,7 +487,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:drawableStart="@drawable/icon_date"
+                                        android:drawableStart="@drawable/icon_date_24x24"
                                         android:drawablePadding="5dp"
                                         android:gravity="center"
                                         android:text="Ngày nhận"
@@ -497,7 +499,7 @@
                                         android:id="@+id/tv_ngayNhanXe_inHD_ChuSH"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="35dp"
+                                        android:layout_marginLeft="28dp"
                                         android:layout_marginTop="5dp"
                                         android:text="06/10/2023"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
@@ -514,7 +516,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:drawableStart="@drawable/icon_date"
+                                        android:drawableStart="@drawable/icon_date_24x24"
                                         android:drawablePadding="5dp"
                                         android:gravity="center"
                                         android:text="Ngày trả"
@@ -526,7 +528,7 @@
                                         android:id="@+id/tv_ngayTraXe_inHD_ChuSH"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="35dp"
+                                        android:layout_marginLeft="28dp"
                                         android:layout_marginTop="5dp"
                                         android:text="06/10/2023"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
@@ -540,7 +542,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp"
-                                android:drawableLeft="@drawable/icon_location_black"
+                                android:drawableLeft="@drawable/icon_location_green_v1"
                                 android:drawablePadding="8dp"
                                 android:gravity="center"
                                 android:text="Nhận xe tại địa chỉ của xe"
@@ -552,11 +554,18 @@
                                 android:id="@+id/tv_diachi_nhanxe_inHD_ChuSH"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="36dp"
+                                android:layout_marginLeft="32dp"
                                 android:layout_marginTop="5dp"
                                 android:text="Quận Nam Từ Liêm, Hà Nội"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                                 android:textSize="16dp" />
+
+                            <WebView
+                                android:id="@+id/webView_loadMap_inHD_ChuSH"
+                                android:layout_width="match_parent"
+                                android:layout_height="250dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/bo_goc_xekhampha" />
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>

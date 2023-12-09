@@ -3,7 +3,7 @@ package com.example.fastcar.Activity.KhachHang;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -31,10 +31,10 @@ import com.example.fastcar.Activity.MaGiamGia_Activity;
 import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Activity.ThongTinGPLX_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
-import com.example.fastcar.Adapter.NganHangAdapter;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Dialog.Dialog_GoiYLoiNhan;
+import com.example.fastcar.Dialog.Dialog_InfoChuSH;
 import com.example.fastcar.Dialog.Dialog_PhiDVFC;
 import com.example.fastcar.Dialog.Dialog_TS_TheChap;
 import com.example.fastcar.Dialog.Dialog_TT70Per;
@@ -43,6 +43,7 @@ import com.example.fastcar.Dialog.Dialog_TienThue_1ngay;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.FormatString.RandomMaHD;
 import com.example.fastcar.Model.Car;
+import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
@@ -57,6 +58,7 @@ import com.google.gson.Gson;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -82,9 +84,13 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     long soNgayThueXe;
     Car car;
     NganHang nganHang;
-    User user;
-    int giaThue1ngay, phiDVFastCar1ngay, tongPhiDV, tongTien, coc30Per, thanhToan70Per, tongTienGiamGia;
-
+    CardView cardView_chuSH;
+    List<Car> listCars_ofChuSH = new ArrayList<>();
+    List<FeedBack> listFeedBack = new ArrayList<>();
+    private int totalChuyen_ofChuSH;
+    User user, userShared;
+    int giaThue1ngay, phiDVFastCar1ngay, tongPhiDV, tongTien, tienCocGoc, coc30Per, thanhToan70Per, tongTienGiamGia;
+    private String timestr1, timestr2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +103,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         ic_back.setOnClickListener(view -> onBackPressed());
 
         btn_xacnhanThueXe.setOnClickListener(view -> createHD_and_showDialog());
+        cardView_chuSH.setOnClickListener(view -> Dialog_InfoChuSH.showDialog(this, car, listCars_ofChuSH, listFeedBack, totalChuyen_ofChuSH));
     }
 
     void mapping() {
@@ -129,6 +136,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv_soSao_ofChuSH = findViewById(R.id.tv_soSao_ofChuSH_Xe_inTTT);
         tv_soChuyen_ofChuSH = findViewById(R.id.tv_soChuyen_ofChuSH_Xe_inTTT);
         edt_loiNhan = findViewById(R.id.edt_loiNhanCuaKH);
+        cardView_chuSH = findViewById(R.id.cardView_chuxe_inTTT);
     }
 
     @SuppressLint("SetTextI18n")
@@ -136,7 +144,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         car = intent.getParcelableExtra("car");
         soNgayThueXe = intent.getLongExtra("soNgayThueXe", 0);
-        int totalChuyen_ofChuSH = intent.getIntExtra("chuyen", 0);
+        totalChuyen_ofChuSH = intent.getIntExtra("chuyen", 0);
         float totalStar_ofChuSH = intent.getFloatExtra("stars", 0);
         progressBar.setVisibility(View.GONE);
 
@@ -147,15 +155,21 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         if (check) {
             startTime = preferences.getLong("startTime2", 0);
             endTime = preferences.getLong("endTime2", 0);
+            timestr1 = preferences.getString("s2", "");
+            timestr2 = preferences.getString("e2", "");
         } else {
             startTime = preferences.getLong("startTime1", 0);
             endTime = preferences.getLong("endTime1", 0);
+            timestr1 = preferences.getString("s1", "");
+            timestr2 = preferences.getString("e1", "");
         }
 
-        SharedPreferences preferences1 = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
-        String userStr = preferences1.getString("user", "");
+        SharedPreferences preferencesUser = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+        String userStr = preferencesUser.getString("user", "");
         Gson gson = new Gson();
-        user = gson.fromJson(userStr, User.class);
+        userShared = gson.fromJson(userStr, User.class);
+        fetchData_ofUserLogin(userShared.getEmail());
+
 
         Glide.with(this)
                 .load(HostApi.URL_Image + car.getHinhAnh().get(0))
@@ -214,8 +228,9 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         String formattedNumber = df.format(totalStar_ofChuSH);
         tv_soSao_ofChuSH.setText(formattedNumber);
         tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
+        getListCar_ofChuSH(car.getChuSH().getEmail());
 
-        setValue_forDate(startTime, endTime);
+        setValue_forDate(startTime, endTime, timestr1, timestr2);
 
         tinhTien(-1, -1);
 
@@ -247,17 +262,16 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         }
 
         ckbox_dieuKhoan.setChecked(true);
-        fetch_ListNH_ofUser(user.getEmail());
     }
 
     @SuppressLint("SetTextI18n")
     private void tinhTien(int giatriPercent, int giatriMax) {
-
         giaThue1ngay = car.getGiaThue1Ngay();
         // Phí DV = 5% giá thuê 1 ngày của xe
         phiDVFastCar1ngay = giaThue1ngay * 5 / 100;
         tongTien = (int) ((giaThue1ngay + phiDVFastCar1ngay) * soNgayThueXe);
         tongPhiDV = phiDVFastCar1ngay * (int) soNgayThueXe;
+        tienCocGoc = (int) (tongTien * 0.3);
 
         tv_tienThue1ngay.setText(NumberFormatVND.format(giaThue1ngay) + "/ngày");
         tv_phiDV.setText(NumberFormatVND.format(phiDVFastCar1ngay) + "/ngày");
@@ -320,7 +334,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
                 String voucher = tv_tenVoucher.getText().toString().trim();
                 String maHD = "FCAR" + RandomMaHD.random(5);
                 String loiNhan = edt_loiNhan.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
                 Date ngayNhan = null, ngayTra = null;
                 try {
                     ngayNhan = sdf.parse(ngayNhanStr);
@@ -330,7 +344,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
                 }
 
                 HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                        voucher, tongTienGiamGia, 0, tongTien, coc30Per, thanhToan70Per, loiNhan, getTimeNow, null, null, null, 1, "", false);
+                        voucher, tongTienGiamGia, 0, tongTien, coc30Per, tienCocGoc, thanhToan70Per, loiNhan, getTimeNow, null, null, null, 1, "", false);
                 progressBar.setVisibility(View.VISIBLE);
                 RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
                     @Override
@@ -474,10 +488,10 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         });
     }
 
-    private void setValue_forDate(Long startTime, Long endTime) {
+    private void setValue_forDate(Long startTime, Long endTime, String s1, String e1) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedStartDate = sdf.format(new Date(startTime));
-        String formattedEndDate = sdf.format(new Date(endTime));
+        String formattedStartDate = s1 + " " + sdf.format(new Date(startTime));
+        String formattedEndDate = e1 + " " + sdf.format(new Date(endTime));
 
         tv_ngayNhanXe.setText(formattedStartDate);
         tv_ngayTraXe.setText(formattedEndDate);
@@ -537,6 +551,26 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         }
     }
 
+    private void fetchData_ofUserLogin(String email) {
+        RetrofitClient.FC_services().getListUser(email).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    if (!response.body().isEmpty()) {
+                        user = response.body().get(0);
+                        fetch_ListNH_ofUser(user.getEmail());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                System.out.println("Có lỗi: " + t);
+            }
+        });
+    }
+
     private void fetch_ListNH_ofUser(String email) {
         RetrofitClient.FC_services().getListNH_ofUser(email).enqueue(new Callback<List<NganHang>>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -556,4 +590,52 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         });
     }
 
+    private void getListCar_ofChuSH(String email) {
+        RetrofitClient.FC_services().getListCar_ofUser(email, "1").enqueue(new Callback<List<Car>>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(retrofit2.Call<List<Car>> call, Response<List<Car>> response) {
+                if (response.code() == 200) {
+                    listCars_ofChuSH = response.body();
+                    StringBuilder all_idCars = new StringBuilder();
+                    for (Car car : listCars_ofChuSH) {
+                        all_idCars.append(car.get_id()).append(",");
+                    }
+                    if (all_idCars.length() > 0) {
+                        all_idCars.deleteCharAt(all_idCars.length() - 1);
+                    }
+                    getAllFeedBack_ofAllCars_ChuSH(String.valueOf(all_idCars));
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<Car>> call, Throwable t) {
+                System.out.println("Có lỗi khi getListCar_ofChuSH: " + t);
+            }
+        });
+    }
+
+    private void getAllFeedBack_ofAllCars_ChuSH(String all_idCars) {
+        RetrofitClient.FC_services().getListFeedBack(all_idCars).enqueue(new Callback<List<FeedBack>>() {
+            @Override
+            public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
+                if (response.code() == 200) {
+                    if (response.body().size() > 0) {
+                        listFeedBack = response.body();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FeedBack>> call, Throwable t) {
+                System.out.println("Có lỗi khi getAllFeedBack_ofAllCars_ChuSH: " + t);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchData_ofUserLogin(userShared.getEmail());
+    }
 }

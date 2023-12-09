@@ -33,6 +33,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -100,6 +103,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     ImageView img1, img2, ic_add1, ic_add2;
     String pathImage1, pathImage2;
     ProgressBar progressBar;
+    private WebView webView_loadMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +160,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         tvGoiChoKhach = findViewById(R.id.btn_goi_cho_khachhang_inHD_ChuSH);
         ln_giaoxe = findViewById(R.id.ln_giaoxe_inHD_ChuSH);
         progressBar = findViewById(R.id.progressBar_inHoaDon_chuSH);
+        webView_loadMap = findViewById(R.id.webView_loadMap_inHD_ChuSH);
     }
 
     private void load() {
@@ -182,7 +187,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             intent1.putExtra("isMyCar", true);
             startActivity(intent1);
         });
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
         tv_maHD.setText(hoaDon.getMaHD());
         tv_ngayNhan.setText(sdf.format(hoaDon.getNgayThue()));
         tv_ngayTra.setText(sdf.format(hoaDon.getNgayTra()));
@@ -201,6 +206,21 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
                     .into(img_khachhang);
         }
         tv_tenKhachHang.setText(hoaDon.getUser().getUserName());
+
+        // map
+        WebSettings webSettings = webView_loadMap.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        // bo tròn WebView = css
+        String css = "body {" +
+                "   border-radius: 20px;" +
+                "}";
+        String js = "var style = document.createElement('style');" +
+                "style.innerHTML = '" + css + "';" +
+                "document.head.appendChild(style);";
+        webView_loadMap.evaluateJavascript(js, null);
+        webView_loadMap.setWebViewClient(new WebViewClient());
+        loadMap_fromHTML_withMarker(hoaDon.getXe().getLongitude(), hoaDon.getXe().getLatitude());
 
         int statusCode = hoaDon.getTrangThaiHD();
         // 0: bị huỷ
@@ -233,7 +253,9 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             // chờ khách hàng đặt cọc
             ic_in_4stt.setImageResource(R.drawable.icon_time_black);
             update_Time(hoaDon.getTimeChuXeXN());
-            ln_view_huy_or_dongy.setVisibility(View.GONE);
+            btn_dongychothue.setVisibility(View.GONE);
+            btn_huychuyen.setVisibility(View.VISIBLE);
+            btn_huychuyen.setBackgroundResource(R.drawable.custom_btn7_v1);
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             stt1.setTextColor(Color.WHITE);
             stt1.setBackgroundResource(R.drawable.custom_btn5);
@@ -244,6 +266,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             // đặt cọc thành công
 //            ln_view_huy_or_dongy.setVisibility(View.GONE);
             btn_dongychothue.setVisibility(View.GONE);
+            btn_huychuyen.setVisibility(View.VISIBLE);
             btn_huychuyen.setBackgroundResource(R.drawable.custom_btn7_v1);
             tv_thoiGianThanhToan.setText("Khách hàng đã thanh toán thành công");
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
@@ -253,13 +276,16 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             stt2.setTextColor(Color.WHITE);
             stt2.setBackgroundResource(R.drawable.custom_btn5);
             tvContentInfo.setVisibility(View.GONE);
+            ln_sdtKhachHang.setVisibility(View.VISIBLE);
             tvSdtKhachHang.setText(hoaDon.getUser().getSDT());
+            ln_giaoxe.setVisibility(View.VISIBLE);
             tvGiaoXe.setText("Giao xe");
             tvXemHinhAnh.setVisibility(View.GONE);
         } else if (statusCode == 4) {
             ln_view_huy_or_dongy.setVisibility(View.GONE);
             tv_thoiGianThanhToan.setText("Đã giao xe cho khách hàng");
             tvXemHinhAnh.setText("Xem hình ảnh");
+            tvXemHinhAnh.setVisibility(View.VISIBLE);
             tv_thoiGianThanhToan.setTextColor(Color.BLACK);
             ic_in_4stt.setImageResource(R.drawable.icon_car);
             stt1.setTextColor(Color.WHITE);
@@ -269,6 +295,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             stt3.setTextColor(Color.WHITE);
             stt3.setBackgroundResource(R.drawable.custom_btn5);
             tvContentInfo.setVisibility(View.GONE);
+            ln_sdtKhachHang.setVisibility(View.VISIBLE);
             tvSdtKhachHang.setText(hoaDon.getUser().getSDT());
             tvGiaoXe.setText("Đã giao xe");
             tvGiaoXe.setEnabled(false);
@@ -285,7 +312,10 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             stt2.setBackgroundResource(R.drawable.custom_btn5);
             stt3.setTextColor(Color.WHITE);
             stt3.setBackgroundResource(R.drawable.custom_btn5);
+            tvGiaoXe.setEnabled(true);
             tvGiaoXe.setText("Đã nhận được xe?");
+            ln_sdtKhachHang.setVisibility(View.VISIBLE);
+            tvSdtKhachHang.setText(hoaDon.getUser().getSDT());
         } else {
             // hoàn thành chuyến xe
             ln_view_huy_or_dongy.setVisibility(View.GONE);
@@ -302,6 +332,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             stt4.setTextColor(Color.WHITE);
             stt4.setBackgroundResource(R.drawable.custom_btn5);
             tvContentInfo.setVisibility(View.GONE);
+            ln_sdtKhachHang.setVisibility(View.VISIBLE);
             tvSdtKhachHang.setText(hoaDon.getUser().getSDT());
             ln_giaoxe.setVisibility(View.GONE);
         }
@@ -566,14 +597,21 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     }
 
     private void showDialog_UploadImage_TraXe() {
-        Dialog dialog = new Dialog(HoaDon_ChuSH_Activity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_dialog_upload_image_giaoxe);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View custom = inflater.inflate(R.layout.layout_dialog_upload_image_giaoxe, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(custom);
+        dialog.setCanceledOnTouchOutside(false);
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         ImageView btnBack = dialog.findViewById(R.id.btn_close_dialog_image_giaoxe);
         img1 = dialog.findViewById(R.id.img1_giaoxe_thanhcong);
@@ -890,6 +928,60 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             dialog.dismiss();
 //            finish();
         });
+    }
+
+    private void loadMap_fromHTML_withMarker(String longitude, String latitude) {
+        String html = "<html lang=\"en\" style=\"height: 100%;\">\n" +
+                "\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                "    <title>Map</title>\n" +
+                "    <style>\n" +
+                "        html,\n" +
+                "        body {\n" +
+                "            height: 100%;\n" +
+                "            margin: 0;\n" +
+                "            padding: 0;\n" +
+                "        }\n" +
+                "\n" +
+                "        #map {\n" +
+                "            width: 100%;\n" +
+                "            height: 100%;\n" +
+                "        }\n" +
+                "\n" +
+                "    </style>\n" +
+                "\n" +
+                "    <script src='https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js'></script>\n" +
+                "    <link href='https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css' rel='stylesheet' />\n" +
+                "\n" +
+                "</head>\n" +
+                "\n" +
+                "<body style=\"height: 100%; margin: 0;\">\n" +
+                "    <div id='map'></div>\n" +
+                "\n" +
+                "    <script>\n" +
+                "        goongjs.accessToken = '" + HostApi.api_key_load_map + "';\n" +
+                "        var map = new goongjs.Map({\n" +
+                "            container: 'map',\n" +
+                "            style: 'https://tiles.goong.io/assets/goong_light_v2.json',\n" +
+                "            center: [" + longitude + "," + latitude + "],\n" +
+                "            zoom: 15, // starting zoom\n" +
+                "            maxZoom: 20,\n" +
+                "            minZoom: 15,\n" +
+                "            dragRotate: false,\n" +
+                "            // dragPan: false\n" +
+                "        });\n" +
+                "\n" +
+                "        // Tạo một Marker và thêm vào bản đồ\n" +
+                "        var marker = new goongjs.Marker()\n" +
+                "            .setLngLat([" + longitude + "," + latitude + "])\n" +
+                "            .addTo(map);\n" +
+                "    </script>\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>";
+        webView_loadMap.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
     }
 
 }
