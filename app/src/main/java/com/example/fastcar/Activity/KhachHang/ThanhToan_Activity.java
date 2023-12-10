@@ -27,6 +27,7 @@ import com.example.fastcar.Model.CreateOrder;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.Socket.SocketManager;
 
 import org.json.JSONObject;
 
@@ -44,6 +45,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
     AppCompatButton btn_thanhtoan;
     LinearLayout ln_zalopay, ln_momo;
     TextView tv_tienCoc;
+    private SocketManager socketManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
 
         mapping();
         load();
+        socketManager = KhamPha_Activity.getSocketManager();
     }
 
     private void mapping() {
@@ -174,8 +177,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
 
         btn_close_dialog.setOnClickListener(view -> {
             dialog.dismiss();
-            startActivity(new Intent(getBaseContext(), KhamPha_Activity.class));
-            finish();
+            onBackPressed();
         });
     }
 
@@ -184,6 +186,7 @@ public class ThanhToan_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
+                socketManager.emit("updateSTT_HD", hoaDon.getMaHD());
             }
 
             @Override
@@ -202,4 +205,5 @@ public class ThanhToan_Activity extends AppCompatActivity {
         super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
     }
+
 }

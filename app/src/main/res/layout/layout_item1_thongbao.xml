@@ -22,11 +22,13 @@
                 android:layout_gravity="top">
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circle_img_inItem_thongbao"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/icon_green" />
 
                 <ImageView
+                    android:id="@+id/img_inItem_thongbao"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_centerInParent="true"

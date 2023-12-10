@@ -64,6 +64,7 @@ public class DanhSachXeCuaToiAdapter extends RecyclerView.Adapter<DanhSachXeCuaT
         //1: đang hoạt động = duyệt thành công
         //2: từ chối
         //3: không hoạt động
+        //4: vô hiệu hoá
 
         if (status == 0) {
             holder.tvTrangThaiXe.setText("Chờ duyệt");
@@ -71,8 +72,10 @@ public class DanhSachXeCuaToiAdapter extends RecyclerView.Adapter<DanhSachXeCuaT
             holder.tvTrangThaiXe.setText("Đang hoạt động");
         } else if (status == 2) {
             holder.tvTrangThaiXe.setText("Bị từ chối");
-        } else {
+        } else if(status == 3){
             holder.tvTrangThaiXe.setText("Không hoạt động");
+        } else {
+            holder.tvTrangThaiXe.setText("Vô hiệu hoá");
         }
 
 

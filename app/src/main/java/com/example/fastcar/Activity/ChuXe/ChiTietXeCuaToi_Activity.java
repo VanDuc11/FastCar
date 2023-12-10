@@ -32,6 +32,7 @@ import android.widget.TimePicker;
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
 import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.CustomTimePickerDialog;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.DialogGiayToXe;
@@ -41,6 +42,7 @@ import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.Socket.SocketManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -67,6 +69,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
     private int index11, index12, index21, index22;
     private CustomTimePickerDialog timePickerDialog1, timePickerDialog2;
     private int state;
+    private SocketManager socketManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,8 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         });
         btn_back.setOnClickListener(view -> onBackPressed());
         btn_more.setOnClickListener(view -> showDialog_XoaXe_orTatHD(car));
+
+        socketManager = KhamPha_Activity.getSocketManager();
     }
 
     private void mapping() {
@@ -151,6 +156,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         //1: đang hoạt động = duyệt thành công
         //2: từ chối
         //3: không hoạt động
+        //4: vô hiệu hoá
 
         if (trangthaiXe != 1 && trangthaiXe != 3) {
             // xe chưa duyệt hoặc duyệt thất bại mới được xoá
@@ -283,8 +289,10 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
                             tvTrangThaiXe.setText("Đang hoạt động");
                         } else if (status == 2) {
                             tvTrangThaiXe.setText("Bị từ chối");
-                        } else {
+                        } else if(status == 3){
                             tvTrangThaiXe.setText("Không hoạt động");
+                        } else {
+                            tvTrangThaiXe.setText("Vô hiệu hoá");
                         }
                     }
                 }
@@ -411,6 +419,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                 if (response.code() == 200) {
+                    socketManager.emit("updateCar", idCar);
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Cập nhật thành công");
                 }
             }
@@ -465,5 +474,4 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         }
         return true;
     }
-
 }

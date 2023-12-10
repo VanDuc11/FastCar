@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Adapter.LichBanAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
@@ -36,6 +37,7 @@ import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.Socket.SocketManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -63,6 +65,7 @@ public class LichBan_CuaXe_Activity extends AppCompatActivity {
     private LichBanAdapter lichBanAdapter;
     private List<String> listLichBan;
     private MaterialDatePicker<Pair<Long, Long>> datePicker;
+    private SocketManager socketManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class LichBan_CuaXe_Activity extends AppCompatActivity {
 
         btnBack.setOnClickListener(view -> onBackPressed());
         btnAdd.setOnClickListener(view -> showDialogDatePicker());
+        socketManager = KhamPha_Activity.getSocketManager();
     }
 
     private void mapping() {
@@ -282,6 +286,7 @@ public class LichBan_CuaXe_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                 if (response.code() == 200) {
+                    socketManager.emit("updateCar", car.get_id());
                     CustomDialogNotify.showToastCustom(LichBan_CuaXe_Activity.this, "Thành công");
                     load();
                 }

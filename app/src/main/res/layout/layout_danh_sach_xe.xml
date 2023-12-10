@@ -7,22 +7,12 @@
     android:orientation="vertical"
     tools:context=".Activity.DanhSachXe_Activity">
 
-
-    <LinearLayout
-        android:id="@+id/view_listXe"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_listXe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_listXe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-    </LinearLayout>
+        android:orientation="vertical" />
 
     <LinearLayout
         android:id="@+id/ln_no_result_inListXe"

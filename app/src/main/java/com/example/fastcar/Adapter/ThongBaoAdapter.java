@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.fastcar.Activity.ChuXe.ChiTietXeCuaToi_Activity;
+import com.example.fastcar.Activity.ChuXe.HoaDon_ChuSH_Activity;
 import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.ThongBao;
@@ -31,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHoder> {
     Context context;
     List<ThongBao> listThongBao;
@@ -42,12 +46,16 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
 
     public class ViewHoder extends RecyclerView.ViewHolder {
         TextView tv_tieude, tv_thoigian, tv_noidung;
+        CircleImageView circle;
+        ImageView img;
 
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
             tv_tieude = itemView.findViewById(R.id.tv_tieude_thongbao);
             tv_noidung = itemView.findViewById(R.id.tv_noidung_thongbao);
             tv_thoigian = itemView.findViewById(R.id.time_thongbao);
+            img = itemView.findViewById(R.id.img_inItem_thongbao);
+            circle = itemView.findViewById(R.id.circle_img_inItem_thongbao);
         }
     }
 
@@ -64,7 +72,44 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
         holder.tv_tieude.setText(item.getTieuDe());
         holder.tv_noidung.setText(item.getNoiDung());
         holder.tv_thoigian.setText(getTimeDifference(item.getCreatedAt()));
-        holder.itemView.setOnClickListener(view -> showDialog_DetailNotify(item));
+
+        if (item.getType() == 0 || item.getType() == 1 || item.getType() == 2) {
+            // hoá đơn
+            holder.circle.setImageResource(R.drawable.icon_red);
+            holder.img.setImageResource(R.drawable.icon_car_white);
+        } else if (item.getType() == 4) {
+            // khuyến mãi
+            holder.circle.setImageResource(R.drawable.icon_blue);
+            holder.img.setImageResource(R.drawable.icon_voucher_white);
+        } else {
+            holder.circle.setImageResource(R.drawable.icon_green);
+            holder.img.setImageResource(R.drawable.icon_notification);
+        }
+
+        holder.itemView.setOnClickListener(view -> {
+            if (item.getType() == 0) {
+                // xe
+                if (item.getXe() == null) {
+                    showDialog_DetailNotify(item);
+                } else {
+                    Intent intent = new Intent(context, ChiTietXeCuaToi_Activity.class);
+                    intent.putExtra("car", item.getXe());
+                    context.startActivity(intent);
+                }
+            } else if (item.getType() == 1) {
+                // hoá đơn chủ xe
+                Intent intent = new Intent(context, HoaDon_ChuSH_Activity.class);
+                intent.putExtra("hoadon", item.getHoaDon());
+                context.startActivity(intent);
+            } else if (item.getType() == 2) {
+                // hoá đơn khách hàng
+                Intent intent = new Intent(context, HoaDon_Activity.class);
+                intent.putExtra("hoadon", item.getHoaDon());
+                context.startActivity(intent);
+            } else {
+                showDialog_DetailNotify(item);
+            }
+        });
     }
 
     @Override

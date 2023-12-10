@@ -64,6 +64,7 @@ import com.example.fastcar.Model.Voucher;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.Socket.SocketManager;
 import com.example.fastcar.User_Method;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -122,6 +123,7 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     private CustomTimePickerDialog timePickerDialog;
     private String formattedStartDate, formattedEndDate;
     private int time1, time2;
+    private static SocketManager socketManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -132,6 +134,8 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();
+        socketManager = SocketManager.getInstance();
+        socketManager.connect();
 
         mapping();
         Save();
@@ -215,6 +219,10 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         tvNumberNotify = findViewById(R.id.notification_badge);
     }
 
+    public static SocketManager getSocketManager() {
+        return socketManager;
+    }
+
     void load() {
         recyclerView_khuyenmai.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         tokenFCM = "";
@@ -254,9 +262,11 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         if (fBaseuser.isEmailVerified()) {
             if (fBaseuser == null) {
                 signOut();
+                socketManager.disconnect();
             }
         } else {
             signOut();
+            socketManager.disconnect();
         }
 
     }
@@ -291,18 +301,16 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
             uri = Uri.parse("https://cdn.landesa.org/wp-content/uploads/default-user-image.png");
             Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(img_user);
         }
-
         tvName.setText(userName);
         if (pass == null) {
             pass = "";
         }
 
-        String finalPass = pass;
         Uri finalUri = uri;
         Date getTimeNow = new Date();
-        User userNew = new User(fBaseuser.getUid(), userName, Email, finalPass, String.valueOf(finalUri), getTimeNow, tokenFCM);
+        User userNew = new User(fBaseuser.getUid(), userName, Email, pass, String.valueOf(finalUri), getTimeNow, tokenFCM);
 
-        getUser_fromEmail(Email, userNew);
+        getUser_fromEmail(Email, userNew, pass);
     }
 
     void signOut() {
@@ -312,7 +320,7 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         finish();
     }
 
-    private void getUser_fromEmail(String email, User userNew) {
+    private void getUser_fromEmail(String email, User userNew, String password) {
         RetrofitClient.FC_services().getListUser(email).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
@@ -330,6 +338,12 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
                         editor.putString("user", json);
                         editor.apply();
 
+                        if (password.length() != 0) {
+                            if (!password.equals(user.getMatKhau())) {
+                                user.setMatKhau(password);
+                                User_Method.func_updateUser(KhamPha_Activity.this, email, user, false);
+                            }
+                        }
                     } else {
                         funcAddNewUser(userNew);
                         Gson gson = new Gson();

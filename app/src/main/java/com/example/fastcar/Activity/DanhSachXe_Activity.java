@@ -52,7 +52,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     RecyclerView recyclerView;
     RelativeLayout ic_back;
     List<Car> listCarFilter = new ArrayList<>();
-    LinearLayout ln_noResult, ln_listView, data_view, data_view_filter, btnResetFilter, btnFilterHangXe, btnFilterChiTiet, btnRate5Star, btnFilterMienTheChap;
+    LinearLayout ln_noResult, data_view, data_view_filter, btnResetFilter, btnFilterHangXe, btnFilterChiTiet, btnRate5Star, btnFilterMienTheChap;
     ShimmerFrameLayout shimmer_view, shimmer_view_filter;
     private User user;
     private String longitude, latitude;
@@ -158,7 +158,6 @@ public class DanhSachXe_Activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView_listXe);
         ic_back = findViewById(R.id.icon_back_in_dsxe);
         ln_noResult = findViewById(R.id.ln_no_result_inListXe);
-        ln_listView = findViewById(R.id.view_listXe);
         data_view = findViewById(R.id.data_view_inDSXe);
         shimmer_view = findViewById(R.id.shimmer_view_inDSXe);
         data_view_filter = findViewById(R.id.data_view_filter_inDSXe);
@@ -270,8 +269,6 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     }
 
     private void getData(String HangXe, String TheChap, String ChuyenDong, String NhienLieu, String Rate5Sao, String giaThueFrom, String giaThueTo, String soGheFrom, String soGheTo, String yearFrom, String yearTo, int distance) {
-        ln_noResult.setVisibility(View.GONE);
-        ln_listView.setVisibility(View.VISIBLE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
@@ -284,9 +281,9 @@ public class DanhSachXe_Activity extends AppCompatActivity {
                     if (listCar.size() > 0) {
                         getDistanceFromCars(response.body(), distance);
                     } else {
-                        ln_listView.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
                         data_view.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                         shimmer_view.stopShimmerAnimation();
                         shimmer_view.setVisibility(View.GONE);
                     }
@@ -381,8 +378,11 @@ public class DanhSachXe_Activity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     boolean check = adapter.filterByDistance(distance);
                     if (!check) {
-                        ln_listView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         ln_noResult.setVisibility(View.VISIBLE);
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        ln_noResult.setVisibility(View.GONE);
                     }
                 }
             }

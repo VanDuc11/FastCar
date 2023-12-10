@@ -39,6 +39,7 @@ import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.Socket.SocketManager;
 import com.example.fastcar.User_Method;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -203,6 +204,7 @@ public class CaNhan_Activity extends AppCompatActivity {
             dialog.dismiss();
             progressBar.setVisibility(View.GONE);
             startActivity(new Intent(getBaseContext(), Login_Activity.class));
+            KhamPha_Activity.getSocketManager().disconnect();
             finish();
             editor.clear();
             editor.apply();
@@ -308,7 +310,7 @@ public class CaNhan_Activity extends AppCompatActivity {
 
     private void getCar_ofUserLogin() {
         // get data
-        RetrofitClient.FC_services().getListCar_ofUser(email, "0,1,2,3").enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_ofUser(email, "0,1,2,3,4").enqueue(new Callback<List<Car>>() {
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
                 data_view.setVisibility(View.VISIBLE);

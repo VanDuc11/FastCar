@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.DanhSachXe_Activity;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Adapter.NhanXetAdapter;
 import com.example.fastcar.Adapter.PhotoChiTietXeAdapter;
 import com.example.fastcar.CustomTimePickerDialog;
@@ -49,6 +51,8 @@ import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.Socket.SocketManager;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -64,6 +68,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.socket.emitter.Emitter;
 import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,7 +98,8 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
     private Long startTimeLong, endTimeLong;
     private MaterialDatePicker<Pair<Long, Long>> datePicker;
     private long soNgayThueXe;
-    private Car car;
+    private Car carIntent, car;
+    private boolean isMyCar;
     private WebView webView_loadMap;
     private int totalChuyen_ofChuSH;
     private float totalStar_ofChuSH;
@@ -101,6 +107,9 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
     private String formattedStartDate, formattedEndDate, timestr1, timestr2;
     private int time1, time2;
     private List<String> listsLichBan;
+    private SocketManager socketManager;
+    private ShimmerFrameLayout shimmer_view;
+    private NestedScrollView data_view;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -110,8 +119,6 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
 
         mapping();
         load();
-
-        func_TinhTongTien(formattedStartDate, formattedEndDate);
 
         btn_showDatePicker.setOnClickListener(view -> showDatePicker_inChiTietXe());
 
@@ -128,9 +135,26 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         ic_back.setOnClickListener(view -> onBackPressed());
         tvXemThemNhanXet.setOnClickListener(view -> Dialog_FullNhanXet.showDialog(this, listFeedbacks));
         cardview_chuxe.setOnClickListener(view -> Dialog_InfoChuSH.showDialog(this, car, listXe_ofChuSH, allFeedbacks_ofAllCars, totalChuyen_ofChuSH));
+
+        socketManager = KhamPha_Activity.getSocketManager();
+        socketManager.on("updateCar", requestLoadUI_fromSocket);
     }
 
+    private final Emitter.Listener requestLoadUI_fromSocket = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            String dataFromSocket = (String) args[0];
+            if (dataFromSocket.equals(car.get_id())) {
+                runOnUiThread(() -> {
+                    load();
+                });
+            }
+        }
+    };
+
     private void mapping() {
+        shimmer_view = findViewById(R.id.shimmer_view_inCTX);
+        data_view = findViewById(R.id.data_view_inCTX);
         btnThueXe = findViewById(R.id.btn_thuexe);
         ic_back = findViewById(R.id.icon_back_in_CTX);
         ic_favorite = findViewById(R.id.icon_favorite_car_inCTX);
@@ -184,11 +208,20 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
     @SuppressLint({"SetTextI18n", "SetJavaScriptEnabled"})
     private void load() {
         Intent intent = getIntent();
-        car = intent.getParcelableExtra("car");
-        boolean isMyCar = intent.getBooleanExtra("isMyCar", false);
+        carIntent = intent.getParcelableExtra("car");
+        isMyCar = intent.getBooleanExtra("isMyCar", false);
+
+        data_view.setVisibility(View.GONE);
+        ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
+        shimmer_view.startShimmerAnimation();
+
+        fetchData_ofCar(carIntent.get_id());
+    }
+
+    private void loadUI() {
         isNotContinue();
         listsLichBan = car.getLichBan();
-
         String diaChiXe = car.getDiaChiXe();
         String[] parts = diaChiXe.split(",");
         int lastIndex = parts.length - 1;
@@ -391,7 +424,31 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         timePickerDialog = new CustomTimePickerDialog();
         timePickerDialog.setListener(this, time1, time2, 0);
         setValue_forDate(startTimeLong, endTimeLong, timestr1, timestr2);
+    }
 
+    private void fetchData_ofCar(String idXe) {
+        RetrofitClient.FC_services().getCarByID(idXe).enqueue(new Callback<Car>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<Car> call, Response<Car> response) {
+                data_view.setVisibility(View.VISIBLE);
+                ln_view_buttonThueXe_inCTX.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
+                if (response.code() == 200) {
+                    if (response.body() != null) {
+                        car = response.body();
+                        loadUI();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Car> call, Throwable t) {
+                System.out.println("Có lỗi xảy ra: " + t);
+            }
+        });
     }
 
 
@@ -479,6 +536,7 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         formattedEndDate = e1 + " " + sdf.format(new Date(endTime));
         tv_ngayNhanXe.setText(formattedStartDate);
         tv_ngayTraXe.setText(formattedEndDate);
+        func_TinhTongTien(formattedStartDate, formattedEndDate);
         if (checkLichBan(sdf.format(new Date(startTime)), sdf.format(new Date(endTime)))) {
             if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
                 icon_redflag_xedathue.setVisibility(View.GONE);
@@ -828,13 +886,13 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         editor.putString("e2", selectedTimeRange.substring(indexOfDash + 3).trim());
         editor.apply();
 
+        func_TinhTongTien(formattedStartDate, formattedEndDate);
         if (checkLichBan(ddMM1, ddMM2)) {
             if (checkTimeThueXe(formattedStartDate, formattedEndDate)) {
                 if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
                     icon_redflag_xedathue.setVisibility(View.GONE);
                     tv_xeDaThue.setVisibility(View.GONE);
                     isContinue();
-                    func_TinhTongTien(formattedStartDate, formattedEndDate);
                     getListHoaDon_hasTrangThai_2345(car.get_id());
                 }
             }
@@ -923,4 +981,5 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         }
         return true;
     }
+
 }

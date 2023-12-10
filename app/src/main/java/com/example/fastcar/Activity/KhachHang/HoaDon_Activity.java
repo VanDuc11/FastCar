@@ -47,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_BangGiaChiTiet;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
@@ -63,6 +64,7 @@ import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
+import com.example.fastcar.Socket.SocketManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.io.File;
@@ -75,6 +77,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.socket.emitter.Emitter;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -93,7 +96,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     private TextView tv_tenChuSH, tv_soSao_ofChuSH, tv_soChuyen_ofChuSH, tv_thoiGianThanhToan, stt1, stt2, stt3, stt4, tvGoiChoChuSH, tvTraXe, tvXemHinhAnh;
     LinearLayout ln_4stt, ln_view_thoiGianThanhToan, ln_view_huy_or_coc, ln_sdtChuSH, ln_traxe;
     private WebView webView_loadMap;
-    private HoaDon hoaDon;
+    private HoaDon hoaDon, hoadon_intent;
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
     float TrungBinhSao;
@@ -107,6 +110,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     private ImageView img1, img2, ic_add1, ic_add2;
     private String pathImage1, pathImage2;
     private int finalStar = 5;
+    private SocketManager socketManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,9 @@ public class HoaDon_Activity extends AppCompatActivity {
         });
 
         btn_huychuyen.setOnClickListener(view -> showDialog_HuyChuyen(hoaDon));
+
+        socketManager = KhamPha_Activity.getSocketManager();
+        socketManager.on("updateSTT_HD", requestLoadUI_fromSocket);
     }
 
     private void mapping() {
@@ -175,7 +182,7 @@ public class HoaDon_Activity extends AppCompatActivity {
 
     private void load() {
         Intent intent = getIntent();
-        HoaDon hoadon_intent = intent.getParcelableExtra("hoadon");
+        hoadon_intent = intent.getParcelableExtra("hoadon");
 
         progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
@@ -186,12 +193,35 @@ public class HoaDon_Activity extends AppCompatActivity {
         fetchHoaDon_byMaHD(hoadon_intent.getMaHD());
     }
 
+    private final Emitter.Listener requestLoadUI_fromSocket = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            String dataFromSocket = (String) args[0];
+            if (dataFromSocket.equals(hoadon_intent.getMaHD())) {
+                runOnUiThread(() -> load());
+            }
+        }
+    };
+
+
     @SuppressLint({"SetTextI18n", "ResourceAsColor", "SetJavaScriptEnabled"})
     private void renderUI() {
         if (hoaDon != null) {
-            Glide.with(this)
-                    .load(HostApi.URL_Image + hoaDon.getXe().getHinhAnh().get(0))
-                    .into(img_xe);
+            if (!isFinishing()) {
+                Glide.with(this)
+                        .load(HostApi.URL_Image + hoaDon.getXe().getHinhAnh().get(0))
+                        .into(img_xe);
+                if (hoaDon.getXe().getChuSH().getAvatar() != null) {
+                    Glide.with(this)
+                            .load(hoaDon.getXe().getChuSH().getAvatar())
+                            .into(img_chuSH);
+                } else {
+                    Glide.with(this)
+                            .load(R.drawable.img_avatar_user_v1)
+                            .into(img_chuSH);
+                }
+            }
+
             tv_tenxe.setText(hoaDon.getXe().getMauXe());
             img_viewXe.setOnClickListener(view -> {
                 Intent intent1 = new Intent(HoaDon_Activity.this, ChiTietXe_Activity.class);
@@ -208,15 +238,6 @@ public class HoaDon_Activity extends AppCompatActivity {
             tv_tt70Per.setText(NumberFormatVND.format(hoaDon.getThanhToan()));
 
             // chủ SH
-            if (hoaDon.getXe().getChuSH().getAvatar() != null) {
-                Glide.with(this)
-                        .load(hoaDon.getXe().getChuSH().getAvatar())
-                        .into(img_chuSH);
-            } else {
-                Glide.with(this)
-                        .load(R.drawable.img_avatar_user_v1)
-                        .into(img_chuSH);
-            }
             tv_tenChuSH.setText(hoaDon.getXe().getChuSH().getUserName());
 
             int statusCode = hoaDon.getTrangThaiHD();
@@ -457,7 +478,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         new CountDownTimer(oneHour - System.currentTimeMillis(), 1000) {
             @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
-                if (hoaDon.getTrangThaiHD() == 3) {
+                if (hoaDon.getTrangThaiHD() != 2) {
                     cancel();
                     return;
                 }
@@ -486,9 +507,9 @@ public class HoaDon_Activity extends AppCompatActivity {
 
                     // hết time = huỷ chuyến
                     // setTrangThaiHD = 0
-                    hoaDon.setTrangThaiHD(0);
-                    hoaDon.setLyDo("Chuyến xe đã bị huỷ bởi khách hàng.\nLý do: Hết thời gian thanh toán");
-                    updateTrangThaiHD(hoaDon);
+//                    hoaDon.setTrangThaiHD(0);
+//                    hoaDon.setLyDo("Chuyến xe đã bị huỷ bởi khách hàng.\nLý do: Hết thời gian thanh toán");
+//                    updateTrangThaiHD(hoaDon);
                 }
             }
         }.start();
@@ -502,6 +523,7 @@ public class HoaDon_Activity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
+                    socketManager.emit("updateSTT_HD", hoaDon.getMaHD());
                     System.out.println("Cập nhật trạng thái hoá đơn " + hoaDon.getMaHD() + " thành công.");
                     CustomDialogNotify.showToastCustom(getBaseContext(), "Thành công");
                     load();
@@ -946,6 +968,7 @@ public class HoaDon_Activity extends AppCompatActivity {
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                 progressBar.setVisibility(View.GONE);
                 if (response.code() == 200) {
+                    socketManager.emit("updateSTT_HD", hoaDon.getMaHD());
                     CustomDialogNotify.showToastCustom(HoaDon_Activity.this, "Thành công");
                     dialog.dismiss();
                     load();

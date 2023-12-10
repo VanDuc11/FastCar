@@ -16,6 +16,9 @@ public class ThongBao implements Parcelable {
 
     private Date updatedAt;
     private User User;
+    private Car Xe;
+    private HoaDon HoaDon;
+    private int Type;
 
     protected ThongBao(Parcel in) {
         TieuDe = in.readString();
@@ -24,6 +27,9 @@ public class ThongBao implements Parcelable {
         NoiDung = in.readString();
         HinhAnh = in.readString();
         User = in.readParcelable(com.example.fastcar.Model.User.class.getClassLoader());
+        Xe = in.readParcelable(Car.class.getClassLoader());
+        HoaDon = in.readParcelable(com.example.fastcar.Model.HoaDon.class.getClassLoader());
+        Type = in.readInt();
     }
 
     @Override
@@ -34,6 +40,9 @@ public class ThongBao implements Parcelable {
         dest.writeString(NoiDung);
         dest.writeString(HinhAnh);
         dest.writeParcelable(User, flags);
+        dest.writeParcelable(Xe, flags);
+        dest.writeParcelable(HoaDon, flags);
+        dest.writeInt(Type);
     }
 
     @Override
@@ -56,7 +65,7 @@ public class ThongBao implements Parcelable {
     public ThongBao() {
     }
 
-    public ThongBao(String tieuDe, int giaTri, int giaTriMax, String noiDung, String hinhAnh, Date createdAt, Date updatedAt, com.example.fastcar.Model.User user) {
+    public ThongBao(String tieuDe, int giaTri, int giaTriMax, String noiDung, String hinhAnh, Date createdAt, Date updatedAt, User user, Car xe, HoaDon hoaDon, int type) {
         TieuDe = tieuDe;
         GiaTri = giaTri;
         GiaTriMax = giaTriMax;
@@ -64,7 +73,10 @@ public class ThongBao implements Parcelable {
         HinhAnh = hinhAnh;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        User = user;
+        this.User = user;
+        this.Xe = xe;
+        this.HoaDon = hoaDon;
+        this.Type = type;
     }
 
     public String getTieuDe() {
@@ -129,5 +141,29 @@ public class ThongBao implements Parcelable {
 
     public void setUser(com.example.fastcar.Model.User user) {
         User = user;
+    }
+
+    public Car getXe() {
+        return Xe;
+    }
+
+    public void setXe(Car xe) {
+        Xe = xe;
+    }
+
+    public com.example.fastcar.Model.HoaDon getHoaDon() {
+        return HoaDon;
+    }
+
+    public void setHoaDon(com.example.fastcar.Model.HoaDon hoaDon) {
+        HoaDon = hoaDon;
+    }
+
+    public int getType() {
+        return Type;
+    }
+
+    public void setType(int type) {
+        Type = type;
     }
 }
