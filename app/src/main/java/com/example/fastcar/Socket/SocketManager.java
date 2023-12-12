@@ -20,7 +20,7 @@ public class SocketManager {
     private SocketManager() {
         {
             try {
-                mSocket = IO.socket(HostApi.API_URL_SOCKET);
+                mSocket = IO.socket(HostApi.API_URL);
             } catch (URISyntaxException e) {
                 System.out.println("mSocket connect error: " + e);
             }

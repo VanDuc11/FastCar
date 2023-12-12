@@ -92,7 +92,7 @@ public class ThemXe_Activity extends AppCompatActivity {
         User user = gson.fromJson(userStr, User.class);
 
         // get data
-        RetrofitClient.FC_services().getListCar_ofUser(user.getEmail(), "0,1,2,3").enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_ofUser(user.getEmail(), "0,1,2,3,4").enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {

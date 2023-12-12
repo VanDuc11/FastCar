@@ -131,11 +131,11 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kham_pha);
 
+        socketManager = SocketManager.getInstance();
+        socketManager.connect();
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();
-        socketManager = SocketManager.getInstance();
-        socketManager.connect();
 
         mapping();
         Save();
@@ -220,6 +220,10 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     }
 
     public static SocketManager getSocketManager() {
+        if (socketManager == null) {
+            socketManager = SocketManager.getInstance();
+            socketManager.connect();
+        }
         return socketManager;
     }
 
@@ -344,6 +348,7 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
                                 User_Method.func_updateUser(KhamPha_Activity.this, email, user, false);
                             }
                         }
+                        getListNotify_ofUser(user);
                     } else {
                         funcAddNewUser(userNew);
                         Gson gson = new Gson();
@@ -357,7 +362,6 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
 
                     load();
                     loadXeKhamPha();
-                    getListNotify_ofUser(user);
                 }
             }
 

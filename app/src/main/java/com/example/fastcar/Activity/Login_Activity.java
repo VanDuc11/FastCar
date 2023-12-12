@@ -101,10 +101,10 @@ public class Login_Activity extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressBar.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 if (mAuth.getCurrentUser() != null) {
                                     if (mAuth.getCurrentUser().isEmailVerified()) {
-                                        progressBar.setVisibility(View.GONE);
                                         CustomDialogNotify.showToastCustom(Login_Activity.this, "Đăng nhập thành công");
                                         Intent intent = new Intent(Login_Activity.this, KhamPha_Activity.class);
                                         intent.putExtra("pass", pass);

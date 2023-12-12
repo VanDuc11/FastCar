@@ -3,7 +3,10 @@ package com.example.fastcar;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -12,8 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
+import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
+import com.example.fastcar.Model.HoaDon;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 public class FireBaseCloudMessageService extends FirebaseMessagingService {
 
@@ -28,17 +35,15 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-
         RemoteMessage.Notification notification = message.getNotification();
         String title = notification.getTitle();
         String body = notification.getBody();
-        String url = String.valueOf(notification.getImageUrl());
 
-        createNotificationChannel(title, body, BitmapFactory.decodeFile(url));
+        createNotificationChannel(title, body);
     }
 
     @SuppressLint("MissingPermission")
-    private void createNotificationChannel(String title, String message, Bitmap url) {
+    private void createNotificationChannel(String title, String message) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelDescription = "FastCars";

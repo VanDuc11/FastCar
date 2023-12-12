@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.User;
@@ -31,6 +32,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CapNhatThongTinUser_Activity extends AppCompatActivity {
     EditText edt_hoten, edt_sdt;
@@ -131,6 +134,18 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
             CustomDialogNotify.showToastCustom(CapNhatThongTinUser_Activity.this, "Chưa nhập số điện thoại");
             edt_sdt.requestFocus();
             return false;
+        } else {
+            if (sdt.length() == 10) {
+                if (!validateNumberPhone(edt_sdt.getText().toString().trim())) {
+                    CustomDialogNotify.showToastCustom(CapNhatThongTinUser_Activity.this, "Số điện thoại phải bắt đầu bằng 0");
+                    edt_sdt.requestFocus();
+                    return false;
+                }
+            } else {
+                CustomDialogNotify.showToastCustom(CapNhatThongTinUser_Activity.this, "Số điện thoại phải có đủ 10 số");
+                edt_sdt.requestFocus();
+                return false;
+            }
         }
 
         if (ngaysinh.length() == 0) {
@@ -164,6 +179,15 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
             }
         });
         datePickerDialog.show();
+    }
+
+    private boolean validateNumberPhone(String numberphone) {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^0([0-9]{9})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(numberphone);
+        return matcher.matches();
     }
 
 }

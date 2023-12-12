@@ -72,6 +72,7 @@ public class LichBan_CuaXe_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lich_ban_cua_xe);
 
+        socketManager = KhamPha_Activity.getSocketManager();
         mapping();
         load();
 
@@ -82,7 +83,6 @@ public class LichBan_CuaXe_Activity extends AppCompatActivity {
 
         btnBack.setOnClickListener(view -> onBackPressed());
         btnAdd.setOnClickListener(view -> showDialogDatePicker());
-        socketManager = KhamPha_Activity.getSocketManager();
     }
 
     private void mapping() {

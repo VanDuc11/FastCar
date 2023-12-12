@@ -39,74 +39,90 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edt_oldpass"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="Mật khẩu cũ"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-            app:helperTextEnabled="false"
-            app:hintTextColor="#1890FF"
-            app:startIconDrawable="@drawable/icon_password">
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/edt_oldpass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_input_background"
-                android:clipToOutline="true"
+                android:layout_height="60dp"
+                android:background="@drawable/custom_border_edittext"
+                android:drawableLeft="@drawable/icon_password"
+                android:drawablePadding="10dp"
+                android:hint="Mật khẩu cũ"
                 android:inputType="textPassword"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edt_newpass"
+            <ImageView
+                android:id="@+id/show_old_pass_inDoiMK"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/icon_show_pasword" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="Mật khẩu mới"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-            app:helperTextEnabled="false"
-            app:hintTextColor="#1890FF"
-            app:startIconDrawable="@drawable/icon_password">
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/edt_newpass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_input_background"
-                android:clipToOutline="true"
+                android:layout_height="60dp"
+                android:background="@drawable/custom_border_edittext"
+                android:drawableLeft="@drawable/icon_password"
+                android:drawablePadding="10dp"
+                android:hint="Mật khẩu mới"
                 android:inputType="textPassword"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edt_renewpass"
+            <ImageView
+                android:id="@+id/show_new_pass_inDoiMK"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/icon_show_pasword" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="Nhập lại mật khẩu mới"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-            app:helperTextEnabled="false"
-            app:hintTextColor="#1890FF"
-            app:startIconDrawable="@drawable/icon_password">
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/edt_renewpass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_input_background"
-                android:clipToOutline="true"
+                android:layout_height="60dp"
+                android:background="@drawable/custom_border_edittext"
+                android:drawableLeft="@drawable/icon_password"
+                android:drawablePadding="10dp"
+                android:hint="Nhập lại mật khẩu mới"
                 android:inputType="textPassword"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/show_renew_pass_inDoiMK"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/icon_show_pasword" />
+        </RelativeLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_confirm_DoiMK"
@@ -116,8 +132,7 @@
             android:background="@drawable/custom_btn4"
             android:textColor="@color/white"
             android:textSize="17dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="30dp"
             android:textAllCaps="false" />
 
     </LinearLayout>

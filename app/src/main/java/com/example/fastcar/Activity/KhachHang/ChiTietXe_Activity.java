@@ -117,6 +117,7 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_xe);
 
+        socketManager = KhamPha_Activity.getSocketManager();
         mapping();
         load();
 
@@ -136,7 +137,6 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         tvXemThemNhanXet.setOnClickListener(view -> Dialog_FullNhanXet.showDialog(this, listFeedbacks));
         cardview_chuxe.setOnClickListener(view -> Dialog_InfoChuSH.showDialog(this, car, listXe_ofChuSH, allFeedbacks_ofAllCars, totalChuyen_ofChuSH));
 
-        socketManager = KhamPha_Activity.getSocketManager();
         socketManager.on("updateCar", requestLoadUI_fromSocket);
     }
 
@@ -145,9 +145,7 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         public void call(Object... args) {
             String dataFromSocket = (String) args[0];
             if (dataFromSocket.equals(car.get_id())) {
-                runOnUiThread(() -> {
-                    load();
-                });
+                runOnUiThread(() -> load());
             }
         }
     };
@@ -982,4 +980,11 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            socketManager.off("updateCar", requestLoadUI_fromSocket);
+        }
+    }
 }

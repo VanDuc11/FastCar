@@ -116,7 +116,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don);
-
+        socketManager = KhamPha_Activity.getSocketManager();
         mapping();
         load();
 
@@ -133,7 +133,6 @@ public class HoaDon_Activity extends AppCompatActivity {
 
         btn_huychuyen.setOnClickListener(view -> showDialog_HuyChuyen(hoaDon));
 
-        socketManager = KhamPha_Activity.getSocketManager();
         socketManager.on("updateSTT_HD", requestLoadUI_fromSocket);
     }
 

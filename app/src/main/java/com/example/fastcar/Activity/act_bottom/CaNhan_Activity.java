@@ -14,11 +14,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -58,8 +60,8 @@ import retrofit2.Response;
 public class CaNhan_Activity extends AppCompatActivity {
     ShimmerFrameLayout shimmer_view;
     LinearLayout data_view;
-    TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnXeYeuThich, btnDoiMK, btnTaiKhoanNH;
-    LinearLayout btnXeCuaToi, btnThemXe;
+    TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnXeYeuThich, btnTaiKhoanNH;
+    LinearLayout btnXeCuaToi, btnThemXe, btnDoiMK;
     AppCompatButton btnLogout;
     CircleImageView avt_user;
     TextView tv_name_user;
@@ -71,6 +73,7 @@ public class CaNhan_Activity extends AppCompatActivity {
     Uri uri;
     User user;
     List<Car> listCars;
+    private boolean isShow1 = false, isShow2 = false, isShow3 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,9 +238,12 @@ public class CaNhan_Activity extends AppCompatActivity {
 
         AppCompatButton btn_confirm_dialog = dialog.findViewById(R.id.btn_confirm_DoiMK);
         ImageView img_close_dialog = dialog.findViewById(R.id.icon_back_in_doiMK);
-        TextInputLayout oldPass = dialog.findViewById(R.id.edt_oldpass);
-        TextInputLayout newPass = dialog.findViewById(R.id.edt_newpass);
-        TextInputLayout renewPass = dialog.findViewById(R.id.edt_renewpass);
+        EditText oldPass = dialog.findViewById(R.id.edt_oldpass);
+        EditText newPass = dialog.findViewById(R.id.edt_newpass);
+        EditText renewPass = dialog.findViewById(R.id.edt_renewpass);
+        ImageView img_showOldPass = dialog.findViewById(R.id.show_old_pass_inDoiMK);
+        ImageView img_showNewPass = dialog.findViewById(R.id.show_new_pass_inDoiMK);
+        ImageView img_showReNewPass = dialog.findViewById(R.id.show_renew_pass_inDoiMK);
 
         img_close_dialog.setOnClickListener(view -> dialog.dismiss());
 
@@ -247,30 +253,81 @@ public class CaNhan_Activity extends AppCompatActivity {
             oldPass.setVisibility(View.GONE);
             isCheck = false;
         } else {
+            oldPass.setVisibility(View.VISIBLE);
             isCheck = true;
         }
 
         btn_confirm_dialog.setOnClickListener(view -> {
             if (validateForm(isCheck, oldPass, newPass, renewPass)) {
-                if (user.getMatKhau().equals(oldPass.getEditText().getText().toString().trim())) {
-                    String newpassStr = newPass.getEditText().getText().toString().trim();
+                if (user.getMatKhau().equals(oldPass.getText().toString().trim())) {
+                    String newpassStr = newPass.getText().toString().trim();
                     fBaseuser.updatePassword(newpassStr).addOnCompleteListener(task -> {
                         // thành công
                         user.setMatKhau(newpassStr);
                         User_Method.func_updateUser(CaNhan_Activity.this, email, user, true);
                         Handler handler = new Handler(Looper.getMainLooper());
                         Runnable myRunnable = () -> {
-                            oldPass.getEditText().setText("");
-                            newPass.getEditText().setText("");
-                            renewPass.getEditText().setText("");
+                            oldPass.setText("");
+                            newPass.setText("");
+                            renewPass.setText("");
                         };
-                        handler.postDelayed(() -> handler.post(myRunnable), 1500);
+                        handler.postDelayed(() -> handler.post(myRunnable), 1000);
                     });
                 } else {
                     CustomDialogNotify.showToastCustom(CaNhan_Activity.this, "Mật khẩu cũ không trùng khớp");
                 }
             }
         });
+
+        img_showOldPass.setOnClickListener(view -> {
+            if (isShow1) {
+                isShow1 = false;
+                oldPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                img_showOldPass.setImageResource(R.drawable.icon_show_pasword);
+            } else {
+                isShow1 = true;
+                oldPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                img_showOldPass.setImageResource(R.drawable.icon_hide_password);
+            }
+            oldPass.setSelection(oldPass.length());
+        });
+        img_showNewPass.setOnClickListener(view -> {
+            if (isShow2) {
+                isShow2 = false;
+                newPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                img_showNewPass.setImageResource(R.drawable.icon_show_pasword);
+            } else {
+                isShow2 = true;
+                newPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                img_showNewPass.setImageResource(R.drawable.icon_hide_password);
+            }
+            newPass.setSelection(newPass.length());
+        });
+        img_showReNewPass.setOnClickListener(view -> {
+            if (isShow3) {
+                isShow3 = false;
+                renewPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                img_showReNewPass.setImageResource(R.drawable.icon_show_pasword);
+            } else {
+                isShow3 = true;
+                renewPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                img_showReNewPass.setImageResource(R.drawable.icon_hide_password);
+            }
+            renewPass.setSelection(renewPass.length());
+        });
+    }
+
+    private void showOrHidePW(boolean passwordShowing, EditText edtPass, ImageView img) {
+        if (passwordShowing) {
+            passwordShowing = false;
+            edtPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            img.setImageResource(R.drawable.icon_show_pasword);
+        } else {
+            passwordShowing = true;
+            edtPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            img.setImageResource(R.drawable.icon_hide_password);
+        }
+        edtPass.setSelection(edtPass.length());
     }
 
     @Override
@@ -297,6 +354,9 @@ public class CaNhan_Activity extends AppCompatActivity {
                     Glide.with(getBaseContext()).load(url).into(avt_user);
                 } else {
                     Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(avt_user);
+                }
+                if(user.getMatKhau().length() == 0) {
+                    btnDoiMK.setVisibility(View.GONE);
                 }
                 getCar_ofUserLogin();
             }
@@ -351,10 +411,10 @@ public class CaNhan_Activity extends AppCompatActivity {
         });
     }
 
-    private boolean validateForm(boolean havePassword, TextInputLayout edt_oldpass, TextInputLayout edt_newpass, TextInputLayout edt_renewpass) {
-        String oldpass = edt_oldpass.getEditText().getText().toString().trim();
-        String newpass = edt_newpass.getEditText().getText().toString().trim();
-        String renewpass = edt_renewpass.getEditText().getText().toString().trim();
+    private boolean validateForm(boolean havePassword, EditText edt_oldpass, EditText edt_newpass, EditText edt_renewpass) {
+        String oldpass = edt_oldpass.getText().toString().trim();
+        String newpass = edt_newpass.getText().toString().trim();
+        String renewpass = edt_renewpass.getText().toString().trim();
 
         if (havePassword) {
             // đã có pass

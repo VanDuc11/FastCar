@@ -57,7 +57,7 @@ public class ForgotPassword_Activity extends AppCompatActivity {
                                         finish();
                                     }
                                 };
-                                handler.postDelayed(() -> handler.post(myRunnable), 1500);
+                                handler.postDelayed(() -> handler.post(myRunnable), 2000);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

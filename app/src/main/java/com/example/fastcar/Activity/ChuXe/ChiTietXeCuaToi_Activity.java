@@ -76,6 +76,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_xe_cua_toi);
 
+        socketManager = KhamPha_Activity.getSocketManager();
         mapping();
         load();
 
@@ -102,8 +103,6 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         });
         btn_back.setOnClickListener(view -> onBackPressed());
         btn_more.setOnClickListener(view -> showDialog_XoaXe_orTatHD(car));
-
-        socketManager = KhamPha_Activity.getSocketManager();
     }
 
     private void mapping() {
@@ -289,7 +288,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
                             tvTrangThaiXe.setText("Đang hoạt động");
                         } else if (status == 2) {
                             tvTrangThaiXe.setText("Bị từ chối");
-                        } else if(status == 3){
+                        } else if (status == 3) {
                             tvTrangThaiXe.setText("Không hoạt động");
                         } else {
                             tvTrangThaiXe.setText("Vô hiệu hoá");
