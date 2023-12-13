@@ -102,7 +102,7 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     private RecyclerView recyclerView_khuyenmai, recyclerView_xeKhamPha;
     private CircleImageView img_user;
     private FirebaseAuth auth;
-    private ShimmerFrameLayout shimmer_view;
+    private ShimmerFrameLayout shimmer_view, shimmer_view_khuyenmai;
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout data_view;
     private FirebaseUser fBaseuser;
@@ -124,7 +124,6 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     private CustomTimePickerDialog timePickerDialog;
     private String formattedStartDate, formattedEndDate;
     private int time1, time2;
-//    private static SocketManager socketManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -132,8 +131,6 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kham_pha);
 
-//        socketManager = SocketManager.getInstance();
-//        socketManager.connect();
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();
@@ -216,19 +213,16 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         img_notify = findViewById(R.id.ic_notify);
         data_view = findViewById(R.id.data_view_inXeKhamPha);
         shimmer_view = findViewById(R.id.shimmer_view_inXeKhamPha);
+        shimmer_view_khuyenmai = findViewById(R.id.shimmer_view_khuyenmai);
         refreshLayout = findViewById(R.id.refresh_data_inKhamPha);
         tvNumberNotify = findViewById(R.id.notification_badge);
     }
 
-//    public static SocketManager getSocketManager() {
-//        if (socketManager == null) {
-//            socketManager = SocketManager.getInstance();
-//            socketManager.connect();
-//        }
-//        return socketManager;
-//    }
-
     void load() {
+        recyclerView_khuyenmai.setVisibility(View.GONE);
+        shimmer_view_khuyenmai.setVisibility(View.VISIBLE);
+        shimmer_view_khuyenmai.startShimmerAnimation();
+
         recyclerView_khuyenmai.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         tokenFCM = "";
         Intent intent = getIntent();
@@ -237,6 +231,10 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Voucher>> call, Response<List<Voucher>> response) {
+                recyclerView_khuyenmai.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+
                 if (response.code() == 200) {
                     if (!response.body().isEmpty()) {
                         adapterVoucher = new VoucherAdapter(KhamPha_Activity.this, response.body(), isIcon, 0);
@@ -245,7 +243,6 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
                         recyclerView_khuyenmai.setOnFlingListener(null);
                         SnapHelper snapHelper = new PagerSnapHelper();
                         snapHelper.attachToRecyclerView(recyclerView_khuyenmai);
-                    } else {
                     }
                 } else {
                     System.out.println("Có lỗi khi get list voucher: " + response.message());
@@ -267,11 +264,9 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         if (fBaseuser.isEmailVerified()) {
             if (fBaseuser == null) {
                 signOut();
-//                socketManager.disconnect();
             }
         } else {
             signOut();
-//            socketManager.disconnect();
         }
 
     }

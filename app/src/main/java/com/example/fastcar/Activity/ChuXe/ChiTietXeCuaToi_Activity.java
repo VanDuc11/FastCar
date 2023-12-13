@@ -31,6 +31,7 @@ import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
+import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
 import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.CustomTimePickerDialog;
@@ -104,7 +105,16 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             intent.putExtra("car", car);
             startActivity(intent);
         });
-        btn_back.setOnClickListener(view -> onBackPressed());
+        btn_back.setOnClickListener(view -> {
+            if (MyApplication.isAppInForeground()) {
+                onBackPressed();
+            } else {
+                Intent intent = new Intent(ChiTietXeCuaToi_Activity.this, KhamPha_Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
         btn_more.setOnClickListener(view -> showDialog_XoaXe_orTatHD(car));
     }
 
@@ -475,5 +485,17 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             e.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (MyApplication.isAppInForeground()) {
+            super.onBackPressed();
+        } else {
+            Intent intent = new Intent(ChiTietXeCuaToi_Activity.this, KhamPha_Activity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 }

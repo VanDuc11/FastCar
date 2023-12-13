@@ -88,7 +88,7 @@ import retrofit2.Response;
 
 public class HoaDon_Activity extends AppCompatActivity {
     private AppCompatButton btn_datcoc, btn_huychuyen;
-    private ImageView img_xe, img_viewXe, ic_in_4stt;
+    private ImageView img_xe, img_viewXe, ic_in_4stt, btnBack;
     private ShimmerFrameLayout shimmer_view;
     private LinearLayout data_view;
     private TextView btn_xemChiTietGia, tv_TheChap, tvChiduong;
@@ -168,6 +168,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         ln_view_thoiGianThanhToan = findViewById(R.id.ln_cho_thanhtoan_inHD);
         ln_view_huy_or_coc = findViewById(R.id.ln_view_huy_or_coc_inHD);
         ic_in_4stt = findViewById(R.id.icon_in_4sttHD);
+        btnBack = findViewById(R.id.btnBack_inHD);
         stt1 = findViewById(R.id.stt_1);
         stt2 = findViewById(R.id.stt_2);
         stt3 = findViewById(R.id.stt_3);
@@ -194,6 +195,17 @@ public class HoaDon_Activity extends AppCompatActivity {
 
         getListCar_ofChuSH(hoadon_intent.getXe().getChuSH().getEmail());
         fetchHoaDon_byMaHD(hoadon_intent.getMaHD());
+
+        btnBack.setOnClickListener(view -> {
+            if (MyApplication.isAppInForeground()) {
+                onBackPressed();
+            } else {
+                Intent intent1 = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent1);
+                finish();
+            }
+        });
     }
 
     private final Emitter.Listener requestLoadUI_fromSocket = new Emitter.Listener() {
@@ -287,7 +299,6 @@ public class HoaDon_Activity extends AppCompatActivity {
                         .appendQueryParameter("api", "1")
                         .appendQueryParameter("destination", hoaDon.getXe().getLatitude() + "," + hoaDon.getXe().getLongitude());
                 String url = builder.build().toString();
-                Log.d("Directions", url);
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -768,18 +779,6 @@ public class HoaDon_Activity extends AppCompatActivity {
 
     public void showDialog_PhuPhiPhatSinh_inHD(View view) {
         Dialog_PhuPhi_PhatSinh.showDialog(this);
-    }
-
-    public void back_inHoaDon(View view) {
-        if (MyApplication.isAppInForeground()) {
-            super.onBackPressed();
-        } else {
-            Intent intent = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        }
-
     }
 
     private void getListFeedBack(Car car) {

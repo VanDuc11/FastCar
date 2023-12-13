@@ -15,10 +15,10 @@
         app:titleTextColor="@color/white">
 
         <ImageView
+            android:id="@+id/btnBack_inHD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:onClick="back_inHoaDon"
             android:src="@drawable/icon_back_black" />
 
         <TextView

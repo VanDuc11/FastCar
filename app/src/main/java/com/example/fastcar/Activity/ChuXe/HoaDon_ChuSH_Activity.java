@@ -125,7 +125,16 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
             refreshLayout.setRefreshing(false);
         });
 
-        btn_back.setOnClickListener(view -> onBackPressed());
+        btn_back.setOnClickListener(view -> {
+            if (MyApplication.isAppInForeground()) {
+                onBackPressed();
+            } else {
+                Intent intent = new Intent(HoaDon_ChuSH_Activity.this, KhamPha_Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
         btn_dongychothue.setOnClickListener(view -> showDialog_Confirm());
         btn_huychuyen.setOnClickListener(view -> showDialog_HuyChuyen(hoaDon));
 
@@ -1003,5 +1012,14 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
                 "\n" +
                 "</html>";
         webView_loadMap.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView_loadMap != null && webView_loadMap.canGoBack()) {
+            webView_loadMap.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
