@@ -25,6 +25,7 @@ import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.FormatString.NumberFormatVND;
 import com.example.fastcar.Model.CreateOrder;
 import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Socket.SocketManager;
@@ -61,7 +62,9 @@ public class ThanhToan_Activity extends AppCompatActivity {
 
         mapping();
         load();
-        socketManager = KhamPha_Activity.getSocketManager();
+        if (socketManager == null) {
+            socketManager = MyApplication.getSocketManager();
+        }
     }
 
     private void mapping() {

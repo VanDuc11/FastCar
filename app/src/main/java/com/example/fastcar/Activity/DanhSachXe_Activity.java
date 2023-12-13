@@ -65,6 +65,9 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     CheckBox ckbox_sosan, ckbox_std, ckbox_xang, ckbox_dau, ckbox_dien;
     int khoangcach, mucgiaFrom, mucgiaTo, sogheFrom, sogheTo, nsxFrom, nsxTo;
     String truyendongFilter, nhienlieuFilter, queryHangXeFilter = "", mucgiaToStr;
+    private int currentPage = 1;
+    private final int pageSize = 10;
+    private final List<Car> listCars = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +281,8 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.code() == 200) {
                     List<Car> listCar = response.body();
-                    if (listCar.size() > 0) {
+//                    listCars.addAll(listCar);
+                    if (response.body().size() > 0) {
                         getDistanceFromCars(response.body(), distance);
                     } else {
                         ln_noResult.setVisibility(View.VISIBLE);
@@ -376,6 +380,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+//                    currentPage++;
                     boolean check = adapter.filterByDistance(distance);
                     if (!check) {
                         recyclerView.setVisibility(View.GONE);
@@ -384,6 +389,22 @@ public class DanhSachXe_Activity extends AppCompatActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                         ln_noResult.setVisibility(View.GONE);
                     }
+
+//                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                        @Override
+//                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                            super.onScrolled(recyclerView, dx, dy);
+//                            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                            int totalItemCount = layoutManager.getItemCount();
+//                            int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+//
+//                            // Kiểm tra nếu đã kéo đến 2/3 danh sách
+//                            if (lastVisibleItem >= (totalItemCount * 2) / 3) {
+//                                getData(queryHangXeFilter, mienthechap, truyendongFilter, nhienlieuFilter, rate5star, String.valueOf(mucgiaFrom), mucgiaToStr,
+//                                        String.valueOf(sogheFrom), String.valueOf(sogheTo), String.valueOf(nsxFrom), String.valueOf(nsxTo), khoangcach);
+//                            }
+//                        }
+//                    });
                 }
             }
 

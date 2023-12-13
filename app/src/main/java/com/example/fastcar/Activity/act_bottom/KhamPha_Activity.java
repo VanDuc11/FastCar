@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -123,7 +124,7 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     private CustomTimePickerDialog timePickerDialog;
     private String formattedStartDate, formattedEndDate;
     private int time1, time2;
-    private static SocketManager socketManager;
+//    private static SocketManager socketManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -131,8 +132,8 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kham_pha);
 
-        socketManager = SocketManager.getInstance();
-        socketManager.connect();
+//        socketManager = SocketManager.getInstance();
+//        socketManager.connect();
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         fBaseuser = auth.getCurrentUser();
@@ -219,13 +220,13 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         tvNumberNotify = findViewById(R.id.notification_badge);
     }
 
-    public static SocketManager getSocketManager() {
-        if (socketManager == null) {
-            socketManager = SocketManager.getInstance();
-            socketManager.connect();
-        }
-        return socketManager;
-    }
+//    public static SocketManager getSocketManager() {
+//        if (socketManager == null) {
+//            socketManager = SocketManager.getInstance();
+//            socketManager.connect();
+//        }
+//        return socketManager;
+//    }
 
     void load() {
         recyclerView_khuyenmai.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -266,11 +267,11 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         if (fBaseuser.isEmailVerified()) {
             if (fBaseuser == null) {
                 signOut();
-                socketManager.disconnect();
+//                socketManager.disconnect();
             }
         } else {
             signOut();
-            socketManager.disconnect();
+//            socketManager.disconnect();
         }
 
     }

@@ -61,6 +61,7 @@ import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
@@ -116,7 +117,10 @@ public class HoaDon_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don);
-        socketManager = KhamPha_Activity.getSocketManager();
+
+        if (socketManager == null) {
+            socketManager = MyApplication.getSocketManager();
+        }
         mapping();
         load();
 
@@ -767,7 +771,15 @@ public class HoaDon_Activity extends AppCompatActivity {
     }
 
     public void back_inHoaDon(View view) {
-        onBackPressed();
+        if (MyApplication.isAppInForeground()) {
+            super.onBackPressed();
+        } else {
+            Intent intent = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
+
     }
 
     private void getListFeedBack(Car car) {
@@ -1309,7 +1321,14 @@ public class HoaDon_Activity extends AppCompatActivity {
         if (webView_loadMap != null && webView_loadMap.canGoBack()) {
             webView_loadMap.goBack();
         } else {
-            super.onBackPressed();
+            if (MyApplication.isAppInForeground()) {
+                super.onBackPressed();
+            } else {
+                Intent intent = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }

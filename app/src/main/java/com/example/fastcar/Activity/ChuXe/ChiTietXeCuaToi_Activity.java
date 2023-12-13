@@ -39,6 +39,7 @@ import com.example.fastcar.Dialog.DialogGiayToXe;
 import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
@@ -76,7 +77,9 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_xe_cua_toi);
 
-        socketManager = KhamPha_Activity.getSocketManager();
+        if (socketManager == null) {
+            socketManager = MyApplication.getSocketManager();
+        }
         mapping();
         load();
 

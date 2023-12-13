@@ -48,6 +48,7 @@ import com.example.fastcar.Model.FeedBack;
 import com.example.fastcar.FormatString.NumberFormatK;
 import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.User;
+import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
@@ -117,7 +118,9 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_xe);
 
-        socketManager = KhamPha_Activity.getSocketManager();
+        if (socketManager == null) {
+            socketManager = MyApplication.getSocketManager();
+        }
         mapping();
         load();
 

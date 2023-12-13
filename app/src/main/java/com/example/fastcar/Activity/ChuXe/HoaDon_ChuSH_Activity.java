@@ -62,6 +62,7 @@ import com.example.fastcar.Model.HoaDon;
 import com.example.fastcar.Model.LichSuGiaoDich;
 import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
@@ -113,7 +114,9 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don_chu_sh);
 
-        socketManager = KhamPha_Activity.getSocketManager();
+        if (socketManager == null) {
+            socketManager = MyApplication.getSocketManager();
+        }
         mapping();
         load();
 

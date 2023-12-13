@@ -207,7 +207,7 @@ public class CaNhan_Activity extends AppCompatActivity {
             dialog.dismiss();
             progressBar.setVisibility(View.GONE);
             startActivity(new Intent(getBaseContext(), Login_Activity.class));
-            KhamPha_Activity.getSocketManager().disconnect();
+//            KhamPha_Activity.getSocketManager().disconnect();
             finish();
             editor.clear();
             editor.apply();

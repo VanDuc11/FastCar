@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.fastcar.Activity.ChuXe.HoaDon_ChuSH_Activity;
 import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.Model.HoaDon;
@@ -35,15 +36,39 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-        RemoteMessage.Notification notification = message.getNotification();
-        String title = notification.getTitle();
-        String body = notification.getBody();
+//        RemoteMessage.Notification notification = message.getNotification();
+//        String title = notification.getTitle();
+//        String body = notification.getBody();
+        String title = message.getData().get("title");
+        String body = message.getData().get("body");
+        String hoaDonKHStr = message.getData().get("hoadonKH");
+        String hoaDonCXStr = message.getData().get("hoadonCX");
+        HoaDon hoaDonKH = null;
+        HoaDon hoaDonCX = null;
+        PendingIntent pendingIntent = null;
+        try {
+            Gson gson = new Gson();
+            if (hoaDonKHStr.length() != 0) {
+                hoaDonKH = gson.fromJson(hoaDonKHStr, HoaDon.class);
+                Intent intent = new Intent(this, HoaDon_Activity.class);
+                intent.putExtra("hoadon", hoaDonKH);
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+            }
+            if (hoaDonCXStr.length() != 0) {
+                hoaDonCX = gson.fromJson(hoaDonCXStr, HoaDon.class);
+                Intent intent = new Intent(this, HoaDon_ChuSH_Activity.class);
+                intent.putExtra("hoadon", hoaDonCX);
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+            }
 
-        createNotificationChannel(title, body);
+        } catch (Exception ignored) {
+        }
+
+        createNotificationChannel(title, body, pendingIntent);
     }
 
     @SuppressLint("MissingPermission")
-    private void createNotificationChannel(String title, String message) {
+    private void createNotificationChannel(String title, String message, PendingIntent pendingIntent) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelDescription = "FastCars";
@@ -61,6 +86,7 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
                 .setContentText(message)
 //                .setStyle( new NotificationCompat.BigPictureStyle()
 //                        .bigPicture(url).bigLargeIcon(null))
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 

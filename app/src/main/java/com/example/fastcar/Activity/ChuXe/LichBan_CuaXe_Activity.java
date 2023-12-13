@@ -34,6 +34,7 @@ import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
+import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
@@ -72,7 +73,9 @@ public class LichBan_CuaXe_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lich_ban_cua_xe);
 
-        socketManager = KhamPha_Activity.getSocketManager();
+        if (socketManager == null) {
+            socketManager = MyApplication.getSocketManager();
+        }
         mapping();
         load();
 
