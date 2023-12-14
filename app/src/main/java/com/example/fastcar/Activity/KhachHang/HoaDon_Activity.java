@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +63,7 @@ import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.BroadCast.ScreenReceiver;
 import com.example.fastcar.Server.HostApi;
 import com.example.fastcar.Socket.SocketManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -112,6 +112,7 @@ public class HoaDon_Activity extends AppCompatActivity {
     private String pathImage1, pathImage2;
     private int finalStar = 5;
     private SocketManager socketManager;
+    private boolean isAppInForeground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +188,8 @@ public class HoaDon_Activity extends AppCompatActivity {
     private void load() {
         Intent intent = getIntent();
         hoadon_intent = intent.getParcelableExtra("hoadon");
-
+        SharedPreferences preferences = getSharedPreferences("isAppInForeground", MODE_PRIVATE);
+//        isAppInForeground = preferences.getBoolean("app_foreground", false);
         progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
@@ -197,7 +199,7 @@ public class HoaDon_Activity extends AppCompatActivity {
         fetchHoaDon_byMaHD(hoadon_intent.getMaHD());
 
         btnBack.setOnClickListener(view -> {
-            if (MyApplication.isAppInForeground()) {
+            if (ScreenReceiver.isAppInForeground()) {
                 onBackPressed();
             } else {
                 Intent intent1 = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
@@ -1320,12 +1322,12 @@ public class HoaDon_Activity extends AppCompatActivity {
         if (webView_loadMap != null && webView_loadMap.canGoBack()) {
             webView_loadMap.goBack();
         } else {
-            if (MyApplication.isAppInForeground()) {
+            if (ScreenReceiver.isAppInForeground()) {
                 super.onBackPressed();
             } else {
-                Intent intent = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                Intent intent1 = new Intent(HoaDon_Activity.this, KhamPha_Activity.class);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent1);
                 finish();
             }
         }

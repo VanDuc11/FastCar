@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -124,6 +126,7 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     private CustomTimePickerDialog timePickerDialog;
     private String formattedStartDate, formattedEndDate;
     private int time1, time2;
+    private boolean isDatePickerDialogShowing = false;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -409,33 +412,44 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
     }
 
     public void showDatePicker(View view) {
-        timePickerDialog = new CustomTimePickerDialog();
-        timePickerDialog.setListener(KhamPha_Activity.this, time1, time2, 0);
-        timePickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+        if (!isDatePickerDialogShowing) {
+            isDatePickerDialogShowing = true;
+            timePickerDialog = new CustomTimePickerDialog();
+            timePickerDialog.setListener(KhamPha_Activity.this, time1, time2, 0);
+            timePickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
 
-        datePicker.show(getSupportFragmentManager(), "Material_Range");
-
-        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-            @Override
-            public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                // Lấy ngày bắt đầu và ngày kết thúc từ Pair
-                Long startDate = selection.first;
-                Long endDate = selection.second;
-
-                isChooseDatePicker = true;
-                SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong("startTime2", startDate);
-                editor.putLong("endTime2", endDate);
-                editor.putBoolean("check", isChooseDatePicker);
-                editor.apply();
-
-                // Định dạng ngày tháng theo định dạng tiếng Việt
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                formattedStartDate = sdf.format(new Date(startDate));
-                formattedEndDate = sdf.format(new Date(endDate));
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("Material_Range");
+            if (prev != null) {
+                ft.remove(prev);
             }
-        });
+            ft.addToBackStack(null);
+            datePicker.show(getSupportFragmentManager(), "Material_Range");
+
+            datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+                @Override
+                public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                    // Lấy ngày bắt đầu và ngày kết thúc từ Pair
+                    Long startDate = selection.first;
+                    Long endDate = selection.second;
+
+                    isChooseDatePicker = true;
+                    SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putLong("startTime2", startDate);
+                    editor.putLong("endTime2", endDate);
+                    editor.putBoolean("check", isChooseDatePicker);
+                    editor.apply();
+
+                    // Định dạng ngày tháng theo định dạng tiếng Việt
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    formattedStartDate = sdf.format(new Date(startDate));
+                    formattedEndDate = sdf.format(new Date(endDate));
+                }
+            });
+
+            datePicker.addOnDismissListener(dialog -> isDatePickerDialogShowing = false);
+        }
     }
 
     private void setDefault_SelectionDate() {

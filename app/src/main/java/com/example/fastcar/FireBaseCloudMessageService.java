@@ -83,17 +83,13 @@ public class FireBaseCloudMessageService extends FirebaseMessagingService {
         if (hoaDon != null) {
             Intent intent = new Intent(this, activityClass);
             intent.putExtra("hoadon", hoaDon);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addNextIntentWithParentStack(intent);
-            return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
         }
 
         if (car != null) {
             Intent intent = new Intent(this, activityClass);
             intent.putExtra("car", car);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addNextIntentWithParentStack(intent);
-            return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
         }
         return null;
     }

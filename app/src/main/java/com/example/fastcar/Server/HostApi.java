@@ -7,6 +7,6 @@ public class HostApi {
     public static String Api_URL_hang = "https://carapi.app";
     public static String API_BANKS = "https://api.vietqr.io/v2/";
     public static String API_GOONG = "https://rsapi.goong.io/";
-    public static String api_key_goong = "K757iyhjZzERCOBAwiAVpWIVZaQFATrGzwiMIiB3";
-    public static String api_key_load_map = "NlmOSlujw1xdNipq3r8Mv6GsUjXcIf09MbmO5gfJ";
+    public static String api_key_goong = "JskSEnlVczU5V8r36Rby9HFx0TOwIqeKlvEyglwb";
+    public static String api_key_load_map = "nMW0D7ywBDIUc9cknmpWhmphm6WYnlu7pQthiFKP";
 }

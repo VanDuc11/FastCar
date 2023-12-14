@@ -5,6 +5,8 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -111,6 +113,7 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
     private SocketManager socketManager;
     private ShimmerFrameLayout shimmer_view;
     private NestedScrollView data_view;
+    private boolean isDatePickerDialogShowing = false;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -454,26 +457,37 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
 
 
     private void showDatePicker_inChiTietXe() {
-        timePickerDialog = new CustomTimePickerDialog();
-        timePickerDialog.setListener(ChiTietXe_Activity.this, time1, time2, 0);
-        timePickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
-        datePicker.show(getSupportFragmentManager(), "Material_Range");
-        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-            @Override
-            public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                Long startDate = selection.first;
-                Long endDate = selection.second;
-                SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong("startTime2", startDate);
-                editor.putLong("endTime2", endDate);
-                editor.putBoolean("check", true);
-                editor.apply();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                formattedStartDate = sdf.format(new Date(startDate));
-                formattedEndDate = sdf.format(new Date(endDate));
+        if (!isDatePickerDialogShowing) {
+            isDatePickerDialogShowing = true;
+            timePickerDialog = new CustomTimePickerDialog();
+            timePickerDialog.setListener(ChiTietXe_Activity.this, time1, time2, 0);
+            timePickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("Material_Range");
+            if (prev != null) {
+                ft.remove(prev);
             }
-        });
+            ft.addToBackStack(null);
+            datePicker.show(getSupportFragmentManager(), "Material_Range");
+            datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+                @Override
+                public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                    Long startDate = selection.first;
+                    Long endDate = selection.second;
+                    SharedPreferences preferences = getSharedPreferences("timePicker", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putLong("startTime2", startDate);
+                    editor.putLong("endTime2", endDate);
+                    editor.putBoolean("check", true);
+                    editor.apply();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    formattedStartDate = sdf.format(new Date(startDate));
+                    formattedEndDate = sdf.format(new Date(endDate));
+                }
+            });
+
+            datePicker.addOnDismissListener(dialog -> isDatePickerDialogShowing = false);
+        }
     }
 
     private CalendarConstraints buildCalendarConstraints() {

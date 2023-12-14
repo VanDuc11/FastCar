@@ -90,6 +90,15 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".BroadCast.ScreenReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+            </intent-filter>
+        </receiver>
+
+
         <activity
             android:name=".Activity.ChuXe.ViChuXe_Activity"
             android:exported="false" />
@@ -185,7 +194,7 @@
 
         <activity
             android:name=".Activity.Login_Activity"
-            android:exported="true"></activity>
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

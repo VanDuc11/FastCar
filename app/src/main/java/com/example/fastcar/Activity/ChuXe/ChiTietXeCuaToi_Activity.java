@@ -4,11 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,39 +19,30 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
-import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
-import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
 import com.example.fastcar.CustomTimePickerDialog;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.DialogGiayToXe;
-import com.example.fastcar.Dialog.Dialog_GiayToThueXe;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.BroadCast.ScreenReceiver;
 import com.example.fastcar.Server.HostApi;
 import com.example.fastcar.Socket.SocketManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -106,7 +94,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             startActivity(intent);
         });
         btn_back.setOnClickListener(view -> {
-            if (MyApplication.isAppInForeground()) {
+            if (ScreenReceiver.isAppInForeground()) {
                 onBackPressed();
             } else {
                 Intent intent = new Intent(ChiTietXeCuaToi_Activity.this, KhamPha_Activity.class);
@@ -489,7 +477,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
 
     @Override
     public void onBackPressed() {
-        if (MyApplication.isAppInForeground()) {
+        if (ScreenReceiver.isAppInForeground()) {
             super.onBackPressed();
         } else {
             Intent intent = new Intent(ChiTietXeCuaToi_Activity.this, KhamPha_Activity.class);

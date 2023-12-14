@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
@@ -16,6 +15,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
@@ -47,24 +47,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fastcar.Activity.KhachHang.ChiTietXe_Activity;
-import com.example.fastcar.Activity.KhachHang.HoaDon_Activity;
-import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Activity.act_bottom.KhamPha_Activity;
-import com.example.fastcar.Adapter.NganHangAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_BangGiaChiTiet;
 import com.example.fastcar.Dialog.Dialog_Coc30Per;
 import com.example.fastcar.Dialog.Dialog_TT70Per;
 import com.example.fastcar.Dialog.Dialog_View_Image;
 import com.example.fastcar.FormatString.NumberFormatVND;
-import com.example.fastcar.FormatString.RandomMaHD;
 import com.example.fastcar.Model.HoaDon;
-import com.example.fastcar.Model.LichSuGiaoDich;
-import com.example.fastcar.Model.NganHang;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.MyApplication;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.example.fastcar.BroadCast.ScreenReceiver;
 import com.example.fastcar.Server.HostApi;
 import com.example.fastcar.Socket.SocketManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -108,6 +103,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     private ProgressBar progressBar;
     private WebView webView_loadMap;
     private SocketManager socketManager;
+    private boolean isAppInForeground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +122,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         });
 
         btn_back.setOnClickListener(view -> {
-            if (MyApplication.isAppInForeground()) {
+            if (ScreenReceiver.isAppInForeground()) {
                 onBackPressed();
             } else {
                 Intent intent = new Intent(HoaDon_ChuSH_Activity.this, KhamPha_Activity.class);
@@ -194,6 +190,8 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     private void load() {
         Intent intent = getIntent();
         hoadon_intent = intent.getParcelableExtra("hoadon");
+        SharedPreferences preferences = getSharedPreferences("isAppInForeground", MODE_PRIVATE);
+        isAppInForeground = preferences.getBoolean("app_foreground", false);
 
         progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
@@ -1019,7 +1017,14 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         if (webView_loadMap != null && webView_loadMap.canGoBack()) {
             webView_loadMap.goBack();
         } else {
-            super.onBackPressed();
+            if (ScreenReceiver.isAppInForeground()) {
+                super.onBackPressed();
+            } else {
+                Intent intent = new Intent(HoaDon_ChuSH_Activity.this, KhamPha_Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }
