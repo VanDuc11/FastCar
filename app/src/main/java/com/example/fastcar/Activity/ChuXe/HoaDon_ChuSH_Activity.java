@@ -103,7 +103,6 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     private ProgressBar progressBar;
     private WebView webView_loadMap;
     private SocketManager socketManager;
-    private boolean isAppInForeground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,8 +189,6 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
     private void load() {
         Intent intent = getIntent();
         hoadon_intent = intent.getParcelableExtra("hoadon");
-        SharedPreferences preferences = getSharedPreferences("isAppInForeground", MODE_PRIVATE);
-        isAppInForeground = preferences.getBoolean("app_foreground", false);
 
         progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
@@ -574,9 +571,7 @@ public class HoaDon_ChuSH_Activity extends AppCompatActivity {
         btn_confirm.setOnClickListener(view -> {
             // 2 = đồng ý cho thuê
             dialog.dismiss();
-            Date getTimeNow = new Date();
             hoaDon.setTrangThaiHD(2);
-            hoaDon.setTimeChuXeXN(getTimeNow);
             update_TimeXacNhanHoaDon(hoaDon);
         });
     }

@@ -34,6 +34,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -75,6 +76,8 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
     String email;
     Calendar calendar;
     private int isSelectedCamera = 1;
+    private ProgressBar progressBar;
+    private boolean isBackPrev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,24 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
         mapping();
         load();
 
-        btn_back.setOnClickListener(view -> onBackPressed());
+        img_mattruoc_gplx.setOnClickListener(view -> {
+            isSelectedCamera = 1;
+            showImageDialog();
+        });
+        img_matsau_gplx.setOnClickListener(view -> {
+            isSelectedCamera = 2;
+            showImageDialog();
+        });
+        btn_back.setOnClickListener(view -> {
+            if (isBackPrev) {
+                onBackPressed();
+            } else {
+                Intent intent = new Intent(ThongTinGPLX_Activity.this, ThongTin_User_Activity.class);
+                intent.putExtra("emailUser", email);
+                startActivity(intent);
+                finish();
+            }
+        });
         edt_ngaycap.setOnClickListener(view -> showDatePicker_inDialogGPLX());
         btn_confirm.setOnClickListener(view -> updateGPLX_forUser());
     }
@@ -100,15 +120,18 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
         edt_diachithuongtru = findViewById(R.id.edt_diachithuongtru_inGPLX);
         data_view = findViewById(R.id.data_view_inGPLX);
         shimmer_view = findViewById(R.id.shimmer_view_inGPLX);
+        progressBar = findViewById(R.id.progressBar_inGPLX);
     }
 
     private void load() {
         Intent intent = getIntent();
         email = intent.getStringExtra("emailUser");
+        isBackPrev = intent.getBooleanExtra("onBackPrev", false);
         calendar = Calendar.getInstance();
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
+        progressBar.setVisibility(View.GONE);
         fetchData_UserLogin(email);
     }
 
@@ -137,6 +160,8 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
                         edt_hoten.setEnabled(false);
                         edt_diachithuongtru.setEnabled(false);
                         edt_ngaycap.setEnabled(false);
+                        img_mattruoc_gplx.setEnabled(false);
+                        img_matsau_gplx.setEnabled(false);
                     }
 
                     if (user.getHinhAnh_GPLX().size() == 2) {
@@ -154,6 +179,7 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
     }
 
     private void updateGPLX_forUser() {
+        progressBar.setVisibility(View.VISIBLE);
         String sogplx = edt_sogplx.getText().toString();
         String hoten = edt_hoten.getText().toString();
         String diachi = edt_diachithuongtru.getText().toString();
@@ -201,13 +227,18 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
             RetrofitClient.FC_services().updateGPLX(user.getEmail(), listPart, sogplxPart, hotenPart, ngaycapPart, diachiPart).enqueue(new Callback<ResMessage>() {
                 @Override
                 public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                    CustomDialogNotify.showToastCustom(ThongTinGPLX_Activity.this, "Cập nhật thành công");
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    Runnable myRunnable = () -> {
-                        onBackPressed();
-                        finish();
-                    };
-                    handler.postDelayed(() -> handler.post(myRunnable), 1000);
+                    progressBar.setVisibility(View.GONE);
+                    if (response.code() == 201) {
+                        CustomDialogNotify.showToastCustom(ThongTinGPLX_Activity.this, "Cập nhật thành công");
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        Runnable myRunnable = () -> {
+                            onBackPressed();
+                            finish();
+                        };
+                        handler.postDelayed(() -> handler.post(myRunnable), 1000);
+                    } else if (response.code() == 303) {
+                        CustomDialogNotify.showToastCustom(ThongTinGPLX_Activity.this, "Sô GPLX đã được sử dụng");
+                    }
                 }
 
                 @Override
@@ -221,27 +252,20 @@ public class ThongTinGPLX_Activity extends AppCompatActivity {
 
     private List<MultipartBody.Part> genderListPart(String imagePath_mattruoc, String imagePath_matsau) {
         List<MultipartBody.Part> listPart = new ArrayList<>();
-        List<String> listPath = new ArrayList<>();
-        listPath.add(imagePath_mattruoc);
-        listPath.add(imagePath_matsau);
-
-        for (String path : listPath) {
-            File file = new File(path);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("HinhAnh_GPLX", file.getName(), requestBody);
-            listPart.add(imagePart);
+        if (imagePath_mattruoc.length() == 0 && imagePath_matsau.length() == 0) {
+            return null;
+        } else {
+            List<String> listPath = new ArrayList<>();
+            listPath.add(imagePath_mattruoc);
+            listPath.add(imagePath_matsau);
+            for (String path : listPath) {
+                File file = new File(path);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                MultipartBody.Part imagePart = MultipartBody.Part.createFormData("HinhAnh_GPLX", file.getName(), requestBody);
+                listPart.add(imagePart);
+            }
         }
         return listPart;
-    }
-
-    public void upload_mattruoc_GPLX(View view) {
-        isSelectedCamera = 1;
-        showImageDialog();
-    }
-
-    public void upload_matsau_GPLX(View view) {
-        isSelectedCamera = 2;
-        showImageDialog();
     }
 
     private void showDatePicker_inDialogGPLX() {

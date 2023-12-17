@@ -27,16 +27,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.fastcar.Activity.ChuXe.LichSuGiaoDich.LichSuGD_Activity;
 import com.example.fastcar.Activity.TaiKhoanNganHang_Activity;
 import com.example.fastcar.Activity.ChuXe.ThemXe.ThemXe_Activity;
 import com.example.fastcar.Activity.MaGiamGia_Activity;
 import com.example.fastcar.Activity.ChuXe.XeCuaToi_Activity;
 import com.example.fastcar.Activity.XeYeuThich_Activity;
+import com.example.fastcar.Adapter.LichSuGiaoDichApdater;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Activity.KhachHang.LichSu_ThueXe_Activity;
 import com.example.fastcar.Activity.Login_Activity;
 import com.example.fastcar.Activity.ThongTin_User_Activity;
 import com.example.fastcar.Model.Car;
+import com.example.fastcar.Model.LichSuGiaoDich;
 import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
@@ -61,7 +64,7 @@ public class CaNhan_Activity extends AppCompatActivity {
     ShimmerFrameLayout shimmer_view;
     LinearLayout data_view;
     TextView btnInfoUser, btnVoucher, btnLichSuThueXe, btnXeYeuThich, btnTaiKhoanNH;
-    LinearLayout btnXeCuaToi, btnThemXe, btnDoiMK;
+    LinearLayout btnXeCuaToi, btnThemXe, btnDoiMK, btnLSGD;
     AppCompatButton btnLogout;
     CircleImageView avt_user;
     TextView tv_name_user;
@@ -70,7 +73,6 @@ public class CaNhan_Activity extends AppCompatActivity {
     FirebaseDatabase database;
     String username, phone, email, url;
     ProgressBar progressBar;
-    Uri uri;
     User user;
     List<Car> listCars;
     private boolean isShow1 = false, isShow2 = false, isShow3 = false;
@@ -128,6 +130,9 @@ public class CaNhan_Activity extends AppCompatActivity {
         // Lịch sử thuê xe
         btnLichSuThueXe.setOnClickListener(view -> startActivity(new Intent(this, LichSu_ThueXe_Activity.class)));
 
+        // Lịch sử giao dịch
+        btnLSGD.setOnClickListener(view -> startActivity(new Intent(this, LichSuGD_Activity.class)));
+
         // Đổi mật khẩu
         btnDoiMK.setOnClickListener(view -> showDialog_DoiMK());
 
@@ -150,6 +155,7 @@ public class CaNhan_Activity extends AppCompatActivity {
         btnXeCuaToi = findViewById(R.id.btn_XeCuaToi_in_tabUser);
         btnTaiKhoanNH = findViewById(R.id.btn_nganhang_in_tabUser);
         progressBar = findViewById(R.id.progressBar_inCaNhan);
+        btnLSGD = findViewById(R.id.btn_lsgd_in_tabUser);
     }
 
     private void load() {
@@ -207,7 +213,6 @@ public class CaNhan_Activity extends AppCompatActivity {
             dialog.dismiss();
             progressBar.setVisibility(View.GONE);
             startActivity(new Intent(getBaseContext(), Login_Activity.class));
-//            KhamPha_Activity.getSocketManager().disconnect();
             finish();
             editor.clear();
             editor.apply();
@@ -317,19 +322,6 @@ public class CaNhan_Activity extends AppCompatActivity {
         });
     }
 
-    private void showOrHidePW(boolean passwordShowing, EditText edtPass, ImageView img) {
-        if (passwordShowing) {
-            passwordShowing = false;
-            edtPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            img.setImageResource(R.drawable.icon_show_pasword);
-        } else {
-            passwordShowing = true;
-            edtPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            img.setImageResource(R.drawable.icon_hide_password);
-        }
-        edtPass.setSelection(edtPass.length());
-    }
-
     @Override
     public void onBackPressed() {
     }
@@ -355,7 +347,7 @@ public class CaNhan_Activity extends AppCompatActivity {
                 } else {
                     Glide.with(getBaseContext()).load(R.drawable.img_avatar_user_v1).into(avt_user);
                 }
-                if(user.getMatKhau().length() == 0) {
+                if (user.getMatKhau().length() == 0) {
                     btnDoiMK.setVisibility(View.GONE);
                 }
                 getCar_ofUserLogin();
@@ -378,15 +370,21 @@ public class CaNhan_Activity extends AppCompatActivity {
                 shimmer_view.setVisibility(View.GONE);
 
                 if (response.code() == 200) {
-                    if (!response.body().isEmpty()) {
+                    if (response.body().size() != 0) {
+                        // có xe
                         listCars = response.body();
                         btnThemXe.setVisibility(View.GONE);
                         btnXeCuaToi.setVisibility(View.VISIBLE);
+                        // ẩn button lsgd
+                        btnLSGD.setVisibility(View.GONE);
+                    } else {
+                        // không có xe
+                        // check lsgd
+                        getLSGD();
+                        listCars = null;
+                        btnThemXe.setVisibility(View.VISIBLE);
+                        btnXeCuaToi.setVisibility(View.GONE);
                     }
-                } else {
-                    listCars = null;
-                    btnThemXe.setVisibility(View.VISIBLE);
-                    btnXeCuaToi.setVisibility(View.GONE);
                 }
             }
 
@@ -450,9 +448,23 @@ public class CaNhan_Activity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        load();
-//    }
+    private void getLSGD() {
+        RetrofitClient.FC_services().getLSGD_ofUser(email, null, null).enqueue(new Callback<List<LichSuGiaoDich>>() {
+            @Override
+            public void onResponse(Call<List<LichSuGiaoDich>> call, Response<List<LichSuGiaoDich>> response) {
+                if (response.code() == 200) {
+                    if (response.body().size() > 0) {
+                        btnLSGD.setVisibility(View.VISIBLE);
+                    } else {
+                        btnLSGD.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<LichSuGiaoDich>> call, Throwable t) {
+                System.out.println("Có lỗi xảy ra: " + t);
+            }
+        });
+    }
 }

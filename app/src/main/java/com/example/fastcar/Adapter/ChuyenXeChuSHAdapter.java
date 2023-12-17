@@ -119,7 +119,7 @@ public class ChuyenXeChuSHAdapter extends RecyclerView.Adapter<ChuyenXeChuSHAdap
 
     private static String getTimeDifference(Date endDate) {
         Date startDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault());
         long duration = Math.abs(startDate.getTime() - endDate.getTime());
         long minutes = duration / (60 * 1000);
         long hours = 0;
@@ -131,7 +131,7 @@ public class ChuyenXeChuSHAdapter extends RecyclerView.Adapter<ChuyenXeChuSHAdap
         int day = (int) (hours / 24);
         int week = (int) (day / 7);
 
-        if (hours <= 1) {
+        if (hours < 1) {
             if (minutes < 1) {
                 return duration / 1000 + " giây trước";
             } else {

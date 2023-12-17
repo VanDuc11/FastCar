@@ -71,11 +71,13 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.socket.emitter.Emitter;
@@ -101,8 +103,8 @@ public class HoaDon_Activity extends AppCompatActivity {
     private ProgressBar progressBar;
     private SwipeRefreshLayout refreshLayout;
     float TrungBinhSao;
-    private int totalChuyen_ofChuSH;
-    private float totalStar_ofChuSH;
+    private int totalChuyen_ofChuSH = 0;
+    private float totalStar_ofChuSH = 0;
     private int index = 0;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
@@ -112,7 +114,6 @@ public class HoaDon_Activity extends AppCompatActivity {
     private String pathImage1, pathImage2;
     private int finalStar = 5;
     private SocketManager socketManager;
-    private boolean isAppInForeground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,12 +189,13 @@ public class HoaDon_Activity extends AppCompatActivity {
     private void load() {
         Intent intent = getIntent();
         hoadon_intent = intent.getParcelableExtra("hoadon");
-        SharedPreferences preferences = getSharedPreferences("isAppInForeground", MODE_PRIVATE);
-//        isAppInForeground = preferences.getBoolean("app_foreground", false);
         progressBar.setVisibility(View.GONE);
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
+
+        totalChuyen_ofChuSH = 0;
+        totalStar_ofChuSH = 0;
 
         getListCar_ofChuSH(hoadon_intent.getXe().getChuSH().getEmail());
         fetchHoaDon_byMaHD(hoadon_intent.getMaHD());
@@ -459,7 +461,7 @@ public class HoaDon_Activity extends AppCompatActivity {
                     showDialog_UploadImage_TraXe();
                 } else if (statusCode == 6) {
                     // user đăng nhận xét, update lại TrungBinhSao
-                    if (hoaDon.isHaveFeedback() == false) {
+                    if (!hoaDon.isHaveFeedback()) {
                         // chưa đăng nhận xét
                         showDialog_PostFeedback(false);
                     } else {
@@ -855,8 +857,6 @@ public class HoaDon_Activity extends AppCompatActivity {
     }
 
     private void getListCar_ofChuSH(String email) {
-        totalChuyen_ofChuSH = 0;
-        totalStar_ofChuSH = 0;
         RetrofitClient.FC_services().getListCar_ofUser(email, "1").enqueue(new Callback<List<Car>>() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -875,8 +875,9 @@ public class HoaDon_Activity extends AppCompatActivity {
                     totalStar_ofChuSH = numberStar / count;
                     DecimalFormat df = new DecimalFormat("0.0");
                     String formattedNumber = df.format(totalStar_ofChuSH);
+                    formattedNumber = formattedNumber.replace(",", ".");
                     tv_soSao_ofChuSH.setText(formattedNumber);
-                    tv_soChuyen_ofChuSH.setText(String.valueOf(totalChuyen_ofChuSH) + " chuyến");
+                    tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
                 }
             }
 

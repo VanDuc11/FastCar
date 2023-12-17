@@ -103,7 +103,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_edittext"
                     android:gravity="right|center"
-                    android:hint="11A - 11111"
+                    android:hint="11A-11111"
                     android:paddingRight="15dp"
                     android:textColorHint="#CFCACA"
                     android:textSize="16dp" />
@@ -147,6 +147,7 @@
                     android:gravity="right"
                     android:onClick="Select_Hang_Xe"
                     android:padding="18dp"
+                    android:textSize="16dp"
                     android:text="Chưa chọn" />
             </LinearLayout>
 
@@ -176,6 +177,7 @@
                     android:layout_weight="2"
                     android:gravity="right"
                     android:padding="18dp"
+                    android:textSize="16dp"
                     android:text="Chưa chọn" />
             </LinearLayout>
 
@@ -215,6 +217,7 @@
                         android:layout_gravity="center"
                         android:background="@color/white"
                         android:dropDownHeight="200dp"
+                        android:textSize="16dp"
                         android:inputType="none"
                         android:paddingVertical="10dp" />
 
@@ -239,6 +242,7 @@
                     android:layout_weight="3"
                     android:text="Số ghế "
                     android:textSize="16dp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
@@ -256,6 +260,7 @@
                         android:layout_gravity="center"
                         android:background="@color/white"
                         android:dropDownHeight="200dp"
+                        android:textSize="16dp"
                         android:inputType="none"
                         android:paddingVertical="10dp" />
 
@@ -392,6 +397,7 @@
                         android:textSize="16dp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -409,16 +415,24 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
                     android:textColor="@color/white"
                     android:textSize="17dp" />
+
                 <TextView
                     android:id="@+id/id_make"
                     android:layout_width="1dp"
                     android:text="0"
                     android:layout_height="1dp"
-                    android:textSize="1dp"/>
+                    android:textSize="1dp" />
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
+    <ProgressBar
+        android:id="@+id/progressBar_inBKSXe"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminateTint="#474A34" />
 
 </RelativeLayout>

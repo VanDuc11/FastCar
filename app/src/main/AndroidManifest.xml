@@ -35,6 +35,10 @@
         android:theme="@style/Theme.FastCar"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo_fast_car_30x30" />
+
         <activity
             android:name=".Activity.ChuXe.LichBan_CuaXe_Activity"
             android:exported="false" />

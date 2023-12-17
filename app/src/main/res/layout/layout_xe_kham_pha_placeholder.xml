@@ -15,7 +15,6 @@
         <androidx.cardview.widget.CardView
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:cardCornerRadius="20dp"
             tools:ignore="MissingConstraints">
@@ -103,8 +102,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
             app:cardCornerRadius="20dp"
             tools:ignore="MissingConstraints">
 

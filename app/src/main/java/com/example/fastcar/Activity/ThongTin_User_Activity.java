@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -76,6 +78,8 @@ public class ThongTin_User_Activity extends AppCompatActivity {
     User user;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
+    private boolean isUpdatedUser = false;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,7 @@ public class ThongTin_User_Activity extends AppCompatActivity {
 
         // button edit info user
         btn_edit_info.setOnClickListener(view -> {
+            isUpdatedUser = true;
             Intent intent = new Intent(getBaseContext(), CapNhatThongTinUser_Activity.class);
             intent.putExtra("user", user);
             startActivity(intent);
@@ -95,7 +100,9 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         btn_updateGPLX.setOnClickListener(view -> {
             Intent intent = new Intent(ThongTin_User_Activity.this, ThongTinGPLX_Activity.class);
             intent.putExtra("emailUser", user.getEmail());
+            intent.putExtra("onBackPrev", false);
             startActivity(intent);
+            finish();
         });
     }
 
@@ -112,13 +119,14 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         shimmer_view = findViewById(R.id.shimmer_view_inThongTinUser);
         btn_updateGPLX = findViewById(R.id.btn_updateGPLX);
         tv_tt_gplx = findViewById(R.id.tv_tt_gplx);
+        progressBar = findViewById(R.id.progressBar_inThongTinUser);
     }
 
     void load() {
         data_view.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
-
+        progressBar.setVisibility(View.GONE);
         Intent intent = getIntent();
         email = intent.getStringExtra("emailUser");
 
@@ -126,8 +134,12 @@ public class ThongTin_User_Activity extends AppCompatActivity {
     }
 
     public void backTo_CaNhanACT(View view) {
-        Intent intent = new Intent(ThongTin_User_Activity.this, CaNhan_Activity.class);
-        startActivity(intent);
+        if (isUpdatedUser) {
+            Intent intent = new Intent(ThongTin_User_Activity.this, CaNhan_Activity.class);
+            startActivity(intent);
+        } else {
+            onBackPressed();
+        }
     }
 
     private void fetchData_UserLogin(String emailUser) {
@@ -151,19 +163,19 @@ public class ThongTin_User_Activity extends AppCompatActivity {
                 tv_ngaythamgia.setText(formattedDate);
 
                 if (user.getGioiTinh() == null || user.getGioiTinh().equals("")) {
-                    tv_gioitinh.setText("");
+                    tv_gioitinh.setText("Chưa cập nhật");
                 } else {
                     tv_gioitinh.setText(user.getGioiTinh());
                 }
 
                 if (user.getNgaySinh() == null || user.getNgaySinh().equals("")) {
-                    tv_ngaysinh.setText("");
+                    tv_ngaysinh.setText("Chưa cập nhật");
                 } else {
                     tv_ngaysinh.setText(user.getNgaySinh());
                 }
 
                 if (phone == null || user.getSDT().equals("")) {
-                    tv_sdt.setText("");
+                    tv_sdt.setText("Chưa cập nhật");
                 } else {
                     tv_sdt.setText(phone);
                 }
@@ -330,6 +342,7 @@ public class ThongTin_User_Activity extends AppCompatActivity {
 
 
     private void updateAvatarUser_inFirebase_andMongoDB(Uri selectedImageUri) {
+        progressBar.setVisibility(View.VISIBLE);
         // Lấy hồ sơ người dùng
         FirebaseUser userFB = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -362,7 +375,14 @@ public class ThongTin_User_Activity extends AppCompatActivity {
                             String photoUrlString = downloadUri.toString();
                             User userModel = new User(null, photoUrlString);
                             User_Method.func_updateUser(ThongTin_User_Activity.this, email, userModel, true);
-                            load();
+                            progressBar.setVisibility(View.GONE);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    load();
+                                }
+                            }, 2000);
+                            isUpdatedUser = true;
                         }
                     });
                 }
@@ -398,11 +418,11 @@ public class ThongTin_User_Activity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        load();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        load();
+//    }
 
     private String getFileName(Uri uri) {
         String result = null;

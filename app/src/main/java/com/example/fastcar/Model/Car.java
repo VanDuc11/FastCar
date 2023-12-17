@@ -14,7 +14,7 @@ public class Car implements Parcelable {
     String _id, BKS, HangXe, MauXe, NSX;
     int SoGhe;
     String ChuyenDong, LoaiNhienLieu;
-    float TieuHao;
+    int TieuHao;
     String MoTa;
     ArrayList<String> HinhAnh;
     String DangKyXe, DangKiem, BaoHiem;
@@ -28,7 +28,7 @@ public class Car implements Parcelable {
     List<String> LichBan;
     private double distance;
 
-    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, float tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, String longitude, String latitude, int giaThue1Ngay, boolean theChap, String thoiGianGiaoXe, String thoiGianNhanXe, User chuSH, int trangThai, int soChuyen, float trungBinhSao, List<String> lichBan) {
+    public Car(String _id, String BKS, String hangXe, String mauXe, String NSX, int soGhe, String chuyenDong, String loaiNhienLieu, int tieuHao, String moTa, ArrayList<String> hinhAnh, String dangKyXe, String dangKiem, String baoHiem, String diaChiXe, String longitude, String latitude, int giaThue1Ngay, boolean theChap, String thoiGianGiaoXe, String thoiGianNhanXe, User chuSH, int trangThai, int soChuyen, float trungBinhSao, List<String> lichBan) {
         this._id = _id;
         this.BKS = BKS;
         this.HangXe = hangXe;
@@ -70,7 +70,7 @@ public class Car implements Parcelable {
         SoGhe = in.readInt();
         ChuyenDong = in.readString();
         LoaiNhienLieu = in.readString();
-        TieuHao = in.readFloat();
+        TieuHao = in.readInt();
         MoTa = in.readString();
         HinhAnh = in.createStringArrayList();
         DangKyXe = in.readString();
@@ -160,11 +160,11 @@ public class Car implements Parcelable {
         LoaiNhienLieu = loaiNhienLieu;
     }
 
-    public float getTieuHao() {
+    public int getTieuHao() {
         return TieuHao;
     }
 
-    public void setTieuHao(float tieuHao) {
+    public void setTieuHao(int tieuHao) {
         TieuHao = tieuHao;
     }
 
@@ -337,7 +337,7 @@ public class Car implements Parcelable {
         parcel.writeInt(SoGhe);
         parcel.writeString(ChuyenDong);
         parcel.writeString(LoaiNhienLieu);
-        parcel.writeFloat(TieuHao);
+        parcel.writeInt(TieuHao);
         parcel.writeString(MoTa);
         parcel.writeStringList(HinhAnh);
         parcel.writeString(DangKyXe);

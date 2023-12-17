@@ -88,23 +88,28 @@ public class ThongTinChiTiet_Activity extends AppCompatActivity {
                 CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập mức tiêu thụ nhiên liệu");
                 edt_TieuHao.requestFocus();
             } else {
-                String motaXe = "Các tính năng có trên xe:\n";
-                for (int i = 0; i < mota.size(); i++) {
-                    if (i == 0) {
-                        motaXe = motaXe + mota.get(i);
-                    } else {
-                        motaXe = motaXe + ", " + mota.get(i);
-                    }
+                if(Integer.parseInt(edt_TieuHao.getText().toString()) > 1000) {
+                    CustomDialogNotify.showToastCustom(this, "Mức tiêu thụ tối đa 1000");
+                    edt_TieuHao.requestFocus();
+                } else {
+                    String motaXe = "Các tính năng có trên xe:\n";
+                    for (int i = 0; i < mota.size(); i++) {
+                        if (i == 0) {
+                            motaXe = motaXe + mota.get(i);
+                        } else {
+                            motaXe = motaXe + ", " + mota.get(i);
+                        }
 
+                    }
+                    addCar.setDiaChiXe(tv_diachi.getText().toString());
+                    addCar.setLatitude(latitude);
+                    addCar.setLongitude(longitude);
+                    addCar.setMoTa(edt_mota.getText().toString() + "\n\n" + motaXe);
+                    addCar.setTieuHao(Float.parseFloat(edt_TieuHao.getText().toString()));
+                    Intent i = new Intent(getBaseContext(), GiaChoThue_Activity.class);
+                    i.putExtra("addCar1", addCar);
+                    startActivity(i);
                 }
-                addCar.setDiaChiXe(tv_diachi.getText().toString());
-                addCar.setLatitude(latitude);
-                addCar.setLongitude(longitude);
-                addCar.setMoTa(edt_mota.getText().toString() + "\n\n" + motaXe);
-                addCar.setTieuHao(Float.parseFloat(edt_TieuHao.getText().toString()));
-                Intent i = new Intent(getBaseContext(), GiaChoThue_Activity.class);
-                i.putExtra("addCar1", addCar);
-                startActivity(i);
             }
         });
 

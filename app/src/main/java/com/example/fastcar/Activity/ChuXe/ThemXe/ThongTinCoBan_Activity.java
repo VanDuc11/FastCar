@@ -22,6 +22,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,9 +31,11 @@ import com.example.fastcar.Adapter.DanhSachTenModelXeAdapter;
 import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Dialog.Dialog_Thoat_DangKy;
 import com.example.fastcar.Model.AddCar;
+import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.HangXe.CarApiResponse;
 import com.example.fastcar.Model.HangXe.HangXe;
 import com.example.fastcar.Model.MauXe.CarModelApiResponse;
+import com.example.fastcar.Model.ResMessage;
 import com.example.fastcar.Model.User;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
@@ -62,6 +65,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
     List<String> years;
     ArrayAdapter<Integer> adapterItems;
     List<HangXe> listfind, list;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +107,29 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
             String tenMau = ten_mau.getText().toString();
             String tenMauFull = tenHang + " " + tenMau + " " + NSX;
             if (validateForm(bksStr, tenHang, tenMau)) {
-                AddCar list = new AddCar(bksStr, tenHang, tenMauFull, NSX, soGhe, truyenDong, loaiNhienLieu, 0, "", "", "", "", 200, false, "", "", user.get_id());
-                Intent i = new Intent(getBaseContext(), ThongTinChiTiet_Activity.class);
-                i.putExtra("addCar", list);
-                startActivity(i);
+                progressBar.setVisibility(View.VISIBLE);
+                Car carNew = new Car();
+                carNew.setBKS(bksStr);
+                RetrofitClient.FC_services().checkBKS_Xe(carNew).enqueue(new Callback<ResMessage>() {
+                    @Override
+                    public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                        progressBar.setVisibility(View.GONE);
+                        if (response.code() == 200) {
+                            AddCar list = new AddCar(bksStr, tenHang, tenMauFull, NSX, soGhe, truyenDong, loaiNhienLieu, 0, "", "", "", "", 200, false, "", "", user.get_id());
+                            Intent i = new Intent(getBaseContext(), ThongTinChiTiet_Activity.class);
+                            i.putExtra("addCar", list);
+                            startActivity(i);
+                        } else if (response.code() == 300) {
+                            CustomDialogNotify.showToastCustom(ThongTinCoBan_Activity.this, "Biển số xe đã được sử dụng");
+                            bks.requestFocus();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResMessage> call, Throwable t) {
+
+                    }
+                });
             }
         });
     }
@@ -124,6 +147,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
         ten_hang = findViewById(R.id.txt_ten_hang);
         make_id = findViewById(R.id.id_make);
         bks = findViewById(R.id.edt_bks_inThemXe);
+        progressBar = findViewById(R.id.progressBar_inBKSXe);
         preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
         autoCompleteTextView = findViewById(R.id.auto_comple);
         autoCompleteYear = findViewById(R.id.auto_comple_year);
@@ -137,7 +161,7 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
 
         sl_xang.setBackgroundResource(R.drawable.custom_item_selected);
         sl_xang.setTextColor(getResources().getColor(R.color.white));
-
+        progressBar.setVisibility(View.GONE);
     }
 
     private void loadItemSelected() {
@@ -278,7 +302,6 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
         if (Integer.parseInt(make_id.getText().toString()) == 0) {
             CustomDialogNotify.showToastCustom(getBaseContext(), "Vui lòng chọn hãng xe trước");
         } else {
-
             Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_name_hang_xe);
@@ -327,6 +350,16 @@ public class ThongTinCoBan_Activity extends AppCompatActivity {
             CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập biển số xe");
             bks.requestFocus();
             return false;
+        } else {
+            if (bksStr.length() < 6) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "BKS tối thiểu 6 ký tự");
+                bks.requestFocus();
+                return false;
+            } else if (bksStr.length() > 10) {
+                CustomDialogNotify.showToastCustom(getBaseContext(), "BKS tối đa 10 ký tự");
+                bks.requestFocus();
+                return false;
+            }
         }
         if (tenHang.equals("Chưa chọn")) {
             CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa chọn hãng xe");

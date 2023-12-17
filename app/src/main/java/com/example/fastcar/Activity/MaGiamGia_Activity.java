@@ -13,9 +13,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.fastcar.Adapter.VoucherAdapter;
+import com.example.fastcar.Model.HoaDon;
+import com.example.fastcar.Model.User;
 import com.example.fastcar.Model.Voucher;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -29,6 +33,11 @@ public class MaGiamGia_Activity extends AppCompatActivity {
     RecyclerView recyclerView;
     VoucherAdapter adapter;
     LinearLayout ln_noResult;
+    private User user;
+    private final StringBuilder allVoucherHasBeenUsedOfUser = new StringBuilder();
+    private boolean isIcon;
+    private ShimmerFrameLayout shimmer_view;
+    private LinearLayout data_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +45,6 @@ public class MaGiamGia_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_ma_giam_gia);
 
         mapping();
-
         getData();
 
         btn_save.setOnClickListener(view -> {
@@ -59,6 +67,8 @@ public class MaGiamGia_Activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView_voucher);
         btn_save = findViewById(R.id.btn_Save_Voucher);
         ln_noResult = findViewById(R.id.ln_no_result_inVoucher);
+        shimmer_view = findViewById(R.id.shimmer_view_inVoucher);
+        data_view = findViewById(R.id.data_view_inVoucher);
     }
 
     public Voucher getSelectedVoucher() {
@@ -73,22 +83,64 @@ public class MaGiamGia_Activity extends AppCompatActivity {
 
     private void getData() {
         ln_noResult.setVisibility(View.GONE);
+        btn_save.setVisibility(View.GONE);
+        data_view.setVisibility(View.GONE);
+        shimmer_view.setVisibility(View.VISIBLE);
+        shimmer_view.startShimmerAnimation();
+
+        SharedPreferences preferences = getSharedPreferences("model_user_login", Context.MODE_PRIVATE);
+        String userStr = preferences.getString("user", "");
+        Gson gson = new Gson();
+        user = gson.fromJson(userStr, User.class);
 
         Intent intent = getIntent();
-        boolean isIcon = intent.getBooleanExtra("SHOW_ICON_ADD", false);
+        isIcon = intent.getBooleanExtra("SHOW_ICON_ADD", false);
 
-        if(isIcon) {
-            btn_save.setVisibility(View.VISIBLE);
-        } else {
-            btn_save.setVisibility(View.GONE);
-        }
+        getListHoaDonHaveVoucherOfUser();
+    }
 
-        RetrofitClient.FC_services().getListVoucher().enqueue(new Callback<List<Voucher>>() {
+    private void getListHoaDonHaveVoucherOfUser() {
+        // hoá đơn bị huỷ sẽ không tính là đã sử dụng voucher đó
+        RetrofitClient.FC_services().getListHoaDonUser(user.get_id(), "1,2,3,4,5,6").enqueue(new Callback<List<HoaDon>>() {
+            @Override
+            public void onResponse(Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
+                if (response.code() == 200) {
+                    if (response.body().size() != 0) {
+                        List<HoaDon> listHoaDonHaveVoucher = response.body();
+                        for (HoaDon hd : listHoaDonHaveVoucher) {
+                            if(hd.getMaGiamGia().length() > 0) {
+                                allVoucherHasBeenUsedOfUser.append(hd.getMaGiamGia()).append(",");
+                            }
+                        }
+                        if (allVoucherHasBeenUsedOfUser.length() > 0) {
+                            allVoucherHasBeenUsedOfUser.deleteCharAt(allVoucherHasBeenUsedOfUser.length() - 1);
+                        }
+                        getListVoucher(String.valueOf(allVoucherHasBeenUsedOfUser));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HoaDon>> call, Throwable t) {
+                System.out.println("Có lỗi khi getListHoaDonHaveVoucherOfUser(): " + t);
+            }
+        });
+    }
+
+    private void getListVoucher(String vouchers) {
+        RetrofitClient.FC_services().getListVoucher(vouchers).enqueue(new Callback<List<Voucher>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Voucher>> call, Response<List<Voucher>> response) {
+                data_view.setVisibility(View.VISIBLE);
+                shimmer_view.stopShimmerAnimation();
+                shimmer_view.setVisibility(View.GONE);
+                if (isIcon) {
+                    btn_save.setVisibility(View.VISIBLE);
+                }
+
                 if (response.code() == 200) {
-                    if(!response.body().isEmpty()) {
+                    if (!response.body().isEmpty()) {
                         ln_noResult.setVisibility(View.GONE);
                         listVoucher = response.body();
                         adapter = new VoucherAdapter(MaGiamGia_Activity.this, listVoucher, isIcon, 1);
@@ -97,6 +149,7 @@ public class MaGiamGia_Activity extends AppCompatActivity {
                     } else {
                         ln_noResult.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
+                        btn_save.setVisibility(View.GONE);
                     }
                 } else {
                     System.out.println("Có lỗi khi get list voucher: " + response.message());

@@ -16,13 +16,12 @@
         android:background="@drawable/custom_border_edittext"
         android:drawableLeft="@drawable/baseline_search_24"
         android:hint="Tìm kiếm hãng xe"
-
         android:padding="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lv_ten_hang_xe"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="400dp" />
 
     <TextView
         android:id="@+id/id_list_null"
@@ -30,5 +29,5 @@
         android:layout_height="200dp"
         android:gravity="center"
         android:text="Hãng bạn chọn chưa có mẫu xe nào"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 </LinearLayout>

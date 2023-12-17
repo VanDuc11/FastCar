@@ -67,7 +67,6 @@ import com.example.fastcar.Model.Voucher;
 import com.example.fastcar.R;
 import com.example.fastcar.Retrofit.RetrofitClient;
 import com.example.fastcar.Server.HostApi;
-import com.example.fastcar.Socket.SocketManager;
 import com.example.fastcar.User_Method;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -161,29 +160,42 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
                 try {
                     Date date1 = dateFormat.parse(formattedStartDate);
                     Date date2 = dateFormat.parse(formattedEndDate);
+                    Date timeNow = new Date();
+                    long timeThree = date1.getTime() - timeNow.getTime();
+                    long threeHoursInMillis = 3 * 60 * 60 * 1000;
+
                     // So sánh
-                    if (date2.after(date1)) {
-                        long timeDifference = date2.getTime() - date1.getTime();
-                        long hoursDifference = timeDifference / (60 * 60 * 1000);
+                    if (date1.after(timeNow)) {
+                        if (timeThree > threeHoursInMillis) {
+                            if (date2.after(date1)) {
+                                long timeDifference = date2.getTime() - date1.getTime();
+                                long hoursDifference = timeDifference / (60 * 60 * 1000);
 
-                        // Nếu chênh lệch ít hơn 3 giờ, return false
-                        if (hoursDifference < 3) {
-                            CustomDialogNotify.showToastCustom(this, "Tối thiểu 3 tiếng khi thuê xe trong ngày");
+                                // Nếu chênh lệch ít hơn 3 giờ, return false
+                                if (hoursDifference < 3) {
+                                    CustomDialogNotify.showToastCustom(this, "Tối thiểu 3 tiếng khi thuê xe trong ngày");
+                                } else {
+                                    SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("diachi", diachi);
+                                    editor.putString("time", time);
+                                    editor.putString("lat", latitude);
+                                    editor.putString("long", longitude);
+                                    editor.apply();
+
+                                    Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
+                                    startActivity(intent);
+                                }
+                            } else {
+                                CustomDialogNotify.showToastCustom(this, "Thời gian không hợp lệ");
+                            }
                         } else {
-                            SharedPreferences preferences = getSharedPreferences("diachiXe", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("diachi", diachi);
-                            editor.putString("time", time);
-                            editor.putString("lat", latitude);
-                            editor.putString("long", longitude);
-                            editor.apply();
-
-                            Intent intent = new Intent(getBaseContext(), DanhSachXe_Activity.class);
-                            startActivity(intent);
+                            CustomDialogNotify.showToastCustom(this, "Thời gian nhận xe cần cách thời gian hiện tại 3 tiếng");
                         }
                     } else {
                         CustomDialogNotify.showToastCustom(this, "Thời gian không hợp lệ");
                     }
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -230,13 +242,13 @@ public class KhamPha_Activity extends AppCompatActivity implements DatePickerDia
         tokenFCM = "";
         Intent intent = getIntent();
         boolean isIcon = intent.getBooleanExtra("SHOW_ICON_ADD", false);
-        RetrofitClient.FC_services().getListVoucher().enqueue(new Callback<List<Voucher>>() {
+        RetrofitClient.FC_services().getListVoucher(null).enqueue(new Callback<List<Voucher>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Voucher>> call, Response<List<Voucher>> response) {
                 recyclerView_khuyenmai.setVisibility(View.VISIBLE);
-                shimmer_view.stopShimmerAnimation();
-                shimmer_view.setVisibility(View.GONE);
+                shimmer_view_khuyenmai.stopShimmerAnimation();
+                shimmer_view_khuyenmai.setVisibility(View.GONE);
 
                 if (response.code() == 200) {
                     if (!response.body().isEmpty()) {

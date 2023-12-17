@@ -65,6 +65,10 @@ public interface FastCarServices {
                                        @Query("yearTo") String yearTo
     );
 
+    // check bks xe
+    @POST("xe/checkBKS")
+    Call<ResMessage> checkBKS_Xe(@Body Car car);
+
     // top 5 xe có số chuyến nhiều nhất
     @GET("xe/top5xe/{email}")
     Call<List<Car>> getListTop5Car(@Path("email") String email_user,
@@ -125,7 +129,7 @@ public interface FastCarServices {
     // Voucher Model URL: voucher/
     // danh sách mã giảm giá/ mã khuyến mãi
     @GET("voucher/list")
-    Call<List<Voucher>> getListVoucher();
+    Call<List<Voucher>> getListVoucher(@Query("MaGiamGia") String vouchers);
 
     // HoaDon model URL: hoadon/
 
@@ -142,7 +146,8 @@ public interface FastCarServices {
 
     // lấy danh sách hoá đơn theo user
     @GET("hoadon/list")
-    Call<List<HoaDon>> getListHoaDonUser(@Query("User") String id_user, @Query("TrangThaiHD") String TrangThaiHD);
+    Call<List<HoaDon>> getListHoaDonUser(@Query("User") String id_user,
+                                         @Query("TrangThaiHD") String TrangThaiHD);
 
     // lấy hoá đơn theo mahd
     @GET("hoadon/list")

@@ -311,7 +311,7 @@ public class ViChuXe_Activity extends AppCompatActivity implements DatePickerDia
     }
 
     private void getListCar_ofChuSH() {
-        RetrofitClient.FC_services().getListCar_ofUser(emailUser, "0,1,2,3").enqueue(new Callback<List<Car>>() {
+        RetrofitClient.FC_services().getListCar_ofUser(emailUser, "0,1,2,3,4").enqueue(new Callback<List<Car>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {

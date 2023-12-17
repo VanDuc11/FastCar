@@ -21,7 +21,6 @@ public class Dialog_TienThue_1ngay {
         dialog.setContentView(v);
         dialog.show();
 
-
         ImageView btn_close = dialog.findViewById(R.id.icon_close_dialog_thue1ngay);
         btn_close.setOnClickListener(view -> {
             dialog.dismiss();

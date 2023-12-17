@@ -114,7 +114,7 @@ public class LichSuThueXeAdapter extends RecyclerView.Adapter<LichSuThueXeAdapte
         int day = (int) (hours / 24);
         int week = (int) (day / 7);
 
-        if (hours <= 1) {
+        if (hours < 1) {
             if (minutes < 1) {
                 return duration / 1000 + " giây trước";
             } else {

@@ -75,7 +75,7 @@ public class XeCuaToi_Activity extends AppCompatActivity {
             intent.putExtra("emailUser", emailUser);
             startActivity(intent);
         });
-
+        // hợp đồng mẫu
         btnHopdongmau.setOnClickListener(view -> showDialogHopDongMau());
         // bổ sung thông tin
         btnThongTinBoSung.setOnClickListener(view -> showDialog_UpdateTTBS());

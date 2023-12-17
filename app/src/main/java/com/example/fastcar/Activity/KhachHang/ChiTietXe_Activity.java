@@ -69,6 +69,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.socket.emitter.Emitter;
@@ -219,13 +220,16 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         ln_view_buttonThueXe_inCTX.setVisibility(View.GONE);
         shimmer_view.setVisibility(View.VISIBLE);
         shimmer_view.startShimmerAnimation();
+        cardview_chuxe.setVisibility(View.GONE);
 
         fetchData_ofCar(carIntent.get_id());
     }
 
+    @SuppressLint("SetTextI18n")
     private void loadUI() {
         isNotContinue();
         listsLichBan = car.getLichBan();
+
         String diaChiXe = car.getDiaChiXe();
         String[] parts = diaChiXe.split(",");
         int lastIndex = parts.length - 1;
@@ -332,9 +336,9 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         }
 
         if (trungbinhSao > 0) {
-            DecimalFormat df = new DecimalFormat("0.0");
+            DecimalFormat df = new DecimalFormat("0.#");
             String formattedNumber = df.format(trungbinhSao);
-
+            formattedNumber = formattedNumber.replace(",", ".");
             tv_soSao.setVisibility(View.VISIBLE);
             tv_soSao.setText(formattedNumber);
         } else {
@@ -510,12 +514,16 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         constraintsBuilder.setValidator(new CalendarConstraints.DateValidator() {
             @Override
             public boolean isValid(long date) {
-                for (String dateRange : listsLichBan) {
-                    if (isDateInRange(dateRange, date)) {
-                        return false;
+                if (car.getTrangThai() == 1) {
+                    for (String dateRange : listsLichBan) {
+                        if (isDateInRange(dateRange, date)) {
+                            return false;
+                        }
                     }
+                    return date >= today && date <= maxEndDateMillis;
+                } else {
+                    return false;
                 }
-                return date >= today && date <= maxEndDateMillis;
             }
 
             @Override
@@ -552,12 +560,16 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         tv_ngayNhanXe.setText(formattedStartDate);
         tv_ngayTraXe.setText(formattedEndDate);
         func_TinhTongTien(formattedStartDate, formattedEndDate);
-        if (checkLichBan(sdf.format(new Date(startTime)), sdf.format(new Date(endTime)))) {
-            if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
-                icon_redflag_xedathue.setVisibility(View.GONE);
-                tv_xeDaThue.setVisibility(View.GONE);
-                isContinue();
-                getListHoaDon_hasTrangThai_2345(car.get_id());
+        if (checkTTXe(car)) {
+            if (checkLichBan(sdf.format(new Date(startTime)), sdf.format(new Date(endTime)))) {
+                if (checkTimeThueXe(formattedStartDate, formattedEndDate)) {
+                    if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
+                        icon_redflag_xedathue.setVisibility(View.GONE);
+                        tv_xeDaThue.setVisibility(View.GONE);
+                        isContinue();
+                        getListHoaDon_hasTrangThai_2345(car.get_id());
+                    }
+                }
             }
         }
     }
@@ -637,12 +649,15 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
 
         Date startDate, endDate;
         SimpleDateFormat sdf_dmy = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
-        SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        sdf_dmy.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         try {
             startDate = sdf_dmy.parse(startDateStr);
             endDate = sdf_dmy.parse(endDateStr);
-            startDateStr = sdf_ymd.format(startDate);
-            endDateStr = sdf_ymd.format(endDate);
+
+            SimpleDateFormat gmtSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            gmtSdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));
+            startDateStr = gmtSdf.format(startDate);
+            endDateStr = gmtSdf.format(endDate);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -652,7 +667,7 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         // 4: chủ xe giao xe thành công
         // 5: (hết time thuê, khách mang xe trả cho chủ) khách hàng trả xe thành công
 
-        RetrofitClient.FC_services().getListHoaDon(id_xe, "2,3,4,5", startDateStr, endDateStr).enqueue(new Callback<List<HoaDon>>() {
+        RetrofitClient.FC_services().getListHoaDon(id_xe, "1,2,3,4,5", startDateStr, endDateStr).enqueue(new Callback<List<HoaDon>>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(retrofit2.Call<List<HoaDon>> call, Response<List<HoaDon>> response) {
@@ -721,8 +736,9 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
                         all_idCars.append(car.get_id()).append(",");
                     }
                     totalStar_ofChuSH = numberStar / count;
-                    DecimalFormat df = new DecimalFormat("0.0");
+                    DecimalFormat df = new DecimalFormat("0.#");
                     String formattedNumber = df.format(totalStar_ofChuSH);
+                    formattedNumber = formattedNumber.replace(",", ".");
                     tv_soSao_ofChuSH.setText(formattedNumber);
                     tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
                     if (all_idCars.length() > 0) {
@@ -902,34 +918,57 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
         editor.apply();
 
         func_TinhTongTien(formattedStartDate, formattedEndDate);
-        if (checkLichBan(ddMM1, ddMM2)) {
-            if (checkTimeThueXe(formattedStartDate, formattedEndDate)) {
-                if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
-                    icon_redflag_xedathue.setVisibility(View.GONE);
-                    tv_xeDaThue.setVisibility(View.GONE);
-                    isContinue();
-                    getListHoaDon_hasTrangThai_2345(car.get_id());
+        if (checkTTXe(car)) {
+            if (checkLichBan(ddMM1, ddMM2)) {
+                if (checkTimeThueXe(formattedStartDate, formattedEndDate)) {
+                    if (checkTimeNhanXe_GiaoXe(formattedStartDate, formattedEndDate)) {
+                        icon_redflag_xedathue.setVisibility(View.GONE);
+                        tv_xeDaThue.setVisibility(View.GONE);
+                        isContinue();
+                        getListHoaDon_hasTrangThai_2345(car.get_id());
+                    }
                 }
             }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private boolean checkTimeThueXe(String startTime, String endTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
         try {
             Date date1 = dateFormat.parse(startTime);
             Date date2 = dateFormat.parse(endTime);
-            if (date2.after(date1)) {
-                long timeDifference = date2.getTime() - date1.getTime();
-                long hoursDifference = timeDifference / (60 * 60 * 1000);
-                if (hoursDifference < 3) {
+            Date timeNow = new Date();
+            long timeThree = date1.getTime() - timeNow.getTime();
+            long threeHoursInMillis = 3 * 60 * 60 * 1000;
+
+            if (date1.after(timeNow)) {
+                if (timeThree > threeHoursInMillis) {
+                    if (date2.after(date1)) {
+                        long timeDifference = date2.getTime() - date1.getTime();
+                        long hoursDifference = timeDifference / (60 * 60 * 1000);
+                        if (hoursDifference < 3) {
+                            isNotContinue();
+                            icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                            tv_xeDaThue.setVisibility(View.VISIBLE);
+                            tv_xeDaThue.setText("Thời gian cách nhau tối thiểu 3 tiếng khi thuê xe trong ngày");
+                            return false;
+                        }
+                        return true;
+                    } else {
+                        isNotContinue();
+                        icon_redflag_xedathue.setVisibility(View.VISIBLE);
+                        tv_xeDaThue.setVisibility(View.VISIBLE);
+                        tv_xeDaThue.setText("Thời gian không hợp lệ");
+                        return false;
+                    }
+                } else {
                     isNotContinue();
                     icon_redflag_xedathue.setVisibility(View.VISIBLE);
                     tv_xeDaThue.setVisibility(View.VISIBLE);
-                    tv_xeDaThue.setText("Thời gian cách nhau tối thiểu 3 tiếng khi thuê xe trong ngày");
+                    tv_xeDaThue.setText("Thời gian nhận xe cần cách thời gian hiện tại 3 tiếng");
                     return false;
                 }
-                return true;
             } else {
                 isNotContinue();
                 icon_redflag_xedathue.setVisibility(View.VISIBLE);
@@ -937,6 +976,7 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
                 tv_xeDaThue.setText("Thời gian không hợp lệ");
                 return false;
             }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -993,6 +1033,25 @@ public class ChiTietXe_Activity extends AppCompatActivity implements DatePickerD
             }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        return true;
+    }
+
+    private boolean checkTTXe(Car car) {
+        if (car.getTrangThai() == 3) {
+            // xe không hoạt động
+            isNotContinue();
+            tv_xeDaThue.setVisibility(View.VISIBLE);
+            tv_xeDaThue.setText("Xe không hoạt động");
+            icon_redflag_xedathue.setVisibility(View.VISIBLE);
+            return false;
+        } else if (car.getTrangThai() == 4) {
+            // xe bị vô hiệu hoá
+            isNotContinue();
+            tv_xeDaThue.setVisibility(View.VISIBLE);
+            tv_xeDaThue.setText("Xe đã bị vô hiệu hoá");
+            icon_redflag_xedathue.setVisibility(View.VISIBLE);
+            return false;
         }
         return true;
     }

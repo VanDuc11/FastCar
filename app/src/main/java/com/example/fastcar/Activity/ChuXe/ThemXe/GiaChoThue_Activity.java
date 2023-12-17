@@ -14,10 +14,11 @@ import com.example.fastcar.Model.AddCar;
 import com.example.fastcar.R;
 
 public class GiaChoThue_Activity extends AppCompatActivity {
-    TextView btn_tieptuc ;
+    TextView btn_tieptuc;
     RelativeLayout btn_back, btn_close;
     AddCar addCar;
     EditText ed_giathue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +28,17 @@ public class GiaChoThue_Activity extends AppCompatActivity {
 
         btn_tieptuc.setOnClickListener(v -> {
             String giaTien = ed_giathue.getText().toString();
-            if(giaTien.length() == 0) {
+            if (giaTien.length() == 0) {
                 CustomDialogNotify.showToastCustom(getBaseContext(), "Chưa nhập giá tiền");
             } else {
-                addCar.setGiaThue1Ngay(Integer.parseInt(giaTien)*1000);
-                Intent i = new Intent(getBaseContext(),Upload_ImageXe_Activity.class);
-                i.putExtra("addCar2",addCar );
-                startActivity(i);
+                if (Integer.parseInt(giaTien) > 10000) {
+                    CustomDialogNotify.showToastCustom(this, "Tối đa 10 triệu");
+                } else {
+                    addCar.setGiaThue1Ngay(Integer.parseInt(giaTien) * 1000);
+                    Intent i = new Intent(getBaseContext(), Upload_ImageXe_Activity.class);
+                    i.putExtra("addCar2", addCar);
+                    startActivity(i);
+                }
             }
         });
         btn_back.setOnClickListener(view -> onBackPressed());
@@ -44,7 +49,7 @@ public class GiaChoThue_Activity extends AppCompatActivity {
         btn_tieptuc = findViewById(R.id.btn_tieptuc_in_giaChoThue);
         btn_back = findViewById(R.id.icon_back_in_giaChoThue);
         btn_close = findViewById(R.id.icon_close_in_giaChoThue);
-        addCar =  (AddCar) getIntent().getSerializableExtra("addCar1");
+        addCar = (AddCar) getIntent().getSerializableExtra("addCar1");
         ed_giathue = findViewById(R.id.gia_cho_thue);
     }
 }

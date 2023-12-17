@@ -6,16 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -23,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.fastcar.Adapter.DSHangXeFilterAdapter;
 import com.example.fastcar.Adapter.DanhSachXeAdapter;
+import com.example.fastcar.Dialog.CustomDialogNotify;
 import com.example.fastcar.Model.Car;
 import com.example.fastcar.Model.Distance.DistanceMatrix;
 import com.example.fastcar.Model.HangXeFilter;
@@ -56,7 +54,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     ShimmerFrameLayout shimmer_view, shimmer_view_filter;
     private User user;
     private String longitude, latitude;
-    private boolean isSelectedRate5Star, isSelectedMienTheChap = false;
+    private boolean isSelectedRate5Star = false, isSelectedMienTheChap = false, isSelectedHangXeFilter = false;
     private String rate5star, mienthechap;
     RangeSlider rangeSlider_soghe, rangeSlider_tienThue1ngay, rangeSlider_namSX;
     TextView tv_khoangcach_seekbar, tv_mucGiaFrom, tv_mucGiaTo, tvSoGheFrom, tvSoGheTo, tvNSXFrom, tvNSXTo, btnResetFilterChiTiet, tvDiaChi, tvThoiGian;
@@ -65,9 +63,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     CheckBox ckbox_sosan, ckbox_std, ckbox_xang, ckbox_dau, ckbox_dien;
     int khoangcach, mucgiaFrom, mucgiaTo, sogheFrom, sogheTo, nsxFrom, nsxTo;
     String truyendongFilter, nhienlieuFilter, queryHangXeFilter = "", mucgiaToStr;
-    private int currentPage = 1;
-    private final int pageSize = 10;
-    private final List<Car> listCars = new ArrayList<>();
+    private DanhSachXeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +85,9 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             // reset
             SharedPreferences preferences = getSharedPreferences("data_filter", Context.MODE_PRIVATE);
             preferences.edit().clear().apply();
+
+            isSelectedRate5Star = false;
+            isSelectedMienTheChap = false;
 
             // fetch lại list
             loadUI();
@@ -192,7 +191,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
     private void loadUI() {
         SharedPreferences preferences = getSharedPreferences("data_filter", Context.MODE_PRIVATE);
         rate5star = preferences.getString("rate5Star", "");
-        boolean isSelectedHangXeFilter = preferences.getBoolean("isSelectedHangXeFilter", false);
+        isSelectedHangXeFilter = preferences.getBoolean("isSelectedHangXeFilter", false);
         mucgiaFrom = preferences.getInt("mucgiaFrom", 0);
         mucgiaTo = preferences.getInt("mucgiaTo", 0);
         khoangcach = preferences.getInt("khoangcach", 0);
@@ -280,7 +279,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
                 if (response.code() == 200) {
-                    List<Car> listCar = response.body();
+//                    List<Car> listCar = response.body();
 //                    listCars.addAll(listCar);
                     if (response.body().size() > 0) {
                         getDistanceFromCars(response.body(), distance);
@@ -297,6 +296,7 @@ public class DanhSachXe_Activity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Car>> call, Throwable t) {
                 System.out.println("Có lỗi khi thực hiện: " + t);
+                CustomDialogNotify.showToastCustom(DanhSachXe_Activity.this, "Có lỗi xảy ra");
             }
         });
     }
@@ -376,8 +376,8 @@ public class DanhSachXe_Activity extends AppCompatActivity {
                         }
                     });
 
-                    DanhSachXeAdapter adapter = new DanhSachXeAdapter(getBaseContext(), carList, elementList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                    adapter = new DanhSachXeAdapter(getBaseContext(), carList, elementList);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(DanhSachXe_Activity.this));
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 //                    currentPage++;

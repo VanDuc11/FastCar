@@ -181,12 +181,12 @@ public class CapNhatThongTinUser_Activity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private boolean validateNumberPhone(String numberphone) {
+    private boolean validateNumberPhone(String number_phone) {
         Pattern pattern;
         Matcher matcher;
-        final String EMAIL_PATTERN = "^0([0-9]{9})$";
-        pattern = Pattern.compile(EMAIL_PATTERN);
-        matcher = pattern.matcher(numberphone);
+        final String PHONE_PATTERN = "^0([0-9]{9})$";
+        pattern = Pattern.compile(PHONE_PATTERN);
+        matcher = pattern.matcher(number_phone);
         return matcher.matches();
     }
 

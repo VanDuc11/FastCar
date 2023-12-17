@@ -96,8 +96,9 @@ public class DanhSachXeCuaToiAdapter extends RecyclerView.Adapter<DanhSachXeCuaT
         }
 
         if (trungbinhSao > 0) {
-            DecimalFormat df = new DecimalFormat("0.0");
+            DecimalFormat df = new DecimalFormat("0.#");
             String formattedNumber = df.format(trungbinhSao);
+            formattedNumber = formattedNumber.replace(",", ".");
 
             holder.tvSoSao.setVisibility(View.VISIBLE);
             holder.tvSoSao.setText(formattedNumber);

@@ -6,37 +6,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/actionbar_CTX"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:orientation="horizontal"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/icon_back_in_CTX"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_weight="0.1"
+            android:layout_marginStart="5dp"
             android:src="@drawable/icon_back_black" />
 
         <TextView
             android:id="@+id/tv_tenxe_actionBar_inChiTietXe"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.8"
             android:gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:maxLines="1"
-            android:text="TOYOTA Innova 2020"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             android:textSize="17dp" />
 
         <ImageView
             android:id="@+id/icon_favorite_car_inCTX"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_marginEnd="5dp"
             android:src="@drawable/icon_nolove" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -854,7 +858,7 @@
                             android:layout_marginTop="7dp"
                             android:drawableLeft="@drawable/icon_cccd"
                             android:drawablePadding="10dp"
-                            android:text="GPLX CCCD gắn chip (đối chiếu)"
+                            android:text="GPLX &amp; CCCD gắn chip (đối chiếu)"
                             android:textColor="@color/grey"
                             android:textSize="16dp" />
 
@@ -864,7 +868,7 @@
                             android:layout_marginTop="7dp"
                             android:drawableLeft="@drawable/icon_hochieu"
                             android:drawablePadding="10dp"
-                            android:text="GPLX (đối chiếu) Passport (giữ lại)"
+                            android:text="GPLX (đối chiếu) &amp; Passport (giữ lại)"
                             android:textColor="@color/grey"
                             android:textSize="16dp" />
 
@@ -1093,7 +1097,7 @@
             android:layout_marginTop="10dp"
             android:text="Số ngày thuê:"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-            android:textSize="15dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -1107,7 +1111,7 @@
             android:drawablePadding="10dp"
             android:text="1 ngày"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-            android:textSize="15dp"
+            android:textSize="16dp"
             app:layout_constraintLeft_toRightOf="@id/textView30"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="DuplicateIds" />

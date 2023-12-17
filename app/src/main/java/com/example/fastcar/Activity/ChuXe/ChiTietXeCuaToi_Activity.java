@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -43,6 +45,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,10 +100,16 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             if (ScreenReceiver.isAppInForeground()) {
                 onBackPressed();
             } else {
-                Intent intent = new Intent(ChiTietXeCuaToi_Activity.this, KhamPha_Activity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+                if (runningAppProcesses.size() == 0) {
+                    Intent intent = new Intent(ChiTietXeCuaToi_Activity.this, KhamPha_Activity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    onBackPressed();
+                }
             }
         });
         btn_more.setOnClickListener(view -> showDialog_XoaXe_orTatHD(car));
@@ -158,7 +167,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
         //3: không hoạt động
         //4: vô hiệu hoá
 
-        if (trangthaiXe != 1 && trangthaiXe != 3) {
+        if (trangthaiXe != 1 && trangthaiXe != 3 && trangthaiXe != 4) {
             // xe chưa duyệt hoặc duyệt thất bại mới được xoá
             btnTat_orBat_TTHDXe.setVisibility(View.GONE);
         } else if (trangthaiXe == 1) {
@@ -166,11 +175,15 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             btnXoaXe.setVisibility(View.GONE);
             img_stt.setImageResource(R.drawable.icon_car_cancel);
             tvTT.setText("Tắt hoạt động");
-        } else {
+        } else if (trangthaiXe == 3) {
             // bật hoạt động
             btnXoaXe.setVisibility(View.GONE);
             img_stt.setImageResource(R.drawable.icon_car_tick);
             tvTT.setText("Bật hoạt động");
+        } else {
+            btnXoaXe.setVisibility(View.GONE);
+            img_stt.setImageResource(R.drawable.icon_car_cancel);
+            tvTT.setText("Xe đã bị vô hiệu hoá");
         }
 
         btnXoaXe.setOnClickListener(view -> {
@@ -183,11 +196,13 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
                 carModel.setTrangThai(3);
                 updateTrangThaiXe(car.get_id(), carModel, "Đã tắt hoạt động");
                 dialog.dismiss();
-            } else {
+            } else if (trangthaiXe == 3) {
                 Car carModel = new Car();
                 carModel.setTrangThai(1);
                 updateTrangThaiXe(car.get_id(), carModel, "Đã bật hoạt động");
                 dialog.dismiss();
+            } else {
+                btnTat_orBat_TTHDXe.setEnabled(false);
             }
         });
     }
@@ -254,6 +269,7 @@ public class ChiTietXeCuaToi_Activity extends AppCompatActivity implements DateP
             @Override
             public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
                 if (response.code() == 200) {
+                    socketManager.emit("updateCar", idXe);
                     load();
                     CustomDialogNotify.showToastCustom(getBaseContext(), message);
                 }

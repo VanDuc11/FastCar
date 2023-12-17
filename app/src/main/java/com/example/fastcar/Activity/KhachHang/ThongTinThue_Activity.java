@@ -1,6 +1,7 @@
 package com.example.fastcar.Activity.KhachHang;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -55,13 +57,17 @@ import com.example.fastcar.Server.HostApi;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 
+import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -170,7 +176,6 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         userShared = gson.fromJson(userStr, User.class);
         fetchData_ofUserLogin(userShared.getEmail());
 
-
         Glide.with(this)
                 .load(HostApi.URL_Image + car.getHinhAnh().get(0))
                 .into(img_Xe);
@@ -190,9 +195,9 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         }
 
         if (trungbinhSao > 0) {
-            DecimalFormat df = new DecimalFormat("0.0");
+            DecimalFormat df = new DecimalFormat("0.#");
             String formattedNumber = df.format(trungbinhSao);
-
+            formattedNumber = formattedNumber.replace(",", ".");
             tv_soSao.setVisibility(View.VISIBLE);
             tv_soSao.setText(formattedNumber);
         } else {
@@ -224,8 +229,9 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         }
 
         tv_tenChuSH_Xe.setText(car.getChuSH().getUserName());
-        DecimalFormat df = new DecimalFormat("0.0");
+        DecimalFormat df = new DecimalFormat("0.#");
         String formattedNumber = df.format(totalStar_ofChuSH);
+        formattedNumber = formattedNumber.replace(",", ".");
         tv_soSao_ofChuSH.setText(formattedNumber);
         tv_soChuyen_ofChuSH.setText(totalChuyen_ofChuSH + " chuyến");
         getListCar_ofChuSH(car.getChuSH().getEmail());
@@ -323,52 +329,56 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         tv_thanhTien.setText(NumberFormatVND.format(tongTien));
     }
 
-    void createHD_and_showDialog() {
-        Date getTimeNow = new Date();
+    private void createHD_and_showDialog() {
+        if (user == null) {
+            isNotContinue();
+        } else {
+            if (user.getTrangThai_GPLX() == 2) {
+                // đã xác minh gplx
+                if (nganHang != null) {
+                    String ngayNhanStr = tv_ngayNhanXe.getText().toString().trim();
+                    String ngayTraStr = tv_ngayTraXe.getText().toString().trim();
+                    String voucher = tv_tenVoucher.getText().toString().trim();
+                    String maHD = "FCAR" + RandomMaHD.random(5);
+                    String loiNhan = edt_loiNhan.getText().toString();
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
+                    sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+                    Date ngayNhanGMT, ngayTraGMT;
+                    try {
+                        ngayNhanGMT = sdf.parse(ngayNhanStr);
+                        ngayTraGMT = sdf.parse(ngayTraStr);
+                        ngayNhanGMT.setTime(ngayNhanGMT.getTime() - TimeZone.getTimeZone("GMT+7").getRawOffset());
+                        ngayTraGMT.setTime(ngayTraGMT.getTime() - TimeZone.getTimeZone("GMT+7").getRawOffset());
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
 
-        if (user.getTrangThai_GPLX() == 2) {
-            // đã xác minh gplx
-            if (nganHang != null) {
-                String ngayNhanStr = tv_ngayNhanXe.getText().toString().trim();
-                String ngayTraStr = tv_ngayTraXe.getText().toString().trim();
-                String voucher = tv_tenVoucher.getText().toString().trim();
-                String maHD = "FCAR" + RandomMaHD.random(5);
-                String loiNhan = edt_loiNhan.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
-                Date ngayNhan = null, ngayTra = null;
-                try {
-                    ngayNhan = sdf.parse(ngayNhanStr);
-                    ngayTra = sdf.parse(ngayTraStr);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-
-                HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhan, ngayTra, (int) soNgayThueXe, tongPhiDV,
-                        voucher, tongTienGiamGia, 0, tongTien, coc30Per, tienCocGoc, thanhToan70Per, loiNhan, getTimeNow, null, null, null, 1, "", false);
-                progressBar.setVisibility(View.VISIBLE);
-                RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
-                    @Override
-                    public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
-                        progressBar.setVisibility(View.GONE);
-                        if (response.code() == 201) {
-                            showDialog_DatCoc_or_ThueXeKhac(hoaDon);
-                        } else {
-                            System.out.println(response.message());
+                    HoaDon hoaDon = new HoaDon(maHD, user, car, ngayNhanGMT, ngayTraGMT, (int) soNgayThueXe, tongPhiDV,
+                            voucher, tongTienGiamGia, 0, tongTien, coc30Per, tienCocGoc, thanhToan70Per, loiNhan, null, null, null, null, 1, "", false);
+                    progressBar.setVisibility(View.VISIBLE);
+                    RetrofitClient.FC_services().createHoaDon(hoaDon).enqueue(new Callback<ResMessage>() {
+                        @Override
+                        public void onResponse(Call<ResMessage> call, Response<ResMessage> response) {
+                            progressBar.setVisibility(View.GONE);
+                            if (response.code() == 201) {
+                                showDialog_DatCoc_or_ThueXeKhac(hoaDon);
+                            } else {
+                                System.out.println(response.message());
+                            }
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResMessage> call, Throwable t) {
+                            System.out.println("Có lỗi khi thực hiện createHoaDon: " + t);
+                        }
+                    });
+                } else {
+                    showDialog_VerifyBank();
+                }
 
-                    @Override
-                    public void onFailure(Call<ResMessage> call, Throwable t) {
-                        System.out.println("Có lỗi khi thực hiện createHoaDon: " + t);
-                    }
-                });
             } else {
-                showDialog_VerifyBank();
+                showDialog_VerifyGPLX();
             }
-
-        } else {
-            showDialog_VerifyGPLX();
         }
     }
 
@@ -402,6 +412,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
         btn_confirm.setOnClickListener(view -> {
             Intent intent = new Intent(ThongTinThue_Activity.this, ThongTinGPLX_Activity.class);
             intent.putExtra("emailUser", user.getEmail());
+            intent.putExtra("onBackPrev", true);
             startActivity(intent);
             dialog.dismiss();
         });
@@ -552,6 +563,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
     }
 
     private void fetchData_ofUserLogin(String email) {
+        isNotContinue();
         RetrofitClient.FC_services().getListUser(email).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
@@ -576,6 +588,7 @@ public class ThongTinThue_Activity extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<NganHang>> call, Response<List<NganHang>> response) {
+                isContinue();
                 if (response.code() == 200) {
                     if (!response.body().isEmpty()) {
                         nganHang = response.body().get(0);
@@ -631,6 +644,16 @@ public class ThongTinThue_Activity extends AppCompatActivity {
                 System.out.println("Có lỗi khi getAllFeedBack_ofAllCars_ChuSH: " + t);
             }
         });
+    }
+
+    private void isContinue() {
+        btn_xacnhanThueXe.setBackgroundResource(R.drawable.custom_btn4);
+        btn_xacnhanThueXe.setEnabled(true);
+    }
+
+    private void isNotContinue() {
+        btn_xacnhanThueXe.setBackgroundResource(R.drawable.disable_custom_btn4);
+        btn_xacnhanThueXe.setEnabled(false);
     }
 
     @Override

@@ -49,4 +49,12 @@
         <include layout="@layout/layout_thong_tin_gplx" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar_inGPLX"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminateTint="#474A34" />
+
 </RelativeLayout>

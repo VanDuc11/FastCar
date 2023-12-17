@@ -732,7 +732,7 @@
                         android:layout_marginTop="7dp"
                         android:drawableLeft="@drawable/icon_cccd"
                         android:drawablePadding="10dp"
-                        android:text="GPLX CCCD gắn chip (đối chiếu)"
+                        android:text="GPLX &amp; CCCD gắn chip (đối chiếu)"
                         android:textColor="@color/grey"
                         android:textSize="16dp" />
 
@@ -742,7 +742,7 @@
                         android:layout_marginTop="7dp"
                         android:drawableLeft="@drawable/icon_hochieu"
                         android:drawablePadding="10dp"
-                        android:text="GPLX (đối chiếu) Passport (giữ lại)"
+                        android:text="GPLX (đối chiếu) &amp; Passport (giữ lại)"
                         android:textColor="@color/grey"
                         android:textSize="16dp" />
 
